@@ -1,0 +1,60 @@
+[gd_resource type="Theme" load_steps=9 format=3 uid="uid://1adxjbws8hdd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2m0ps"]
+bg_color = Color(0.633621, 0.595091, 0.53492, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2m0ps"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2nx4x"]
+bg_color = Color(0.0930799, 0.188157, 0.274675, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_in55k"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ota80"]
+bg_color = Color(0.113725, 0.133333, 0.160784, 1)
+border_color = Color(0.113725, 0.133333, 0.160784, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uxxsh"]
+bg_color = Color(0.141176, 0.141176, 0.141176, 0.282353)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c8l2w"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.277528, 0.277528, 0.277528, 0.0823529)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.211765, 0.239216, 0.290196, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fyxoc"]
+bg_color = Color(0.113725, 0.133333, 0.160784, 1)
+border_color = Color(0.113725, 0.133333, 0.160784, 1)
+anti_aliasing = false
+
+[resource]
+Button/styles/disabled = SubResource("StyleBoxFlat_2m0ps")
+Button/styles/focus = SubResource("StyleBoxEmpty_2m0ps")
+Button/styles/normal = SubResource("StyleBoxFlat_2nx4x")
+CheckBox/styles/focus = SubResource("StyleBoxFlat_in55k")
+CheckBox/styles/hover = SubResource("StyleBoxFlat_in55k")
+CheckBox/styles/hover_pressed = SubResource("StyleBoxFlat_in55k")
+CheckBox/styles/normal = SubResource("StyleBoxFlat_in55k")
+CheckBox/styles/pressed = SubResource("StyleBoxFlat_in55k")
+HSplitContainer/styles/split_bar_background = SubResource("StyleBoxFlat_ota80")
+Panel/styles/panel = SubResource("StyleBoxFlat_uxxsh")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_c8l2w")
+VSplitContainer/styles/split_bar_background = SubResource("StyleBoxFlat_fyxoc")

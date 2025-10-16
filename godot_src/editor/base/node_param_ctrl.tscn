@@ -1,0 +1,51 @@
+[gd_scene load_steps=2 format=3 uid="uid://dq6f8pycupybg"]
+
+[ext_resource type="Script" uid="uid://coev863lf761n" path="res://editor/base/node_param_ctrl.gd" id="1_rfe3u"]
+
+[node name="NodeParamCtrl" type="HBoxContainer"]
+offset_right = 200.0
+offset_bottom = 31.0
+script = ExtResource("1_rfe3u")
+
+[node name="Label" type="Label" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 160
+
+[node name="TabContainer" type="TabContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tab_alignment = 1
+current_tab = 0
+tabs_visible = false
+
+[node name="SpinBox" type="SpinBox" parent="TabContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+allow_greater = true
+alignment = 3
+suffix = "%"
+metadata/_tab_index = 0
+
+[node name="para_name" type="Label" parent="TabContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="mb_selection" type="MenuButton" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+text = "﹀"
+flat = false
+icon_alignment = 1
+item_count = 1
+popup/item_0/text = "% use percent"
+popup/item_0/id = 0

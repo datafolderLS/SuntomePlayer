@@ -1,0 +1,54 @@
+[gd_scene load_steps=4 format=3 uid="uid://dbwhjg7gglnkx"]
+
+[ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="1_ht605"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3lcdo"]
+bg_color = Color(0.448067, 0.448067, 0.448067, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ncnbo"]
+bg_color = Color(0, 1, 0.383333, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="ProgressBar" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -401.0
+offset_bottom = -588.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.025
+anchor_top = 0.5
+anchor_right = 0.975
+anchor_bottom = 0.5
+offset_top = -5.0
+offset_bottom = 5.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3lcdo")
+
+[node name="Button" type="Button" parent="."]
+layout_direction = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_ht605")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ncnbo")

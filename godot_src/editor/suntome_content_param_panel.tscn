@@ -1,0 +1,46 @@
+[gd_scene load_steps=4 format=3 uid="uid://cea6er3wktvcg"]
+
+[ext_resource type="Script" uid="uid://t1jwv3x3ebe1" path="res://editor/suntome_content_param_panel.gd" id="1_etcn3"]
+[ext_resource type="PackedScene" uid="uid://cke7ioixtxi24" path="res://editor/base/drag_sort/drag_sort_control.tscn" id="1_yj3eg"]
+[ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="2_cmkkb"]
+
+[node name="SuntomeContentParamPanel" type="VBoxContainer"]
+script = ExtResource("1_etcn3")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Add Suntome Count"
+
+[node name="CB_isSuntome" type="CheckBox" parent="HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("2_cmkkb")
+alignment = 1
+icon_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "node trans type"
+
+[node name="OB_type" type="OptionButton" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ButtonNormalization" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "概率归一化"
+
+[node name="DragSortControl" parent="." instance=ExtResource("1_yj3eg")]
+unique_name_in_owner = true
+layout_mode = 2

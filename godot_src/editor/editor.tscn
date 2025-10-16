@@ -1,0 +1,60 @@
+[gd_scene load_steps=5 format=3 uid="uid://c68vlwdo0nhj1"]
+
+[ext_resource type="Script" uid="uid://mtjxxhfk7dil" path="res://editor/editor.gd" id="1_6j37k"]
+[ext_resource type="Theme" uid="uid://cxsvh8s7nbr" path="res://editor/editor_top_theme.tres" id="1_ycap1"]
+[ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="2_j82do"]
+[ext_resource type="PackedScene" uid="uid://b67dfbbpkpvs" path="res://editor/left_sub_container.tscn" id="4_j82do"]
+
+[node name="Editor" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_6j37k")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="button_SoundObjEdit" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("1_ycap1")
+text = "sound editor"
+
+[node name="button_SelectPicNodeEdit" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("1_ycap1")
+text = "Select Pic editor"
+
+[node name="button_PlayNodeEdit" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("1_ycap1")
+text = "node editor"
+
+[node name="ButtonSave" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+theme = ExtResource("1_ycap1")
+text = "save"
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_j82do")
+
+[node name="LeftSubContainer" parent="VBoxContainer/PanelContainer" instance=ExtResource("4_j82do")]
+unique_name_in_owner = true
+layout_mode = 2

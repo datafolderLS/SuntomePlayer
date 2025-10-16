@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bq7q1o8wrwcb7"]
+
+[ext_resource type="Script" uid="uid://b2f5ju4sird7l" path="res://misc/keep_ratio_picture.gd" id="1_aqajg"]
+
+[node name="KeepRatioPicture" type="TextureRect"]
+script = ExtResource("1_aqajg")

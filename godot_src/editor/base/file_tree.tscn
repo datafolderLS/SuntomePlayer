@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://bw7t64a4n11n0"]
+
+[ext_resource type="Script" uid="uid://djr1auq8jfmfh" path="res://editor/base/file_tree.gd" id="1_nab2o"]
+
+[node name="FileTree" type="Tree"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/icon_max_width = 25
+columns = 3
+select_mode = 2
+script = ExtResource("1_nab2o")

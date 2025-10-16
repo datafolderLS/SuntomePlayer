@@ -1,0 +1,51 @@
+[gd_scene load_steps=6 format=3 uid="uid://digckinv3nw21"]
+
+[ext_resource type="Script" uid="uid://b5aoy88dji4tb" path="res://misc/simple_button.gd" id="1_g3brw"]
+[ext_resource type="Shader" uid="uid://b0pil1siyqgk7" path="res://misc/simple_button.gdshader" id="1_w7655"]
+[ext_resource type="Texture2D" uid="uid://cr3703em6j40u" path="res://misc/white.jpg" id="3_xjofp"]
+[ext_resource type="Script" uid="uid://bttgnk3bb2a8i" path="res://addons/font_auto_size_labels/auto_size_label.gd" id="4_xitcq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g3brw"]
+shader = ExtResource("1_w7655")
+shader_parameter/color_top = Vector4(1, 1, 1, 1)
+shader_parameter/color_bottom = Vector4(1, 1, 1, 1)
+
+[node name="SimpleButton" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 249.0
+offset_bottom = 111.0
+script = ExtResource("1_g3brw")
+
+[node name="picture" type="TextureRect" parent="."]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_g3brw")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_xjofp")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="picture"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 81
+text = "xxx"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+clip_text = true
+script = ExtResource("4_xitcq")
+_max_size = 1024
+_current_font_size = 81
+_editor_defaults_set = true
+metadata/_custom_type_script = "uid://bttgnk3bb2a8i"

@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3 uid="uid://dulrh8j236xyq"]
+
+[ext_resource type="Script" uid="uid://mi04xl5vso2e" path="res://editor/base/drag_sort/drag_able_item.gd" id="1_4x8kv"]
+
+[node name="DragAbleItem" type="HBoxContainer"]
+script = ExtResource("1_4x8kv")
+
+[node name="button" type="Button" parent="."]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(10, 25)
+layout_mode = 2
+mouse_default_cursor_shape = 6
+
+[node name="Label" type="Label" parent="button"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "::"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3

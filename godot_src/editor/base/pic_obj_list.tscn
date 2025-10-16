@@ -1,0 +1,67 @@
+[gd_scene load_steps=7 format=3 uid="uid://ccdtnc6dlyyjd"]
+
+[ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="1_pos0b"]
+[ext_resource type="Texture2D" uid="uid://dvhacktl4php6" path="res://editor/icon/add_32.png" id="2_0n13a"]
+[ext_resource type="Script" uid="uid://05fx6kslgoaq" path="res://editor/base/pic_obj_list.gd" id="2_s8rji"]
+[ext_resource type="Texture2D" uid="uid://c5p70dxnus8e4" path="res://editor/icon/remove_32.png" id="3_s8rji"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pk0dy"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ycvpb"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="PicObjList" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1060.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_pos0b")
+script = ExtResource("2_s8rji")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme = ExtResource("1_pos0b")
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_pos0b")
+theme_override_constants/margin_left = 10
+
+[node name="Label" type="Label" parent="HBoxContainer/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("1_pos0b")
+text = "Picture Object"
+
+[node name="Label2" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+justification_flags = 0
+
+[node name="AddButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("2_0n13a")
+flat = true
+icon_alignment = 1
+
+[node name="RemoveButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("3_s8rji")
+flat = true
+
+[node name="ItemList" type="ItemList" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="NameEdit" type="LineEdit" parent="ItemList"]
+visible = false
+layout_mode = 0
+offset_left = 10.0
+offset_top = 60.0
+offset_right = 373.0
+offset_bottom = 91.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_pk0dy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_ycvpb")

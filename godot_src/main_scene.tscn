@@ -1,0 +1,98 @@
+[gd_scene load_steps=8 format=3 uid="uid://bn0k2oedou2on"]
+
+[ext_resource type="Script" uid="uid://dfecfnasdybyj" path="res://main_scene.gd" id="1_2c62f"]
+[ext_resource type="PackedScene" uid="uid://ssyrrobi1frw" path="res://player.tscn" id="2_2c62f"]
+[ext_resource type="Texture2D" uid="uid://n1gbjm80nmn2" path="res://editor/icon/fullscreen.png" id="3_8mm7a"]
+[ext_resource type="Script" uid="uid://cnvlcwx1nl3li" path="res://misc/fade_button_script.gd" id="3_d5x1h"]
+[ext_resource type="Script" uid="uid://bttgnk3bb2a8i" path="res://addons/font_auto_size_labels/auto_size_label.gd" id="3_gyfs4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8mm7a"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gyfs4"]
+
+[node name="Node2D" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2c62f")
+
+[node name="Player" parent="." instance=ExtResource("2_2c62f")]
+layout_mode = 1
+
+[node name="Button_fullscreen_toggle" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.1
+anchor_bottom = 0.1
+offset_right = 8.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_8mm7a")
+script = ExtResource("3_d5x1h")
+
+[node name="TextureRect" type="TextureRect" parent="Button_fullscreen_toggle"]
+layout_mode = 2
+texture = ExtResource("3_8mm7a")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AutoSizeLabel" type="Label" parent="Button_fullscreen_toggle"]
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = "fullscreen toggle"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+clip_text = true
+script = ExtResource("3_gyfs4")
+_max_size = 16
+_current_font_size = 16
+_editor_defaults_set = true
+metadata/_custom_type_script = "uid://bttgnk3bb2a8i"
+
+[node name="button_omorashi" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.8
+anchor_top = 0.8
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -50.0
+offset_top = -50.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_gyfs4")
+script = ExtResource("3_d5x1h")
+
+[node name="AutoSizeLabel" type="Label" parent="button_omorashi"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 76
+text = "射精した"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+clip_text = true
+script = ExtResource("3_gyfs4")
+_max_size = 2048
+_current_font_size = 76
+_editor_defaults_set = true
+metadata/_custom_type_script = "uid://bttgnk3bb2a8i"
+
+[node name="editor_container" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

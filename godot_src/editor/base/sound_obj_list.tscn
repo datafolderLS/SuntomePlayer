@@ -1,0 +1,66 @@
+[gd_scene load_steps=7 format=3 uid="uid://bqhdt3gpgfb0"]
+
+[ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="1_glee3"]
+[ext_resource type="Script" uid="uid://b3fkdn06wi4nq" path="res://editor/base/sound_obj_list.gd" id="1_jajxg"]
+[ext_resource type="Texture2D" uid="uid://dvhacktl4php6" path="res://editor/icon/add_32.png" id="2_gc1wa"]
+[ext_resource type="Texture2D" uid="uid://c5p70dxnus8e4" path="res://editor/icon/remove_32.png" id="3_1wcnt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_38vge"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jajxg"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="SoundObjList" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1080.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_glee3")
+script = ExtResource("1_jajxg")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+
+[node name="Label" type="Label" parent="HBoxContainer/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("1_glee3")
+text = "Sound Object"
+
+[node name="Label2" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+justification_flags = 0
+
+[node name="AddButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("2_gc1wa")
+flat = true
+icon_alignment = 1
+
+[node name="RemoveButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("3_1wcnt")
+flat = true
+
+[node name="ItemList" type="ItemList" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="NameEdit" type="LineEdit" parent="ItemList"]
+visible = false
+layout_mode = 0
+offset_left = 10.0
+offset_top = 60.0
+offset_right = 373.0
+offset_bottom = 91.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_38vge")
+theme_override_styles/focus = SubResource("StyleBoxFlat_jajxg")

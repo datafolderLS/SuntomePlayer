@@ -1,0 +1,123 @@
+[gd_scene load_steps=5 format=3 uid="uid://157nn2k11wjq"]
+
+[ext_resource type="Script" uid="uid://b4mo7y6pgjgq6" path="res://editor/base/param_edit/param_edit_root.gd" id="1_1qck6"]
+[ext_resource type="PackedScene" uid="uid://gs5a24cnsr7x" path="res://editor/base/slider_of_vector2.tscn" id="1_uvvhq"]
+[ext_resource type="Script" uid="uid://daqh0iya30pen" path="res://editor/base/param_edit/param_edit_control.gd" id="2_1qck6"]
+
+[sub_resource type="GDScript" id="GDScript_uvvhq"]
+script/source = "extends Control
+
+class TestObject:
+	var pos          : Vector2   #相对图片的位置
+	var size         : Vector2   #相对图片的大小
+	var bgcolor      : Color     #背景颜色
+	var name         : String    #按钮名称，该值在同组图片下唯一
+	var name_as_text : bool      #text是否和name相同，如果为true，无视text
+	var text         : String    #按钮文字
+	var fontcolor    : Color     #字体颜色
+	var isPicture    : bool      #标记使用图片来作为按钮
+	var picpath      : float    #图片路径，如果isPicture为true使用该路径对象
+
+var value : TestObject = TestObject.new()
+
+func _ready() -> void:
+	value.pos = Vector2(0.5,0.5)
+	value.name = \"shit\"
+	value.name_as_text = true
+	value.fontcolor = Color.SKY_BLUE
+	value.picpath = 12
+
+	%RootControl.get_value = func():
+		return value
+
+	%RootControl.refresh()
+
+	%Button_print.pressed.connect(func():
+		%RootControl.update()
+		print(value.pos)
+		print(value.name)
+		print(value.name_as_text)
+		print(value.fontcolor)
+		print(value.picpath)
+	)
+"
+
+[node name="TestParamControl" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = SubResource("GDScript_uvvhq")
+
+[node name="RootControl" type="Control" parent="."]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_1qck6")
+
+[node name="Control" type="Control" parent="RootControl"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="RootControl/Control"]
+layout_mode = 0
+offset_left = 209.0
+offset_top = 459.0
+offset_right = 243.0
+offset_bottom = 493.0
+script = ExtResource("2_1qck6")
+param_name = "fontcolor"
+
+[node name="LineEdit" type="LineEdit" parent="RootControl/Control"]
+layout_mode = 0
+offset_left = 239.0
+offset_top = 51.0
+offset_right = 307.563
+offset_bottom = 82.0
+script = ExtResource("2_1qck6")
+param_name = "name"
+
+[node name="CheckBox" type="CheckBox" parent="RootControl/Control"]
+layout_mode = 0
+offset_left = 159.0
+offset_top = 111.0
+offset_right = 293.0
+offset_bottom = 142.0
+text = "testCheckBox"
+script = ExtResource("2_1qck6")
+param_name = "name_as_text"
+
+[node name="SpinBox" type="SpinBox" parent="RootControl/Control"]
+layout_mode = 0
+offset_left = 248.0
+offset_top = 210.0
+offset_right = 334.563
+offset_bottom = 241.0
+script = ExtResource("2_1qck6")
+param_name = "picpath"
+
+[node name="HSlider" type="HSlider" parent="RootControl/Control"]
+layout_mode = 0
+offset_left = 183.0
+offset_top = 282.0
+offset_right = 396.0
+offset_bottom = 298.0
+script = ExtResource("2_1qck6")
+param_name = "picpath"
+
+[node name="SliderOfVector2" parent="RootControl/Control" instance=ExtResource("1_uvvhq")]
+layout_mode = 0
+offset_left = 203.0
+offset_top = 345.0
+offset_right = 392.0
+offset_bottom = 416.0
+param_name = "pos"
+
+[node name="Button_print" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 22.0
+offset_top = 12.0
+offset_right = 102.0
+offset_bottom = 62.0
+text = "print value"

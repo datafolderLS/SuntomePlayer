@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://cakhp0nx8mx54"]
+
+[ext_resource type="Script" uid="uid://dcail063od8fk" path="res://misc/subtitle_viewer.gd" id="1_7b0bx"]
+[ext_resource type="Script" uid="uid://bttgnk3bb2a8i" path="res://addons/font_auto_size_labels/auto_size_label.gd" id="1_frqth"]
+
+[node name="SubtitleViewer" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7b0bx")
+
+[node name="AutoSizeLabel" type="Label" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 64
+text = "13515313131313151"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+clip_text = true
+script = ExtResource("1_frqth")
+_current_font_size = 64
+_editor_defaults_set = true
+metadata/_custom_type_script = "uid://bttgnk3bb2a8i"

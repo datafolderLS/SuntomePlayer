@@ -1,0 +1,54 @@
+[gd_scene load_steps=3 format=3 uid="uid://7yk3hpx2sn2i"]
+
+[ext_resource type="Script" uid="uid://byx6omd72u8ne" path="res://editor/base/state_line.gd" id="1_p7o38"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p7o38"]
+
+[node name="StateLine" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1280.0
+offset_bottom = -720.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_p7o38")
+
+[node name="rot_root" type="Control" parent="."]
+anchors_preset = 0
+
+[node name="move_root" type="Control" parent="rot_root"]
+anchors_preset = 0
+offset_top = -6.665
+offset_bottom = -6.665
+
+[node name="Line2D" type="Line2D" parent="rot_root/move_root"]
+points = PackedVector2Array(0, 0, 80, 0)
+width = 3.0
+sharp_limit = 0.0
+
+[node name="Polygon2D" type="Polygon2D" parent="rot_root/move_root"]
+position = Vector2(80, 0)
+polygon = PackedVector2Array(0, 10, 20, 0, 0, -10)
+uv = PackedVector2Array(-2.5, 0, 122.5, 30, -14.5, 93)
+
+[node name="mouse_detect" type="Panel" parent="rot_root/move_root"]
+layout_mode = 0
+offset_top = -2.875
+offset_right = 89.0
+offset_bottom = 2.125
+theme_override_styles/panel = SubResource("StyleBoxEmpty_p7o38")
+
+[node name="Label" type="Label" parent="rot_root/move_root"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 28.0
+offset_top = -25.335
+offset_right = 51.0
+offset_bottom = -2.335
+pivot_offset = Vector2(12, 12)
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 0

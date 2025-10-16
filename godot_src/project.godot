@@ -1,0 +1,37 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="suntome_player"
+run/main_scene="uid://bn0k2oedou2on"
+config/features=PackedStringArray("4.5", "Mobile")
+config/icon="res://icon.svg"
+
+[autoload]
+
+SuntomeGlobal="*res://core/suntome_global.gd"
+Utility="*res://core/utility_funcs.gd"
+TextureCenter="*res://core/texture_center.gd"
+SuntomePlayer="*res://core/suntome_player.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/font_auto_size_labels/plugin.cfg")
+
+[rendering]
+
+renderer/rendering_method="mobile"

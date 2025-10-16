@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bib3sk3i5vv04"]
+
+[ext_resource type="Script" uid="uid://br5fkf1l5sjkf" path="res://editor/suntome_para_node_content.gd" id="1_3grqk"]
+
+[node name="SelectPicContent" type="VBoxContainer"]
+script = ExtResource("1_3grqk")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "ParamSetting"

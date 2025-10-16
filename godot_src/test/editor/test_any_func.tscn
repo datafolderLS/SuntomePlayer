@@ -1,0 +1,46 @@
+[gd_scene load_steps=4 format=3 uid="uid://16ami7sse2y"]
+
+[ext_resource type="Script" uid="uid://cq25kvtydcekt" path="res://test/editor/test_any_func.gd" id="1_dl84o"]
+[ext_resource type="PackedScene" uid="uid://cil6wi1mo5esx" path="res://editor/base/para_node_setting_ctrl.tscn" id="2_0t62x"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dl84o"]
+
+[node name="TestAnyFunc" type="Node2D"]
+script = ExtResource("1_dl84o")
+
+[node name="ParaNodeSettingCtrl" parent="." instance=ExtResource("2_0t62x")]
+unique_name_in_owner = true
+offset_left = 439.0
+offset_top = 240.0
+offset_right = 625.0
+offset_bottom = 271.0
+
+[node name="Button" type="Button" parent="."]
+unique_name_in_owner = true
+offset_left = 84.0
+offset_top = 51.0
+offset_right = 135.0
+offset_bottom = 80.0
+theme_override_styles/focus = SubResource("StyleBoxFlat_dl84o")
+text = "button"
+
+[node name="CheckBox" type="CheckBox" parent="."]
+offset_left = 201.0
+offset_top = 205.0
+offset_right = 225.0
+offset_bottom = 229.0
+text = "adsfadsf"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="."]
+offset_left = 342.0
+offset_top = 120.0
+offset_right = 390.0
+offset_bottom = 169.0
+
+[node name="MenuButton" type="MenuButton" parent="."]
+offset_left = 488.0
+offset_top = 101.0
+offset_right = 564.0
+offset_bottom = 156.0
+text = "dsafadfa"
+flat = false

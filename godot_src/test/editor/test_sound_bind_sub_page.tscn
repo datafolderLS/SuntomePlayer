@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://b61h7fkjyrl8u"]
+
+[ext_resource type="PackedScene" uid="uid://47o3x6878kva" path="res://editor/(deprecated)sound_bind_sub_page.tscn" id="1_lw2eg"]
+[ext_resource type="Script" uid="uid://dgivim6p7x0ku" path="res://test/editor/test_sound_bind_sub_page.gd" id="1_xxh30"]
+
+[node name="TestSoundBindSubPage" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xxh30")
+
+[node name="SoundBindSubPage" parent="." instance=ExtResource("1_lw2eg")]
+layout_mode = 1
+offset_left = 119.0
+offset_top = 56.0
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 34.0
+offset_right = 103.0
+offset_bottom = 76.0
+text = "测试"

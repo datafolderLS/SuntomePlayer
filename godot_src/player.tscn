@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://ssyrrobi1frw"]
+
+[ext_resource type="Script" uid="uid://cgongns5uc6dw" path="res://player.gd" id="1_onrkg"]
+[ext_resource type="PackedScene" uid="uid://bq7q1o8wrwcb7" path="res://misc/keep_ratio_picture.tscn" id="2_onrkg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4flbx"]
+
+[node name="Player" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+localize_numeral_system = false
+theme_override_styles/panel = SubResource("StyleBoxEmpty_4flbx")
+script = ExtResource("1_onrkg")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="Texture2" parent="." instance=ExtResource("2_onrkg")]
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Texture1" parent="." instance=ExtResource("2_onrkg")]
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5

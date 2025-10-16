@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://cil6wi1mo5esx"]
+
+[ext_resource type="Script" uid="uid://dhh0w0efyq13l" path="res://editor/base/para_node_setting_ctrl.gd" id="1_2dsb0"]
+[ext_resource type="Texture2D" uid="uid://xict4eak4lym" path="res://editor/icon/delete_16.png" id="1_8v83x"]
+[ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="2_m3tfs"]
+
+[node name="ParaNodeSettingCtrl" type="HBoxContainer"]
+editor_description = "一个用于表示设置节点编辑参数项的控件"
+script = ExtResource("1_2dsb0")
+
+[node name="button_remove" type="Button" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(26, 0)
+layout_mode = 2
+theme = ExtResource("2_m3tfs")
+icon = ExtResource("1_8v83x")
+icon_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SpinBox" type="SpinBox" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_stretch_ratio = 0.0
+alignment = 3
+suffix = "%"

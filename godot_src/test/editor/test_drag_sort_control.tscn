@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://ndkhk3ly5m2v"]
+
+[ext_resource type="PackedScene" uid="uid://cke7ioixtxi24" path="res://editor/base/drag_sort/drag_sort_control.tscn" id="1_1y7a5"]
+[ext_resource type="Script" uid="uid://5oe7fl5p0syg" path="res://test/editor/test_drag_sort_control.gd" id="1_k0081"]
+
+[node name="TestDragSortControl" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_k0081")
+
+[node name="DragSortControl" parent="." instance=ExtResource("1_1y7a5")]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 285.0
+offset_bottom = 435.0
+
+[node name="SpinBox" type="SpinBox" parent="."]
+layout_mode = 0
+offset_left = 748.0
+offset_top = 179.0
+offset_right = 834.563
+offset_bottom = 210.0
+alignment = 2
+suffix = "%"
+
+[node name="Button" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 802.0
+offset_top = 275.0
+offset_right = 868.0
+offset_bottom = 319.0
+text = "print"

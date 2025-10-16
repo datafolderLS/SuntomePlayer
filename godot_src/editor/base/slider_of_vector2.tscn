@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=3 uid="uid://gs5a24cnsr7x"]
+
+[ext_resource type="Script" uid="uid://6olif3ox0sof" path="res://editor/base/slider_of_vector2.gd" id="1_t2j4t"]
+
+[node name="SliderOfVector2" type="VBoxContainer"]
+script = ExtResource("1_t2j4t")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="part1" type="SpinBox" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+
+[node name="Label2" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "x"
+
+[node name="part2" type="SpinBox" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+
+[node name="vec1_slider" type="HSlider" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+
+[node name="vec2_slider" type="HSlider" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.01

@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=3 uid="uid://ct0jqaoecw5t8"]
+
+[ext_resource type="Script" uid="uid://cjvvutd1q8e8u" path="res://editor/base/state_node.gd" id="1_1t1ap"]
+[ext_resource type="StyleBox" uid="uid://dk7hib1sbscms" path="res://editor/base/state_panel_style/border_unselected.tres" id="2_5tttc"]
+[ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="2_u7let"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5tttc"]
+bg_color = Color(0, 0, 0, 0.490196)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1t1ap"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.53, 0.53, 0.53, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="StateNode" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1178.0
+offset_bottom = -657.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_u7let")
+theme_override_styles/panel = ExtResource("2_5tttc")
+script = ExtResource("1_1t1ap")
+
+[node name="backContainer" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5tttc")
+
+[node name="MarginContainer" type="MarginContainer" parent="backContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="PanelContainer" type="PanelContainer" parent="backContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_u7let")
+theme_override_styles/panel = SubResource("StyleBoxFlat_1t1ap")
+
+[node name="container" type="VBoxContainer" parent="backContainer/MarginContainer/PanelContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+alignment = 1

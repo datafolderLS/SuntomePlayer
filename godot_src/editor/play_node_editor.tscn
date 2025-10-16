@@ -1,0 +1,90 @@
+[gd_scene load_steps=6 format=3 uid="uid://cmywx43uxl7yt"]
+
+[ext_resource type="Script" uid="uid://b1esp3u5s4hac" path="res://editor/play_node_editor.gd" id="1_4plv0"]
+[ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="2_oqrfk"]
+[ext_resource type="PackedScene" uid="uid://cf4yknb808q7d" path="res://editor/base/state_panel.tscn" id="4_tavto"]
+[ext_resource type="Texture2D" uid="uid://dvhacktl4php6" path="res://editor/icon/add_32.png" id="5_oqrfk"]
+[ext_resource type="Texture2D" uid="uid://dqthmqp2e1g3t" path="res://editor/icon/left-right-arrows.png" id="6_tavto"]
+
+[node name="PlayNodeEditor" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4plv0")
+
+[node name="HSplitContainer2" type="HSplitContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_oqrfk")
+
+[node name="EditMargin" type="MarginContainer" parent="HSplitContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.3
+theme = ExtResource("2_oqrfk")
+
+[node name="StatePanel" parent="HSplitContainer2/EditMargin" instance=ExtResource("4_tavto")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PropMargin" type="VBoxContainer" parent="HSplitContainer2"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme = ExtResource("2_oqrfk")
+
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer2/PropMargin"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer2/PropMargin/MarginContainer"]
+layout_mode = 2
+
+[node name="ButtonAddNode" type="Button" parent="HSplitContainer2/PropMargin/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_oqrfk")
+theme_override_font_sizes/font_size = 20
+theme_override_icons/icon = ExtResource("5_oqrfk")
+text = "Add Play Node"
+
+[node name="ButtonAddTrans" type="Button" parent="HSplitContainer2/PropMargin/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_oqrfk")
+theme_override_font_sizes/font_size = 20
+theme_override_icons/icon = ExtResource("5_oqrfk")
+text = "Add Port Node"
+
+[node name="ButtonAddSetting" type="Button" parent="HSplitContainer2/PropMargin/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_oqrfk")
+theme_override_font_sizes/font_size = 20
+theme_override_icons/icon = ExtResource("5_oqrfk")
+text = "Add Setting Node"
+
+[node name="param_container" type="PanelContainer" parent="HSplitContainer2/PropMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ctt_root_control" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="contextmenu" type="VBoxContainer" parent="ctt_root_control"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 194.0
+offset_top = 179.0
+offset_right = 292.0
+offset_bottom = 202.0
+
+[node name="ctt_button" type="Button" parent="ctt_root_control/contextmenu"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_oqrfk")
+text = "change node type"
+icon = ExtResource("6_tavto")

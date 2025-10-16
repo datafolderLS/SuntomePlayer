@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://cx5ihvav5xt01"]
+
+[ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="1_mayud"]
+[ext_resource type="Script" uid="uid://bryrbu5uji7ev" path="res://editor/suntome_setting_para_node_panel.gd" id="1_ufusq"]
+[ext_resource type="Texture2D" uid="uid://dvhacktl4php6" path="res://editor/icon/add_32.png" id="2_ufusq"]
+
+[node name="SuntomeSettingParaNodePanel" type="VBoxContainer"]
+script = ExtResource("1_ufusq")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "add param"
+horizontal_alignment = 2
+
+[node name="button_add" type="Button" parent="HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme = ExtResource("1_mayud")
+icon = ExtResource("2_ufusq")
+icon_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+theme = ExtResource("1_mayud")
+
+[node name="CtrlContainer" type="VBoxContainer" parent="PanelContainer"]
+unique_name_in_owner = true
+layout_mode = 2
