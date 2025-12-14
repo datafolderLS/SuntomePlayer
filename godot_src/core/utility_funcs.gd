@@ -55,7 +55,9 @@ func remove_all_child_and_return(parent : Node, checkFunc : Callable = Callable(
 #将绝对路径filePath改为以./data打头的路径
 func cut_file_path(filePath : String) -> String:
 	if filePath.is_absolute_path():
+		@warning_ignore_start("static_called_on_instance")
 		var root = SuntomeGlobal.root_path()
+		@warning_ignore_restore("static_called_on_instance")
 		if filePath.begins_with(root):
 			filePath = filePath.erase(0, root.length())
 			filePath = "." + filePath
@@ -68,7 +70,9 @@ func relative_to_full(filePath : String) -> String:
 	if filePath.is_absolute_path():
 		return filePath
 
+	@warning_ignore_start("static_called_on_instance")
 	var root = SuntomeGlobal.root_path()
+	@warning_ignore_restore("static_called_on_instance")
 	# var root = OS.get_executable_path().get_base_dir()
 	# if OS.has_feature("editor") :
 	# 	root = "res://"
@@ -263,7 +267,119 @@ func node_all_children(parent : Node) -> Array:
 #返回路径文件的后缀名，小写，如果没有后缀名返回空字符串
 func file_suffix(path : String) -> String:
 	var suffixCheck = path.rsplit(".", true, 1)
-	if suffixCheck.size() < 1:
+	if suffixCheck.size() < 2:
 		return ""
 	var type = suffixCheck[1].to_lower()
 	return type
+
+
+func load_supported_audio(path : String) -> AudioStream:
+	var abpath = relative_to_full(path)
+	if not FileAccess.file_exists(abpath):
+		push_error("sound path not valid: ", abpath)
+		return null
+
+	# var suffix
+	var suffixCheck = path.rsplit(".", true, 1)
+	var type = suffixCheck[1].to_lower()
+	if type not in GlobalSetting.SurportSoundTypes:
+		return null
+
+	if "wav" == type:
+		return AudioStreamWAV.load_from_file(abpath)
+	elif "ogg" == type:
+		return AudioStreamOggVorbis.load_from_file(abpath)
+	elif "mp3" == type:
+		return AudioStreamMP3.load_from_file(abpath)
+
+	return null
+
+
+#计算moverect表示的区域为了和target重合需要执行的偏移，也可以理解为两个Rect2的距离向量
+#如果两个rect区域有重合，返回0向量
+func calc_diff_rect_to_rect(moverect : Rect2, target : Rect2) -> Vector2:
+	var center_dis = target.get_center() - moverect.get_center()
+	var half_side_lenth_info = (target.size + moverect.size) * 0.5
+	if abs(center_dis.x) < half_side_lenth_info.x:
+		center_dis.x = 0.0
+	else:
+		center_dis.x -= sign(center_dis.x) * half_side_lenth_info.x
+
+	if abs(center_dis.y) < half_side_lenth_info.y:
+		center_dis.y = 0.0
+	else:
+		center_dis.y -= sign(center_dis.y) * half_side_lenth_info.y
+	return center_dis
+
+
+#计算由pos1和pos2组成的rect2对象
+func make_rect2(pos1 : Vector2, pos2 : Vector2) -> Rect2:
+	var rect = Rect2()
+	rect.position = pos1.min(pos2)
+	rect.end = pos1.max(pos2)
+	return rect
+
+
+#获取队列中不重复的uid
+func make_uniq_uid(list : Array) -> int:
+	var next = _rng_gene.randi()
+	while list.has(next):
+		next = (next + 1) % 4294967295
+
+	return next
+
+
+func dict_change_key_if_exist(dict : Dictionary, prekey, aftkey):
+	if dict.has(prekey):
+		var predata = dict.get(prekey)
+		dict.erase(prekey)
+		dict.set(aftkey, predata)
+
+
+#将03:20.91或02:03:20.91这样格式的字符串转为秒数
+func timestamp_to_seconds(stamp : String) -> float:
+	var times = stamp.remove_chars(" ").split(":")
+	var hour = 0
+	var minute = 0
+	var seconds = 0
+	if times.size() > 2:
+		hour = times[0].to_float()
+		minute = times[1].to_float()
+		seconds = times[2].to_float()
+	else:
+		minute = times[0].to_float()
+		seconds = times[1].to_float()
+	return hour * 3600.0 + minute * 60.0 + seconds
+
+
+#可以让程序直接崩溃的函数
+func CriticalFail(_anything = null) -> int:
+	var dict = Dictionary()
+	return dict[12]
+
+
+#将dict的key和value反转构造一个新的dict并返回
+func reverse_map(dict : Dictionary) -> Dictionary:
+	var result := Dictionary()
+	for key in dict:
+		var value = dict[key]
+		if null != value:
+			result.set(value, key)
+
+	return result
+
+
+#获取一个文件的所在文件夹路径
+func file_locate_path(file_path : String) -> String:
+	var locate_check = file_path.rsplit("/", true, 1)
+	if locate_check.size() < 2:
+		return file_path
+	var locate = locate_check[0]
+	return locate
+
+
+func file_name_without_suffix(file_path : String) -> String:
+	var locate_check = file_path.rsplit("/", true, 1)
+	var filename : String = locate_check[0] if locate_check.size() < 2 else locate_check[1]
+	var suffixCheck = filename.rsplit(".", true, 1)
+	return suffixCheck[0]

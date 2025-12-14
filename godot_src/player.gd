@@ -13,10 +13,11 @@ var next_tex : TextureRect = null
 class NextPlayerObj extends RefCounted:
 	var nextTexture : Texture2D
 	var nextSound : AudioStream
+	var sound_subtitle : SubtitleData   #音频字幕数据，如果为空，就是没有字幕
 
 class NextSelectPicObj extends RefCounted:
 	var nextTexture : Texture2D
-	var getNextSound : Callable    #当音频播放完成时，重复调用该函数来获取下一个音频文件，返回null就不播放
+	var getNextSoundAndSub : Callable    #当音频播放完成时，重复调用该函数来获取下一个音频文件和字幕文件[stream, SubtitleData]，返回[null, ..]就不播放
 	var emitAllButton : Callable   #初始化时调用该函数来初始化选择控件，调用函数传递keep_ratio_picture对象
 
 # var waiting_next : NextPlayerObj = null
@@ -75,19 +76,27 @@ func _fadeNextImage(delta : float) -> bool:
 	return false
 
 
+func pause():
+	sound_player.set_stream_paused(true)
+
+
 func play_next(waiting_next : NextPlayerObj) -> void:
 	next_tex.texture = waiting_next.nextTexture
 	sound_player.set_block_signals(true)
 	sound_player.stop()
 	sound_player.set_stream(waiting_next.nextSound)
-	sound_player.play()
 	sound_player.set_block_signals(false)
 	cur_next = waiting_next
-	waiting_next = null
 	fade_func = Callable(self, "_fadeNextImage")
-	_fade_over_func = Callable()
+
+	_fade_over_func = func() : sound_player.play()
+
 	_play_end_func = func():
 		play_finished.emit(cur_next)
+
+	#设置字幕文件，如果是null就不播放字幕了
+	set_subtitle(waiting_next.sound_subtitle)
+	waiting_next = null
 	pass
 
 
@@ -95,24 +104,30 @@ func play_select_pic(next : NextSelectPicObj):
 	next_tex.texture = next.nextTexture
 	sound_player.set_block_signals(true)
 	sound_player.stop()
-	var nextsound = next.getNextSound.call()
 
-	if null != nextsound:
-		sound_player.set_stream(nextsound)
-		sound_player.play()
+	var nextsoundAndSub = next.getNextSoundAndSub.call()
+
+	if null != nextsoundAndSub[0]:
+		sound_player.set_stream(nextsoundAndSub[0])
+		set_subtitle(nextsoundAndSub[1])
+
 		_play_end_func = func():
 			sound_player.set_block_signals(true)
 			sound_player.stop()
-			var next_sound = next.getNextSound.call()
-			sound_player.set_stream(next_sound)
+			var next_sound_sub = next.getNextSoundAndSub.call()
+			sound_player.set_stream(next_sound_sub[0])
 			sound_player.play()
 			sound_player.set_block_signals(false)
+			set_subtitle(next_sound_sub[1])
 	else:
 		_play_end_func = Callable()
 
 	sound_player.set_block_signals(false)
 	# next.emitAllButton.call(next_tex)
-	_fade_over_func = func(): next.emitAllButton.call(next_tex)
+	_fade_over_func = func():
+		if null != nextsoundAndSub[0]:
+			sound_player.play()
+		next.emitAllButton.call(next_tex)
 
 	fade_func = Callable(self, "_fadeNextImage")
 	pass
@@ -149,3 +164,16 @@ func _finished():
 
 func stop():
 	sound_player.stop()
+
+
+func set_subtitle(data : SubtitleData):
+	if null == data:
+		%SubtitleViewer.get_now_subtitle = Callable()
+		return
+
+	%SubtitleViewer.get_now_subtitle = func():
+		if sound_player.is_playing():
+			var pos = sound_player.get_playback_position()
+			var strr = data.lyric_in_pos(pos)
+			return strr
+		return ""

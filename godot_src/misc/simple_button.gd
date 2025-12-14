@@ -28,19 +28,19 @@ func _ready() -> void:
 #用于在选择图片对象上显示简单按钮的对象
 func change_color(top : Color, bottom = null):
 	%picture.texture = empty_pic
-	%picture.material.set_shader_parameter("color_top", top)
+	%picture.set_instance_shader_parameter("color_top", top)
 	if TYPE_COLOR != typeof(bottom):
-		%picture.material.set_shader_parameter("color_bottom", top)
+		%picture.set_instance_shader_parameter("color_bottom", top)
 	else:
-		%picture.material.set_shader_parameter("color_bottom", bottom)
+		%picture.set_instance_shader_parameter("color_bottom", bottom)
 	pass
 
 
 func set_picture(pic : Texture2D):
 	if null == pic:
 		return
-	%picture.material.set_shader_parameter("color_top", Color.WHITE)
-	%picture.material.set_shader_parameter("color_bottom", Color.WHITE)
+	%picture.set_instance_shader_parameter("color_top", Color.WHITE)
+	%picture.set_instance_shader_parameter("color_bottom", Color.WHITE)
 	%picture.texture = pic
 	pass
 

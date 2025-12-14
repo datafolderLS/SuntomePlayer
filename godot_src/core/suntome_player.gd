@@ -15,6 +15,9 @@ var _next_node : SuntomeNodeBase = null
 #suntome_node切换时触发信号，suntome_node为新的节点
 signal suntome_node_change(suntome_node : SuntomeNodeBase)
 
+#步进函数
+var _step_func := Callable()
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
@@ -47,21 +50,38 @@ func start_from_node(suntome_node : SuntomeNodeBase):
 	pass
 
 
+#暂停播放
+func pause_play():
+	pass
+
+#步进播放
+func step_in_next():
+	if _step_func.is_valid():
+		_step_func.call()
+	pass
+
+
 #基于节点类型使用不同的播放方式
 func select_node_play_mode(suntome_node : SuntomeNodeBase):
 	_cur_play_node = suntome_node
 	suntome_node_change.emit(_cur_play_node)
+	_step_func = Callable()
 
 	if suntome_node is SuntomeSelectPictNode:
 		play_select_pic_node(_cur_play_node)
 	elif suntome_node is SuntomeNode:
+		play_suntome_node(suntome_node)
+	# elif suntome_node is SuntomeParaNode:
+	# 	play_normal_node(suntome_node)
+	# elif suntome_node is SuntomeCountCheckNode:
+	# 	play_normal_node(suntome_node)
+	else:
 		play_normal_node(suntome_node)
-	elif suntome_node is SuntomeParaNode:
-		play_para_setting_node(suntome_node)
+		# Utility.CriticalFail()
 
 
 #播放普通节点
-func play_normal_node(suntome_node : SuntomeNode):
+func play_suntome_node(suntome_node : SuntomeNode):
 	if suntome_node.is_suntome:
 		SuntomeGlobal.suntome_count += 1
 
@@ -83,9 +103,15 @@ func play_normal_node(suntome_node : SuntomeNode):
 	var playobj = Player.NextPlayerObj.new()
 
 	playobj.nextTexture = TextureCenter.get_picture(suntome_node.usedTexturePath)
-	playobj.nextSound = _sound_load(suntome_node.usedSoundObject.get_next_sound());
+	var sound_path = suntome_node.usedSoundObject.get_next_sound()
+	playobj.nextSound = Utility.load_supported_audio(sound_path)
+
+	#检查是否有字幕文件来播放
+	playobj.sound_subtitle = _load_sub_data_if_exist(sound_path)
 
 	_player.play_next(playobj)
+
+	_step_func = func(): _sound_play_over(null)
 	pass
 
 
@@ -93,11 +119,12 @@ func play_normal_node(suntome_node : SuntomeNode):
 func play_select_pic_node(suntome_node : SuntomeSelectPictNode):
 	var selectObj = Player.NextSelectPicObj.new()
 	if null != suntome_node.usedSoundObject:
-		selectObj.getNextSound = func():
-			var sound = _sound_load(suntome_node.usedSoundObject.get_next_sound())
-			return sound
+		selectObj.getNextSoundAndSub = func():
+			var soundpath = suntome_node.usedSoundObject.get_next_sound()
+			var sound = Utility.load_supported_audio(soundpath)
+			return [sound, _load_sub_data_if_exist(soundpath)]
 	else:
-		selectObj.getNextSound = func(): return null
+		selectObj.getNextSoundAndSub = func(): return [null, null]
 
 	var selectpicobj = suntome_node.usedSelectPic
 	var path = selectpicobj.usedTexturePath
@@ -118,10 +145,11 @@ func play_select_pic_node(suntome_node : SuntomeSelectPictNode):
 					var nextNode = suntome_node.nextNodes[uid]
 
 					#清空所有button
-					for b : SimpleButton in button_cache:
-						picture.remove_child(b)
-						b.queue_free()
-					button_cache.clear()
+					# for b : SimpleButton in button_cache:
+					# 	picture.remove_child(b)
+					# 	b.queue_free()
+					# button_cache.clear()
+					_clear_button_cache()
 					_play_node_in_next_frame(nextNode)
 					pass
 			)
@@ -131,8 +159,26 @@ func play_select_pic_node(suntome_node : SuntomeSelectPictNode):
 	pass
 
 
-func play_para_setting_node(suntome_node : SuntomeParaNode):
-	suntome_node.do_operation()
+# func play_para_setting_node(suntome_node : SuntomeParaNode):
+# 	suntome_node.do_operation()
+# 	var next = suntome_node.next_node()
+# 	if null == next:
+# 		return
+# 	_play_node_in_next_frame(next)
+
+
+# func play_count_check_node(suntome_node : SuntomeCountCheckNode):
+# 	var next = suntome_node.next_node()
+# 	if null == next:
+# 		return
+# 	_play_node_in_next_frame(next)
+# 	pass
+
+
+func play_normal_node(suntome_node : SuntomeNodeBase):
+	if suntome_node.has_method("do_operation"):
+		suntome_node.do_operation()
+
 	var next = suntome_node.next_node()
 	if null == next:
 		return
@@ -140,6 +186,7 @@ func play_para_setting_node(suntome_node : SuntomeParaNode):
 
 
 func _play_node_in_next_frame(suntome_node : SuntomeNodeBase):
+	_clear_button_cache()
 	_next_node = suntome_node
 
 
@@ -165,24 +212,21 @@ func omorashi_shita():
 	start_from_node(SuntomeGlobal.sourou_node)
 
 
-#加载音频文件
-func _sound_load(path : String) -> AudioStream:
-	var abpath = Utility.relative_to_full(path)
-	if not FileAccess.file_exists(abpath):
-		push_error("sound path not valid: ", abpath)
-		return null
-
-	# var suffix
-	var suffixCheck = path.rsplit(".", true, 1)
-	var type = suffixCheck[1].to_lower()
-	if type not in GlobalSetting.SurportSoundTypes:
-		return null
-
-	if "wav" == type:
-		return AudioStreamWAV.load_from_file(abpath)
-	elif "ogg" == type:
-		return AudioStreamOggVorbis.load_from_file(abpath)
-	elif "mp3" == type:
-		return AudioStreamMP3.load_from_file(abpath)
+#检查sound_path的音频是否有绑定的字幕对象，如果没有或者读取出错就返回null，否则返回SubtitleData对象
+func _load_sub_data_if_exist(sound_path : String) -> SubtitleData:
+	var subpath : String = SuntomeGlobal.sound_subtitle_bind_info.get(Utility.cut_file_path(sound_path), "")
+	if not subpath.is_empty():
+		var data = SubtitleData.construct_from_file(subpath)
+		if data.errorinfo.is_empty():
+			return data
 
 	return null
+
+
+func _clear_button_cache():
+	#清空所有button
+	for b : SimpleButton in button_cache:
+		b.get_parent().remove_child(b)
+		b.queue_free()
+	button_cache.clear()
+

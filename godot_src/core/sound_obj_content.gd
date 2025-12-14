@@ -13,7 +13,7 @@ var name : String                       #该对象的名称
 #一个NodeInfo对象列表
 var sound_nodes : Array
 var out_offset_pos : Vector2 = Vector2(200,200)   #输出节点的坐标，默认为(200,200)
-var play_method : Utility.RandomHelper.Method           #音频节点的随机方式
+var play_method : Utility.RandomHelper.Method = Utility.RandomHelper.Method.RandomNoRepeat   #音频节点的随机方式
 var is_temp : bool = false    #标记是否是临时音频对象
 
 var name_change_cb : Callable           #当用户修改了name时，触发该函数对象
@@ -53,7 +53,7 @@ static func make_temp_soundobj(path : String) -> SoundObjContent:
 
 #返回node下面的第一个节点，如果node已是最后一个节点，返回null
 func _get_near_next_node(node : NodeInfo) -> NodeInfo:
-	var yp = node.offset_pos.y
+	# var yp = node.offset_pos.y
 	var pass_nodes = sound_nodes.filter(
 		func(n : NodeInfo):
 			if node == n:
@@ -111,7 +111,7 @@ func get_next_sound() -> String:
 	# if null == _now_play_sound:
 	# 	_sound_obj = make_soundobject()
 
-	return "_sound_obj.getNextSound.call()"
+	return "error path"
 
 
 func change_name(new_name : String):

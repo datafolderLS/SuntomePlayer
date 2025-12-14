@@ -48,7 +48,7 @@ func set_suntome_node(node : SuntomeNode):
 
 
 #拖拽相关函数
-func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
+func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	if null == ref_suntome_node:
 		print("critical error")
 		return false
@@ -68,7 +68,7 @@ func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
 	return false
 
 
-func _drop_data(at_position: Vector2, data: Variant):
+func _drop_data(_at_position: Vector2, data: Variant):
 	if typeof(data) == TYPE_ARRAY and data.size() < 2:
 		# if SuntomeGlobal.select_pic_contents.keys().has(data[0]):
 		# 	set_select_picture_content(SuntomeGlobal.select_pic_contents[data[0]])
@@ -179,7 +179,17 @@ func process_node_connect(target : SuntomeNodeBase):
 
 	var index = ref_suntome_node.get_unused_index()
 	ref_suntome_node.nextNodes_index.set(target.uid, index)
-	ref_suntome_node.nextNodes_chance.set(target.uid, 1.0 / ref_suntome_node.nextNodes.size())
+	var avgchance = func():
+		if ref_suntome_node.nextNodes_chance.size() == 0:
+			return 1.0
+		var sumv = ref_suntome_node.nextNodes_chance.values().reduce(
+				func(accum, value):
+					if typeof(value) == TYPE_FLOAT:
+						return accum + value
+					return accum
+		)
+		return sumv / ref_suntome_node.nextNodes_chance.size()
+	ref_suntome_node.nextNodes_chance.set(target.uid, avgchance.call())
 	ref_suntome_node.update_index_data()
 
 
@@ -245,6 +255,8 @@ func show_node_param(parent : Container):
 	#更新线条的显示信息
 	update_node_line_info.call(parent_node)
 	pass
+
+
 #end（和PlayNodeEditor联动的函数）
 
 func _update_param_info(panel : Control):

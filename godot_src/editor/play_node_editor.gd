@@ -8,7 +8,14 @@ var sourou_node : StateNode
 
 var _cur_select_node : StateNode = null
 
-var _context_func : Callable
+static var NormalNodeFuncMap = {
+	SuntomeParaNode.normal_key() : [SuntomeParaNode, SuntomeParaNodePanel],
+	SuntomeCountCheckNode.normal_key(): [SuntomeCountCheckNode, SuntomeCountCheckNodePanel],
+	SuntomeTimeBeginNode.normal_key(): [SuntomeTimeBeginNode, SuntomeTimeBeginNodePanel],
+	SuntomeTimeCheckNode.normal_key(): [SuntomeTimeCheckNode, SuntomeTimeCheckNodePanel],
+}
+
+# var _context_func : Callable
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -46,10 +53,26 @@ func _ready() -> void:
 
 	%ButtonAddNode.pressed.connect(_add_state_node)
 	%ButtonAddTrans.pressed.connect(_add_trans_node)
-	%ButtonAddSetting.pressed.connect(_add_setting_node)
+
+	# %ButtonAddSetting.pressed.connect(_add_setting_node)
+	# %ButtonAddCountCheck.pressed.connect(_add_count_check_node)
+
+	# %ButtonAddSetting.pressed.connect(func(): _add_normal_node(SuntomeParaNode.normal_key()))
+	# %ButtonAddCountCheck.pressed.connect(func(): _add_normal_node(SuntomeCountCheckNode.normal_key()))
+
+	%ButtonAddOther.get_popup().index_pressed.connect(
+		func(bindex : int):
+			var id = %ButtonAddOther.get_popup().get_item_id(bindex)
+			match id:
+				0 : _add_normal_node(SuntomeParaNode.normal_key())
+				1 : _add_normal_node(SuntomeCountCheckNode.normal_key())
+				2 : _add_normal_node(SuntomeTimeBeginNode.normal_key())
+				3 : _add_normal_node(SuntomeTimeCheckNode.normal_key())
+				_ : Utility.CriticalFail("un implement selection")
+	)
 
 	#右键菜单
-	%ctt_button.pressed.connect(func() : _context_func.call())
+	# %ctt_button.pressed.connect(func() : _context_func.call())
 	%ctt_root_control.hide()
 	%ctt_root_control.gui_input.connect(
 		func(event: InputEvent):
@@ -70,18 +93,55 @@ func _ready() -> void:
 	state_panel.node_selected.connect(_node_select_change)
 	state_panel.context_menu_req.connect(_context_menu_show)
 	state_panel.node_pos_updated.connect(_node_pos_update)
+
+	#实现复制贴贴
+	state_panel.req_copy_data_cb = Callable(self, "_copy_node")
+	state_panel.req_paste_data_cb = Callable(self, "_paste_node")
+
+	#节点播放调试控制内容
+	%bt_start_begin.pressed.connect(func():
+		#清空变量等信息
+		SuntomeGlobal.clear_property()
+		SuntomePlayer.start_from_node(SuntomeGlobal.begin_node)
+		pass
+	)
+
+	%bt_step.pressed.connect(func():
+		SuntomePlayer.step_in_next()
+	)
 	pass # Replace with function body.
 
 
 func _fresh_panel_from_global():
-	#首先构造所有的节点
+	var uid_to_node = _create_state_node_in_list(SuntomeGlobal.suntome_nodes.values())
+
+	#处理start和sourou
+	for left_node in init_nodes():
+		var stmnode = get_node_SuntomeNode(left_node)
+		for right_uid in stmnode.nextNodes.keys():
+			var right_node = uid_to_node[right_uid]
+			state_panel.connect_node(left_node, right_node)
+		pass
+
+	# #更新连接的标签信息
+	# for node : StateNode in uid_to_node.values():
+	# 	_update_node_line_index_info(node)
+
+	for node : StateNode in init_nodes():
+		_update_node_line_index_info(node)
+	pass
+
+
+#基于SuntomeNodeBase对象列表，在editor中创建节点，其中std_nodes的成员对象为SuntomeNodeBase派生对象
+#返回值为构造的uid到StateNode映射{uid : StateNode}
+func _create_state_node_in_list(std_nodes : Array) -> Dictionary:
 	var uid_to_node := Dictionary() #存储uid到StateNode的临时映射对象
 
-	for uid in SuntomeGlobal.suntome_nodes:
-		var stmnode : SuntomeNodeBase = SuntomeGlobal.suntome_nodes[uid]
+	#构造节点
+	for stmnode : SuntomeNodeBase in std_nodes:
 		var node = state_panel.new_node()
 		node.position = stmnode.position
-		uid_to_node.set(uid, node)
+		uid_to_node.set(stmnode.uid, node)
 
 		if stmnode is SuntomeNode:
 			SuntomContent.Create(node, stmnode, Callable(self, "_update_node_line_index_info"))
@@ -92,34 +152,40 @@ func _fresh_panel_from_global():
 				Callable(self, "_update_node_line_index_info"),
 				Callable(self, "_select_pic_ctt_line_delete_req")
 			)
-		elif stmnode is SuntomeParaNode:
-			SuntomeParaNodeContent.create_ctt_from_para_node(node, stmnode)
+		elif stmnode.has_method("normal_key"):
+			var _key = stmnode.normal_key()
+			NormalNodeFuncMap[_key][1].create_ctt_from_node(node, stmnode)
+		# for TTYPE in NormalNodeFuncMap:
+		# 	# if stmnode is TTYPE:
+		# 	NormalNodeFuncMap[TTYPE].create_ctt_from_node(node, stmnode)
+		# 	continue
+
+		# elif stmnode is SuntomeParaNode:
+		# 	SuntomeParaNodePanel.create_ctt_from_node(node,stmnode)
+		# elif stmnode is SuntomeCountCheckNode:
+		# 	SuntomeCountCheckNodePanel.create_ctt_from_node(node, stmnode)
 		else:
-			printerr("stmnode type error")
+			push_error("stmnode type error")
+			Utility.CriticalFail()
+
+
+	var deftercall = func():
+		for node in uid_to_node.values():
+			node.position = get_node_SuntomeNode(node).position
+	deftercall.call_deferred()
 
 	#其次连接所有的节点
-	for uid in SuntomeGlobal.suntome_nodes:
-		var stmnode : SuntomeNodeBase = SuntomeGlobal.suntome_nodes[uid]
-		var left_node = uid_to_node[uid]
+	for stmnode : SuntomeNodeBase in std_nodes:
+		var left_node = uid_to_node[stmnode.uid]
 		for right_uid in stmnode.nextNodes.keys():
 			var right_node = uid_to_node[right_uid]
 			state_panel.connect_node(left_node, right_node)
-
-	#处理start和sourou
-	for left_node in init_nodes():
-		var stmnode = get_node_SuntomeNode(left_node)
-		for right_uid in stmnode.nextNodes.keys():
-			var right_node = uid_to_node[right_uid]
-			state_panel.connect_node(left_node, right_node)
-		pass
 
 	#更新连接的标签信息
 	for node : StateNode in uid_to_node.values():
 		_update_node_line_index_info(node)
 
-	for node : StateNode in init_nodes():
-		_update_node_line_index_info(node)
-	pass
+	return uid_to_node
 
 
 func init_nodes() -> Array:
@@ -144,13 +210,34 @@ func _add_trans_node() -> StateNode:
 	return node
 
 
-func _add_setting_node() -> StateNode:
+# func _add_setting_node() -> StateNode:
+# 	var next = state_panel.new_node()
+# 	next.position = state_panel.pos_map(state_panel.size / 2)
+# 	var newNode := SuntomeParaNode.new_node()
+# 	newNode.position = next.position
+# 	SuntomeGlobal.suntome_nodes.set(newNode.uid, newNode)
+# 	var _content = SuntomeParaNodePanel.create_ctt_from_node(next, newNode)
+# 	return next
+
+
+# func _add_count_check_node() -> StateNode:
+# 	var next = state_panel.new_node()
+# 	next.position = state_panel.pos_map(state_panel.size / 2)
+# 	var newNode := SuntomeCountCheckNode.new_node()
+# 	newNode.position = next.position
+# 	SuntomeGlobal.suntome_nodes.set(newNode.uid, newNode)
+# 	var _content = SuntomeCountCheckNodePanel.create_ctt_from_node(next, newNode)
+# 	return next
+
+
+func _add_normal_node(key : String) -> StateNode:
+	var pair = NormalNodeFuncMap[key]
 	var next = state_panel.new_node()
 	next.position = state_panel.pos_map(state_panel.size / 2)
-	var newNode := SuntomeParaNode.new_node()
+	var newNode = pair[0].new_node()
 	newNode.position = next.position
 	SuntomeGlobal.suntome_nodes.set(newNode.uid, newNode)
-	var _content = SuntomeParaNodeContent.create_ctt_from_para_node(next, newNode)
+	var _content = pair[1].create_ctt_from_node(next, newNode)
 	return next
 
 
@@ -304,6 +391,10 @@ func _process_node_delete(node : StateNode):
 
 
 func _show_node_param(node : StateNode):
+	if null == node:
+		%param_container.hide()
+		return
+
 	var ctt = get_node_ctt(node)
 	%param_container.show()
 	ctt.show_node_param(%param_container)
@@ -311,40 +402,52 @@ func _show_node_param(node : StateNode):
 
 
 #用户选中的节点发生变化信号槽函数
-func _node_select_change(selected_node : StateNode, _pre_selected : StateNode):
+func _node_select_change(selected_node : StateNode):
 	_cur_select_node = selected_node
 	_show_node_param(selected_node)
 	pass
 
 
 func _context_menu_show(emit_node : StateNode, _pos : Vector2):
-	if emit_node in init_nodes():
-		return
+	#构造菜单选项
+	var context_menu_items := Array()
 
-	var left = emit_node.get_ctt()
-	if left is SuntomeSPicContent:
-		return
+	context_menu_items.append([ "play from this node", func():
+			%ctt_root_control.hide()
+			var node = get_node_SuntomeNode(emit_node)
+			SuntomePlayer.start_from_node(node)
+			pass
+	])
+
+	if emit_node not in init_nodes():
+		var node = get_node_SuntomeNode(emit_node)
+		if node is SuntomeNode:
+			if node.is_transit_node:
+				context_menu_items.append([ "trans type to play node", func():
+					%ctt_root_control.hide()
+					_change_node_to_content(emit_node)
+				])
+			else:
+				context_menu_items.append([ "trans type to port node", func():
+					%ctt_root_control.hide()
+					_change_node_to_trans(emit_node)
+				])
+			pass
 
 	#显示右键菜单
+	%ContextMenuPad.set_selections(context_menu_items)
+
 	print("context menu show")
-	%ctt_root_control.show()
-	%contextmenu.position = get_local_mouse_position()
+	%ContextMenuPad.position = get_local_mouse_position()
 
 	#优化位置
 	var rr = get_rect()
-	var rc = %contextmenu.get_rect()
+	var rc = %ContextMenuPad.get_rect()
 	if rr.end.y < rc.end.y:
 		var diff = rc.end.y - rr.end.y
-		%contextmenu.position.y -= diff
+		%ContextMenuPad.position.y -= diff
 
-	_context_func = func():
-		var ctt = get_node_SuntomeNode(emit_node)
-		#print("call once")
-		%ctt_root_control.hide()
-		if ctt.is_transit_node:
-			_change_node_to_content(emit_node)
-		else:
-			_change_node_to_trans(emit_node)
+	%ctt_root_control.show()
 	pass
 
 
@@ -359,4 +462,100 @@ func _select_pic_ctt_line_delete_req(node : StateNode, other : SuntomeNodeBase):
 func _node_pos_update(emit_node : StateNode, pos : Vector2):
 	var stm = get_node_SuntomeNode(emit_node)
 	stm.position = pos
+	pass
+
+
+#将需要拷贝的对象序列化并返回
+func _copy_node(list : Array) -> String:
+	var stmnodes := Dictionary() #流程节点对象
+
+	for nd : StateNode in list:
+		if nd in init_nodes(): #默认节点不复制
+			continue
+
+		var stmnd = get_node_SuntomeNode(nd)
+		stmnodes.set(stmnd.uid, SuntomeSerialization.SuntomeNodeSerialize(stmnd))
+
+	return JSON.stringify(JSON.from_native(stmnodes))
+
+
+#将基于_copy_node获取的数据进行反序列化，并拷贝到鼠标所在的地方
+func _paste_node(data : String):
+	var json = JSON.new()
+	var error = json.parse(data)
+	if OK != error:
+		return "JSON 解析错误：" + json.get_error_message() + " 行号 "+ String.num_int64(json.get_error_line())
+	var stmnodes = JSON.to_native(json.data)
+	var orguidlist = stmnodes.keys()
+	var exist_uids = SuntomeGlobal.suntome_nodes.keys()
+
+	if stmnodes.is_empty():
+		return
+
+	#构造原始uid到新uid的映射
+	var uidmapdict := Dictionary()
+	for _uid : int in orguidlist:
+		var new_uid = Utility.make_uniq_uid(exist_uids)
+		uidmapdict.set(_uid, new_uid)
+		exist_uids.append(new_uid)
+
+	var new_stmnodes := Dictionary()
+
+	var mapcbs := SuntomeSerialization.GlobalInfoMapCBs.new()
+	mapcbs.sound_obj_map_cb = func(key : String): return SuntomeGlobal.sound_object_contents.get(key)
+	mapcbs.select_pic_map_cb = func(key : String): return SuntomeGlobal.select_pic_contents.get(key)
+	mapcbs.suntomenode_map_cb = func(_uid : int): return new_stmnodes.get(_uid)
+	mapcbs.uid_map_cb = func(_uid : int): return uidmapdict.get(_uid)
+
+	#执行反序列化
+	print("开始执行拷贝")
+	var errorinfo := Array()
+	for uid in stmnodes:
+		print(uid)
+		var dict : Dictionary = stmnodes[uid]
+		var stmnode := SuntomeSerialization.SuntomeUnSerializeFisrt(dict, errorinfo, mapcbs)
+		if not errorinfo.is_empty():
+			push_error(errorinfo)
+			return "error in paste suntome_nodes unserialize step1"
+
+		var preuid = stmnode.uid
+		stmnode.uid = uidmapdict.get(preuid)
+		# SuntomeGlobal.suntome_nodes.set(stmnode.uid, stmnode)
+		new_stmnodes.set(stmnode.uid, stmnode)
+
+	for uid in stmnodes:
+		var dict : Dictionary = stmnodes[uid]
+		var node_data = dict["data"]
+		var true_uid = uidmapdict.get(uid)
+		var errorlist = new_stmnodes[true_uid].unserialize_second(node_data, mapcbs)
+		if not errorlist.is_empty():
+			push_error(errorlist)
+			# return "error in node connect: " + String.num_int64(uid)
+	#执行结束
+
+	#对节点坐标进行偏移，适配鼠标位置
+	#获取鼠标的坐标
+	var mouse_pos = state_panel.get_local_mouse_position()
+	var panel_pos = state_panel.pos_map(mouse_pos)
+
+	#获取复制节点的平均坐标
+	var avgpos := Vector2.ZERO
+	for stnd : SuntomeNodeBase in new_stmnodes.values():
+		avgpos += stnd.position
+	avgpos = avgpos / new_stmnodes.size()
+	#计算偏移
+	var diff_pos = panel_pos - avgpos
+	#将偏移应用到每一个节点上
+	for stnd : SuntomeNodeBase in new_stmnodes.values():
+		stnd.position += diff_pos
+
+	#将新的节点添加到global和editor中
+	SuntomeGlobal.suntome_nodes.merge(new_stmnodes)
+
+	#将新的节点显示在编辑界面中
+	var uid_to_statenode = _create_state_node_in_list(new_stmnodes.values())
+
+	#选中复制出来的节点
+	state_panel.unselect_all()
+	state_panel.add_selected(uid_to_statenode.values())
 	pass

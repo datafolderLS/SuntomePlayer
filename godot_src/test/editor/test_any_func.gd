@@ -11,6 +11,11 @@ func _ready() -> void:
 	%ParaNodeSettingCtrl.text_change.connect(func(pretext : String, text : String):
 		print(pretext, " ", text)
 	)
+
+	print(Utility.file_name_without_suffix("./dafadsf/dfdfa/ddd"))
+	print(Utility.file_name_without_suffix("./dafadsf/dfdfa/ddd."))
+	print(Utility.file_name_without_suffix("./dafadsf/dfdfa/ddd.dd"))
+	print(Utility.file_name_without_suffix("ddd.dd"))
 	pass # Replace with function body.
 
 

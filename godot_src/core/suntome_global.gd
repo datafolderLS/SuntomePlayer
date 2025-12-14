@@ -21,11 +21,17 @@ var suntome_nodes := Dictionary()
 #当用户点击漏了时的触发节点
 @onready var sourou_node := SuntomeNode.new_transit_node()
 
+#音频文件和字幕文件绑定信息，键值对为{音频文件路径, 字幕文件路径}
+var sound_subtitle_bind_info := Dictionary()
+
 #用户寸止次数计数
 var suntome_count : int = 0
 
-#辅助变量，
+#辅助变量，用于记录当前流程中的所有变量信息
 var property_variable := VariableProp.new()
+
+#时间tag，用于记录各标签时间的开始时间{name : String, time : float}
+var time_check_map := Dictionary()
 
 const SaveFile = "play_file.suntome"
 
@@ -39,6 +45,8 @@ func ErrorOccur(info : String, node : SuntomeNodeBase):
 
 func clear_property():
 	property_variable = VariableProp.new()
+	time_check_map.clear()
+	suntome_count = 0
 
 
 func _ready() -> void:
@@ -104,3 +112,7 @@ func load_from_disc():
 	if not errorstr.is_empty():
 		push_error(errorstr)
 		return
+
+
+func now_time() -> float:
+	return float(Time.get_ticks_msec()) / 1000.0

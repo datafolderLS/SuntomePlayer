@@ -36,7 +36,9 @@ signal before_delete_sig(node : SelectPicContent)
 signal texture_change_sig(node : SelectPicContent)
 
 #用户修改选项按钮的name时触发(该信号仅由Select_pic_editor触发
+@warning_ignore_start("UNUSED_SIGNAL")
 signal button_name_change_signal(prename : String, now_name : String)
+@warning_ignore_restore("UNUSED_SIGNAL")
 #用户删除选项按钮时触发信号
 signal button_before_delete_signal(name : String)
 

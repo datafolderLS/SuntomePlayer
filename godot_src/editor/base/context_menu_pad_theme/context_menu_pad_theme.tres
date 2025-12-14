@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://bn4flh41jg7rg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rpuel"]
+bg_color = Color(0.29803923, 0.32156864, 0.36862746, 1)
+
+[resource]
+Button/styles/hover = SubResource("StyleBoxFlat_rpuel")

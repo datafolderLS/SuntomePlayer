@@ -11,15 +11,16 @@ var _clicked_button : SimpleButton = null
 var _clicked_button_diff_pos : Vector2   #相对坐标
 var _clicked_mouse_emit_pos : Vector2   #相对坐标
 
+var _need_refresh : bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	%PicContainer.drop_in_panel_availiable_func = func(at_position: Vector2, data: Variant):
+	%PicContainer.drop_in_panel_availiable_func = func(_at_position: Vector2, data: Variant):
 		if null == current_select_picture_content:
 			return false
 		return _is_pic_dropdata(data)
 
-	%PicContainer.drop_in_panel_cb = func(at_position: Vector2, data: Variant):
+	%PicContainer.drop_in_panel_cb = func(_at_position: Vector2, data: Variant):
 		var path = data[0]
 		print(path)
 		var pic = TextureCenter.get_picture(path)
@@ -37,6 +38,11 @@ func _ready() -> void:
 	%param_container.value_changed.connect(_param_updated)
 
 	%param_container.hide()
+
+	visibility_changed.connect(func():
+		if visible and _need_refresh:
+			_show_pic_content()
+	)
 	pass # Replace with function body.
 
 
@@ -58,7 +64,7 @@ func _set_picture(pic):
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if not is_visible_in_tree():
 		return
 
@@ -79,6 +85,18 @@ func set_current_pic_content(ctt : SelectPicContent):
 	if ctt == current_select_picture_content:
 		return
 
+	current_select_picture_content = ctt
+
+	if visible:
+		_need_refresh = false
+		_show_pic_content()
+	else:
+		_need_refresh = true
+	pass
+
+
+#显示current_select_picture_content
+func _show_pic_content():
 	#清空之前的内容
 	for button : SimpleButton in button_to_info:
 		%picture.remove_child(button)
@@ -88,11 +106,10 @@ func set_current_pic_content(ctt : SelectPicContent):
 	%param_container.hide()
 	_selected_button = null
 
-	current_select_picture_content = ctt
-	if ctt.usedTexturePath.is_empty():
+	if current_select_picture_content.usedTexturePath.is_empty():
 		_set_picture(null)
 	else:
-		var pic = TextureCenter.get_picture(ctt.usedTexturePath)
+		var pic = TextureCenter.get_picture(current_select_picture_content.usedTexturePath)
 		_set_picture(pic)
 		pass
 
@@ -155,6 +172,7 @@ func _select_change(button : SimpleButton):
 	var info = button_to_info[button]
 	if null == info:
 		printerr("wc, 这是什么鬼")
+		Utility.CriticalFail()
 		return
 
 	%button_name.remove_theme_color_override("font_color")

@@ -64,22 +64,22 @@ func _ready() -> void:
 	)
 
 
-func set_x_range(range : Vector2):
-	var min = min(range.x, range.y)
-	var max = max(range.x, range.y)
-	%part1.min_value = min
-	%part1.max_value = max
-	%vec1_slider.min_value = min
-	%vec1_slider.max_value = max
+func set_x_range(range_ : Vector2):
+	var min_ = min(range_.x, range_.y)
+	var max_ = max(range_.x, range_.y)
+	%part1.min_value = min_
+	%part1.max_value = max_
+	%vec1_slider.min_value = min_
+	%vec1_slider.max_value = max_
 
 
-func set_y_range(range : Vector2):
-	var min = min(range.x, range.y)
-	var max = max(range.x, range.y)
-	%part2.min_value = min
+func set_y_range(range_ : Vector2):
+	var min_ = min(range_.x, range_.y)
+	var max_ = max(range_.x, range_.y)
+	%part2.min_value = min_
 	%part2.max_value = max
-	%vec2_slider.min_value = min
-	%vec2_slider.max_value = max
+	%vec2_slider.min_value = min_
+	%vec2_slider.max_value = max_
 
 
 #为ParamEditRoot准备的函数
@@ -87,9 +87,9 @@ func refresh(obj):
 	if param_name.is_empty():
 		return
 
-	var value = obj.get(param_name)
-	if typeof(value) == TYPE_VECTOR2:
-		set_value_no_signal(value)
+	var value_ = obj.get(param_name)
+	if typeof(value_) == TYPE_VECTOR2:
+		set_value_no_signal(value_)
 
 
 func update_value(obj):
@@ -97,5 +97,5 @@ func update_value(obj):
 		return
 
 	var val = obj.get(param_name)
-	if typeof(value) == TYPE_VECTOR2:
+	if typeof(val) == TYPE_VECTOR2:
 		obj.set(param_name, value)

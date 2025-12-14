@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://dchiokdt4bvs6"]
+
+[ext_resource type="Script" uid="uid://cbspslilbu51k" path="res://test/editor/testSelectPicEditor.gd" id="1_56ncr"]
+[ext_resource type="PackedScene" uid="uid://chyuuegy6ob5p" path="res://editor/select_pic_editor.tscn" id="2_f7ced"]
+
+[node name="TestSimpleButton" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_56ncr")
+
+[node name="select_pic_editor" parent="." instance=ExtResource("2_f7ced")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

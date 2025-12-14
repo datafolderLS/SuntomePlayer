@@ -37,7 +37,7 @@ func is_connected_from_node_to_node(from : StateNode, to : StateNode) -> bool:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if null == end:
 		return
 
@@ -91,7 +91,7 @@ func _calc_node_to_node_true_position(lpos : Vector2, lsize : Vector2, rpos : Ve
 	var rsizehalf = rsize / 2
 
 	var start = lpos + Vector2(sign(dir.x) * lsizehalf.x, sign(dir.y) * lsizehalf.y)
-	var end = rpos - Vector2(sign(dir.x) * rsizehalf.x, sign(dir.y) * rsizehalf.y)
+	var endp = rpos - Vector2(sign(dir.x) * rsizehalf.x, sign(dir.y) * rsizehalf.y)
 
 	if abs(dir.x) < (lsizehalf.x + rsizehalf.x) :
 		var temp = abs(rpos.x - lpos.x) - lsizehalf.x - rsizehalf.x
@@ -100,8 +100,7 @@ func _calc_node_to_node_true_position(lpos : Vector2, lsize : Vector2, rpos : Ve
 		var xdiffr = xdiffl * rsizehalf.x / lsizehalf.x
 
 		start.x = start.x - sign(dir.x) * xdiffl
-		end.x = end.x + sign(dir.x) * xdiffr
-		#return [start, end]
+		endp.x = endp.x + sign(dir.x) * xdiffr
 		pass
 	elif abs(dir.y) < (lsizehalf.y + rsizehalf.y) :
 		var temp = abs(rpos.y - lpos.y) - lsizehalf.y - rsizehalf.y
@@ -110,12 +109,11 @@ func _calc_node_to_node_true_position(lpos : Vector2, lsize : Vector2, rpos : Ve
 		var ydiffr = ydiffl * rsizehalf.y / lsizehalf.y
 
 		start.y = start.y - sign(dir.y) * ydiffl
-		end.y = end.y + sign(dir.y) * ydiffr
-		#return [start, end]
+		endp.y = endp.y + sign(dir.y) * ydiffr
 		pass
 
-	return [start, end]
-	pass
+	return [start, endp]
+	#pass
 
 
 func _update_pos(from : Vector2, to : Vector2) -> void:

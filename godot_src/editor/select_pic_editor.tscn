@@ -93,6 +93,7 @@ param_name = "name"
 [node name="Button_bt_use_name" type="CheckBox" parent="HSplitContainer/PanelContainer2/VBoxContainer/param_container/param_root"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("1_175df")
 text = "button text use name"
 script = ExtResource("5_uqtrd")
 param_name = "name_as_text"

@@ -1,0 +1,75 @@
+[gd_scene load_steps=5 format=3 uid="uid://d31rjuyf4gy20"]
+
+[sub_resource type="GDScript" id="GDScript_na2h8"]
+script/source = "extends Control
+
+func _ready() -> void:
+
+	pass
+
+func _process(_delta: float) -> void:
+	var diff = Utility.calc_diff_rect_to_rect(%movepanel.get_rect(), %tarpanel.get_rect())
+	%checkpanel.size = %movepanel.size
+	%checkpanel.position = %movepanel.position + diff
+
+	#var rect_ = Utility.rect_merge(%movepanel.get_rect(), %tarpanel.get_rect())
+	#%rectpanel.position = rect_.position
+	#%rectpanel.size = rect_.size
+	pass
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_na2h8"]
+bg_color = Color(0, 0.7086797, 0.49406397, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v1cyt"]
+bg_color = Color(0.45882353, 0.27058825, 0.79607844, 0.25882354)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0l2np"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(6.7383053e-06, 0.8306049, 0.91685134, 1)
+
+[node name="TestFuncs" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_na2h8")
+
+[node name="movepanel" type="Panel" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 45.0
+offset_top = 125.0
+offset_right = 160.0
+offset_bottom = 196.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_na2h8")
+
+[node name="checkpanel" type="Panel" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 104.0
+offset_top = 159.0
+offset_right = 219.0
+offset_bottom = 230.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_v1cyt")
+
+[node name="tarpanel" type="Panel" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 324.0
+offset_top = 59.0
+offset_right = 501.0
+offset_bottom = 160.0
+
+[node name="rectpanel" type="Panel" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 178.0
+offset_bottom = 110.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_0l2np")

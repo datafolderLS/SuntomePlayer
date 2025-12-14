@@ -1,9 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://16ami7sse2y"]
+[gd_scene load_steps=9 format=3 uid="uid://16ami7sse2y"]
 
 [ext_resource type="Script" uid="uid://cq25kvtydcekt" path="res://test/editor/test_any_func.gd" id="1_dl84o"]
 [ext_resource type="PackedScene" uid="uid://cil6wi1mo5esx" path="res://editor/base/para_node_setting_ctrl.tscn" id="2_0t62x"]
+[ext_resource type="Shader" uid="uid://b0pil1siyqgk7" path="res://misc/simple_button.gdshader" id="3_yn1d0"]
+[ext_resource type="Texture2D" uid="uid://wwa8ybk3d7br" path="res://icon.svg" id="4_1kvcj"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dl84o"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yn1d0"]
+shader = ExtResource("3_yn1d0")
+
+[sub_resource type="QuadMesh" id="QuadMesh_1kvcj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m6fgy"]
+shader = ExtResource("3_yn1d0")
 
 [node name="TestAnyFunc" type="Node2D"]
 script = ExtResource("1_dl84o")
@@ -44,3 +54,29 @@ offset_right = 564.0
 offset_bottom = 156.0
 text = "dsafadfa"
 flat = false
+
+[node name="MeshInstance2D2" type="MeshInstance2D" parent="."]
+material = SubResource("ShaderMaterial_yn1d0")
+instance_shader_parameters/color_bottom = Color(1, 1, 1, 1)
+instance_shader_parameters/color_top = Color(1, 1, 1, 1)
+position = Vector2(1024, 328)
+scale = Vector2(271.2499, 232.25002)
+mesh = SubResource("QuadMesh_1kvcj")
+texture = ExtResource("4_1kvcj")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+material = SubResource("ShaderMaterial_yn1d0")
+position = Vector2(676, 446)
+scale = Vector2(192.5, 113.74999)
+mesh = SubResource("QuadMesh_1kvcj")
+texture = ExtResource("4_1kvcj")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_m6fgy")
+instance_shader_parameters/color_bottom = Color(1, 1, 1, 1)
+instance_shader_parameters/color_top = Color(1, 1, 1, 1)
+offset_left = 234.0
+offset_top = 446.0
+offset_right = 440.0
+offset_bottom = 574.0
+texture = ExtResource("4_1kvcj")

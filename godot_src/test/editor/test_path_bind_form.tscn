@@ -1,0 +1,36 @@
+[gd_scene load_steps=3 format=3 uid="uid://c4g235w36g8j5"]
+
+[ext_resource type="PackedScene" uid="uid://bqr47tcimigpn" path="res://editor/base/subtitle/path_bind_form.tscn" id="1_8gc08"]
+[ext_resource type="Script" uid="uid://y466wnfv7n87" path="res://test/editor/test_path_bind_form.gd" id="1_yv2x1"]
+
+[node name="TestPathBindForm" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yv2x1")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="testbutton1" type="Button" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "test1"
+
+[node name="testbutton2" type="Button" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "test1"
+
+[node name="HBoxContainer2" type="HSplitContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PathBindForm" parent="HBoxContainer2" instance=ExtResource("1_8gc08")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

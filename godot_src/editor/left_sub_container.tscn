@@ -1,9 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://b67dfbbpkpvs"]
+[gd_scene load_steps=3 format=3 uid="uid://b67dfbbpkpvs"]
 
 [ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="1_mtojm"]
 [ext_resource type="Script" uid="uid://d20l423ql8qck" path="res://editor/left_sub_container.gd" id="1_n5dga"]
-[ext_resource type="PackedScene" uid="uid://bqhdt3gpgfb0" path="res://editor/base/sound_obj_list.tscn" id="2_mtojm"]
-[ext_resource type="PackedScene" uid="uid://ccdtnc6dlyyjd" path="res://editor/base/pic_obj_list.tscn" id="4_n5dga"]
 
 [node name="LeftSubContainer" type="MarginContainer"]
 anchors_preset = 15
@@ -35,24 +33,12 @@ theme = ExtResource("1_mtojm")
 [node name="TabContainer" type="TabContainer" parent="HSplitContainer/VSplitContainer/PanelContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/outline_size = 0
 theme_override_constants/side_margin = 0
 theme_override_constants/icon_separation = 0
 theme_override_constants/icon_max_width = 0
-current_tab = 0
+theme_override_constants/outline_size = 0
 clip_tabs = false
 tab_focus_mode = 1
-
-[node name="SoundObjList" parent="HSplitContainer/VSplitContainer/PanelContainer2/TabContainer" instance=ExtResource("2_mtojm")]
-unique_name_in_owner = true
-layout_mode = 2
-metadata/_tab_index = 0
-
-[node name="PicObjList" parent="HSplitContainer/VSplitContainer/PanelContainer2/TabContainer" instance=ExtResource("4_n5dga")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-metadata/_tab_index = 1
 
 [node name="ContentContainer" type="PanelContainer" parent="HSplitContainer"]
 unique_name_in_owner = true

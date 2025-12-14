@@ -1,11 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://c68vlwdo0nhj1"]
+[gd_scene load_steps=6 format=3 uid="uid://c68vlwdo0nhj1"]
 
 [ext_resource type="Script" uid="uid://mtjxxhfk7dil" path="res://editor/editor.gd" id="1_6j37k"]
 [ext_resource type="Theme" uid="uid://cxsvh8s7nbr" path="res://editor/editor_top_theme.tres" id="1_ycap1"]
 [ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="2_j82do"]
 [ext_resource type="PackedScene" uid="uid://b67dfbbpkpvs" path="res://editor/left_sub_container.tscn" id="4_j82do"]
 
-[node name="Editor" type="MarginContainer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j82do"]
+bg_color = Color(0.2295, 0.346375, 0.51, 0.49803922)
+
+[node name="Editor" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -13,6 +16,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j82do")
 script = ExtResource("1_6j37k")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -42,6 +46,12 @@ unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_ycap1")
 text = "node editor"
+
+[node name="button_SubtitleEdit" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("1_ycap1")
+text = "subtitle bind"
 
 [node name="ButtonSave" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true

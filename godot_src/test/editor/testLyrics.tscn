@@ -1,0 +1,41 @@
+[gd_scene load_steps=4 format=3 uid="uid://br3pp0yl0bx1k"]
+
+[ext_resource type="Script" uid="uid://bs2kj4t3bgwgj" path="res://test/editor/test_lyrics.gd" id="1_csudy"]
+[ext_resource type="PackedScene" uid="uid://cakhp0nx8mx54" path="res://misc/subtitle_viewer.tscn" id="2_7nr4v"]
+[ext_resource type="PackedScene" uid="uid://dlk7krendsprp" path="res://editor/base/subtitle/subtitle_multi_viewer.tscn" id="3_1akhn"]
+
+[node name="TestLyrics" type="Node2D"]
+script = ExtResource("1_csudy")
+
+[node name="Button_Openfile" type="Button" parent="."]
+unique_name_in_owner = true
+offset_left = 111.0
+offset_top = 126.0
+offset_right = 253.0
+offset_bottom = 186.0
+text = "打开字幕文件"
+
+[node name="Button_playaudio" type="Button" parent="."]
+unique_name_in_owner = true
+offset_left = 314.0
+offset_top = 127.0
+offset_right = 436.0
+offset_bottom = 187.0
+text = "播放音频"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+
+[node name="SubtitleViewer" parent="." instance=ExtResource("2_7nr4v")]
+unique_name_in_owner = true
+offset_left = 54.0
+offset_top = 221.0
+offset_right = 793.0
+offset_bottom = 319.0
+
+[node name="SubtitleMultiViewer" parent="." instance=ExtResource("3_1akhn")]
+unique_name_in_owner = true
+offset_left = 679.0
+offset_top = 366.0
+offset_right = 1229.0
+offset_bottom = 667.0

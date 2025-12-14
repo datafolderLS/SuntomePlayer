@@ -1,6 +1,6 @@
 extends TextureRect
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if null == texture:
 		size = Vector2.ZERO
 		return

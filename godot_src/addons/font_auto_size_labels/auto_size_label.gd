@@ -35,7 +35,7 @@ class_name AutoSizeLabel
 @export_storage var _size_just_modified_by_autosizer: bool = false
 @export_storage var _editor_defaults_set: bool = false
 var _label_settings_just_duplicated: bool = false
-enum LABEL_SIZE_STATE {JUST_SHRUNK, IDLE, JUST_ENLARGED} 
+enum LABEL_SIZE_STATE {JUST_SHRUNK, IDLE, JUST_ENLARGED}
 #endregion
 
 
@@ -105,7 +105,7 @@ func _set(property: StringName, value: Variant) -> bool:
 			if _label_settings_just_duplicated: ## Need to check because this gets called whenever we duplicate the resource as well.
 				_label_settings_just_duplicated = false
 				return true
-			else: 
+			else:
 				if value != null:
 					label_settings = value
 					_label_settings_just_duplicated = true
@@ -137,14 +137,14 @@ func _check_font_size() -> void:
 func _check_line_count() -> void:
 	if Engine.is_editor_hint() and _lock_size_in_editor:
 		return
-	
+
 	if _current_font_size > _max_size and _current_font_size > _min_size:
 		_shrink_font()
 		return
 	elif  get_line_count() > get_visible_line_count() and _current_font_size > _min_size:
 		_shrink_font()
 		return
-	
+
 	if _current_font_size < _max_size and _current_font_size < _min_size:
 		_enlarge_font()
 		return

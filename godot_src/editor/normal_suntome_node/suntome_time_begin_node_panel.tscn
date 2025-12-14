@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://bgq0ooy4llupb"]
+
+[ext_resource type="Script" uid="uid://cdhgf1m24gx5a" path="res://editor/normal_suntome_node/suntome_time_begin_node_panel.gd" id="1_84hrj"]
+[ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="2_klubp"]
+
+[node name="SuntomeTimeBeginNodePanel" type="VBoxContainer"]
+script = ExtResource("1_84hrj")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "updata tag"
+vertical_alignment = 1
+
+[node name="tag" type="LineEdit" parent="HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_klubp")
+theme_override_colors/font_color = Color(0.88, 0.88, 0.88, 1)
+text = "time"

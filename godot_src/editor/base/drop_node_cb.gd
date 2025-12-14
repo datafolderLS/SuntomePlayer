@@ -1,6 +1,8 @@
 class_name DropNodeCB extends Control
 
+#(at_position: Vector2, data: Variant) -> bool
 var drop_in_panel_availiable_func : Callable
+#(at_position: Vector2, data: Variant) -> void
 var drop_in_panel_cb : Callable
 var can_drop : bool = true
 

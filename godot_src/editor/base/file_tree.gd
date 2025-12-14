@@ -2,10 +2,7 @@ extends Tree
 
 class_name FileTree
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-
-	pass # Replace with function body.
+#文件树控件的拖动data数据为[path : String, Type, AssetType]
 
 enum Type {
 	Folder = 0,
@@ -13,7 +10,7 @@ enum Type {
 }
 
 enum AssetType {
-	Nothing = -1,     #音频文件
+	Nothing = -1,     #什么都不是
 	Sound = 0,     #音频文件
 	Picture = 1,   #图像文件
 	Subtitle = 2   #字幕文件
@@ -21,6 +18,10 @@ enum AssetType {
 
 static var picture_icon = preload("res://editor/icon/picture_32.png")
 static var sound_icon = preload("res://editor/icon/speaker_32.png")
+static var subtitle_icon = preload("res://editor/icon/subtitle_32.png")
+
+
+signal on_select_file_change(path : String, type : AssetType)
 
 # const SurportPictureTypes = ["jpg", "png"]
 # const SurportSoundTypes = ["mp3", "wav", "ogg"]
@@ -30,7 +31,8 @@ var RootPath : String
 
 #返回一个FileTree控件，如果filePath不是合法路径，则返回一个空对象
 static func new_tree(filePath : String) -> FileTree:
-	var tree = FileTree.new()
+	var tree = preload("res://editor/base/file_tree.tscn").instantiate()
+
 	if not filePath.is_absolute_path():
 		if filePath.is_relative_path() :
 			#将路径转换为绝对路径
@@ -68,9 +70,33 @@ static func new_tree(filePath : String) -> FileTree:
 					node.set_icon(0, sound_icon)
 					node.set_metadata(0, [path, Type.File, AssetType.Sound])
 					pass
-		pass)
+				elif suffixCheck[1].to_lower() in SubtitleData.SupportSubtitleTypes.keys():
+					var node = tree.add_or_find_node(path)
+					node.set_icon(0, subtitle_icon)
+					node.set_metadata(0, [path, Type.File, AssetType.Subtitle])
+					pass
+		pass
+	)
 
 	return tree
+
+
+func _ready():
+	item_selected.connect(func():
+		print("")
+	)
+	cell_selected.connect(func():
+		var meta = get_selected().get_metadata(0)
+		if null == meta:
+			return
+
+		if Type.Folder == meta[1]:
+			return
+
+		# print(Utility.cut_file_path(meta[0]), meta[2])
+		on_select_file_change.emit(Utility.cut_file_path(meta[0]), meta[2])
+	)
+	pass
 
 
 #在树中添加一个路径为path的节点，如果存在就返回已有的节点
@@ -146,6 +172,9 @@ static func _drag_preview(item : TreeItem) -> Control:
 				AssetType.Picture:
 					ctrl.set_texture(picture_icon)
 					pass
+				AssetType.Subtitle:
+					ctrl.set_texture(subtitle_icon)
+					pass
 				_:
 					return null
 		Type.Folder:
@@ -177,7 +206,7 @@ static func _folder_scan(path : String, callback : Callable):
 		dir.list_dir_end()
 
 
-#遍历path路径下的所有文件夹和文件，并调用callback函数，callback的参数为（path，Type）
+#遍历path路径下的所有文件夹和文件，并调用callback函数，callback的参数为（path，Type），如果do_recursion为true则会遍历子目录
 static func scan_folder(path : String, callback : Callable, do_recursion : bool = false):
 	path = Utility.relative_to_full(path)
 	if do_recursion:

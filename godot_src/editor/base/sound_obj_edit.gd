@@ -18,7 +18,7 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if not is_visible_in_tree():
 		return
 
@@ -32,7 +32,7 @@ func _process(delta: float) -> void:
 
 
 #和SoundObjList进行关联
-func connect_sound_obj_list(sol : SoundObjList):
+func connect_sound_obj_list(sol : ObjList):
 	sol.select_change.connect(
 		func(select_name : String):
 			if SuntomeGlobal.sound_object_contents.has(select_name):
@@ -67,12 +67,12 @@ func set_sound_object(sobj : SoundObjContent):
 			GraphEd.connect_node(n.name, 0, node_out.name, 0)
 
 
-	current_edit_node.name_change_cb = func(sobj : SoundObjContent):
-		if sobj == current_edit_node:
+	current_edit_node.name_change_cb = func(sobj_ : SoundObjContent):
+		if sobj_ == current_edit_node:
 			node_out.title = current_edit_node.name
 
-	current_edit_node.before_delete_cb = func(sobj : SoundObjContent):
-		if sobj == current_edit_node:
+	current_edit_node.before_delete_cb = func(sobj_ : SoundObjContent):
+		if sobj_ == current_edit_node:
 			_clear_node()
 			node_out.title = ""
 
@@ -92,7 +92,9 @@ func _construct_param_control(value) -> Control:
 		paramctrl.container().add_child(ctrl)
 		ctrl.item_selected.connect(
 			func(id : int):
+				@warning_ignore_start("INT_AS_ENUM_WITHOUT_CAST")
 				current_edit_node.play_method = id
+				@warning_ignore_restore("INT_AS_ENUM_WITHOUT_CAST")
 				pass
 		)
 		return paramctrl
@@ -140,7 +142,7 @@ func _add_sound_context(node : GraphNode) -> GraphNode:
 
 
 #允许的metadata应该是[path, FileTree.Type.File, FileTree.AssetType.Sound]的文件形式，且第三个成员是FileTree.AssetType.Sound
-func _can_drop_data(position, data):
+func _can_drop_data(_position, data):
 	if null == current_edit_node:
 		return false
 
@@ -201,10 +203,10 @@ func _add_sound_node_in_pos(path : String, pos : Vector2) -> GraphNode:
 	return node
 
 
-static func _find_child_by_name(parent : Node, name : String) -> Node:
+static func _find_child_by_name(parent : Node, name_ : String) -> Node:
 	var nodes = parent.get_children()
 	for n in nodes:
-		if name == n.name:
+		if name_ == n.name:
 			return n
 	return null
 

@@ -10,6 +10,11 @@ static func new_node() -> SuntomeParaNode:
 	return newNode
 
 
+#返回该类型的判别名
+static func normal_key()->String:
+	return "TYPE_SuntomeParaNode"
+
+
 func do_operation():
 	for key in change_operation:
 		SuntomeGlobal.property_variable.setv(key, change_operation[key])
@@ -35,7 +40,7 @@ func serialize() -> Dictionary:
 
 #反序列化第一步，如果没有出错就返回空列表，否则返回错误信息列表
 #这一步只进行节点构建，不涉及节点的连接
-func unserialize_first(dict : Dictionary) -> Array:
+func unserialize_first(dict : Dictionary, _mapcbs : SuntomeSerialization.GlobalInfoMapCBs) -> Array:
 	var errorinfo := Array()
 	SuntomeSerialization.SetValueFromDictOrError(errorinfo, dict, "change_operation", self)
 
@@ -47,9 +52,9 @@ func unserialize_first(dict : Dictionary) -> Array:
 
 #反序列化，如果没有出错就返回空列表，否则返回错误信息列表
 #这一步进行节点的连接
-func unserialize_second(dict : Dictionary) -> Array:
+func unserialize_second(dict : Dictionary, mapcbs : SuntomeSerialization.GlobalInfoMapCBs) -> Array:
 	var errorinfo := Array()
 	var list : Array = SuntomeSerialization.ValueFromDictOrError(errorinfo, dict, "nextNodes")
-	errorinfo.append_array(unserialize_nextNodes_info(list))
+	errorinfo.append_array(unserialize_nextNodes_info(list, mapcbs))
 	return errorinfo
 #end(序列化和反序列化的函数)

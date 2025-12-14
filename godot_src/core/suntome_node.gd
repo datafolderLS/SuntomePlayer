@@ -177,6 +177,7 @@ func _random_node_by_chance(raws_dict : Dictionary) -> int:
 	if raws_dict.is_empty():
 		printerr("error")
 		print_debug("critical error")
+		Utility.CriticalFail()
 		return -1
 
 	#基于变量的值将raws_dict转换为uid到float的键值对
@@ -243,14 +244,14 @@ func serialize() -> Dictionary:
 
 #反序列化第一步，如果没有出错就返回空列表，否则返回错误信息列表
 #这一步只进行节点构建，不涉及节点的连接
-func unserialize_first(dict : Dictionary) -> Array:
+func unserialize_first(dict : Dictionary, mapcbs : SuntomeSerialization.GlobalInfoMapCBs) -> Array:
 	var errorinfo := Array()
 	SuntomeSerialization.SetValueFromDictOrError(errorinfo, dict, "usedTexturePath", self)
-	SuntomeSerialization.SetValueFromDictOrError(errorinfo, dict, "nextNodes_chance", self)
-	SuntomeSerialization.SetValueFromDictOrError(errorinfo, dict, "nextNodes_index", self)
 	SuntomeSerialization.SetValueFromDictOrError(errorinfo, dict, "play_mode", self)
 	SuntomeSerialization.SetValueFromDictOrError(errorinfo, dict, "is_transit_node", self)
 	SuntomeSerialization.SetValueFromDictOrError(errorinfo, dict, "is_suntome", self)
+	SuntomeSerialization.SetValueFromDictOrError(errorinfo, dict, "nextNodes_chance", self)
+	SuntomeSerialization.SetValueFromDictOrError(errorinfo, dict, "nextNodes_index", self)
 
 	#SuntomeNodeBase的数据读取
 	SuntomeSerialization.SetValueFromDictOrError(errorinfo, dict, "position", self)
@@ -259,10 +260,11 @@ func unserialize_first(dict : Dictionary) -> Array:
 	#usedSoundObject的特殊处理
 	var soundobj = SuntomeSerialization.ValueFromDictOrError(errorinfo, dict, "usedSoundObject")
 	if typeof(soundobj) == TYPE_STRING:
-		if not SuntomeSerialization.unserialize_global.sound_object_contents.has(soundobj):
+		var obj = mapcbs.sound_obj_map_cb.call(soundobj)
+		if null == obj:
 			errorinfo.append("未找到名称为 " + soundobj + " 的音频对象")
 		else:
-			usedSoundObject = SuntomeSerialization.unserialize_global.sound_object_contents[soundobj]
+			usedSoundObject = obj
 	elif typeof(soundobj) == TYPE_DICTIONARY:
 		usedSoundObject = SoundObjContent.new()
 		errorinfo.append_array(usedSoundObject.unserialize(soundobj))
@@ -274,9 +276,50 @@ func unserialize_first(dict : Dictionary) -> Array:
 
 #反序列化，如果没有出错就返回空列表，否则返回错误信息列表
 #这一步进行节点的连接
-func unserialize_second(dict : Dictionary) -> Array:
+func unserialize_second(dict : Dictionary, mapcbs : SuntomeSerialization.GlobalInfoMapCBs) -> Array:
 	var errorinfo := Array()
 	var list : Array = SuntomeSerialization.ValueFromDictOrError(errorinfo, dict, "nextNodes")
-	errorinfo.append_array(unserialize_nextNodes_info(list))
+	errorinfo.append_array(unserialize_nextNodes_info(list, mapcbs))
+
+	#更新nextNodes_chance和nextNodes_index的key
+	var keydatamap := Dictionary()
+
+	for _uid in nextNodes_chance:
+		var mapeduid = mapcbs.uid_map_cb.call(_uid)
+		if mapeduid != _uid:
+			keydatamap.set(_uid, mapeduid)
+
+	for _uid in nextNodes_index:
+		var mapeduid = mapcbs.uid_map_cb.call(_uid)
+		if mapeduid != _uid:
+			keydatamap.set(_uid, mapeduid)
+
+	for preuid in keydatamap:
+		var aftuid = keydatamap[preuid]
+		if null == aftuid:
+			continue
+		Utility.dict_change_key_if_exist(nextNodes_chance, preuid, aftuid)
+		Utility.dict_change_key_if_exist(nextNodes_index, preuid, aftuid)
+	#本块结束（更新nextNodes_chance和nextNodes_index的key）
+
+	#删除未连接的概率和次序信息
+	var remove_uids := Dictionary()
+	var now_connected = nextNodes.keys()
+	for _uid in nextNodes_chance:
+		if _uid not in now_connected:
+			remove_uids.set(_uid, null)
+
+	for _uid in nextNodes_index:
+		if _uid not in now_connected:
+			remove_uids.set(_uid, null)
+
+	for preuid in remove_uids:
+		nextNodes_chance.erase(preuid)
+		nextNodes_index.erase(preuid)
+
+	#更新nextNodes_index
+	update_index_data()
+	#本块结束（删除未连接的概率和次序信息）
+
 	return errorinfo
 #end(序列化和反序列化的函数)

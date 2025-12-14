@@ -1,0 +1,64 @@
+[gd_scene load_steps=7 format=3 uid="uid://besp8dq7inqtt"]
+
+[ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="1_54x7j"]
+[ext_resource type="Script" uid="uid://bw34p1xgm67w" path="res://editor/base/obj_list.gd" id="1_n34jd"]
+[ext_resource type="Texture2D" uid="uid://dvhacktl4php6" path="res://editor/icon/add_32.png" id="2_n34jd"]
+[ext_resource type="Texture2D" uid="uid://c5p70dxnus8e4" path="res://editor/icon/remove_32.png" id="3_e3v1u"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hlfcs"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oinqk"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="ObjList" type="VBoxContainer"]
+offset_right = 200.0
+offset_bottom = 518.0
+script = ExtResource("1_n34jd")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme = ExtResource("1_54x7j")
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_54x7j")
+theme_override_constants/margin_left = 10
+
+[node name="label_name" type="Label" parent="HBoxContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("1_54x7j")
+text = "Object List"
+
+[node name="Label2" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+justification_flags = 0
+
+[node name="AddButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("2_n34jd")
+flat = true
+icon_alignment = 1
+
+[node name="RemoveButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("3_e3v1u")
+flat = true
+
+[node name="ItemList" type="ItemList" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+wraparound_items = false
+
+[node name="NameEdit" type="LineEdit" parent="ItemList"]
+visible = false
+layout_mode = 0
+offset_left = 10.0
+offset_top = 60.0
+offset_right = 373.0
+offset_bottom = 91.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_hlfcs")
+theme_override_styles/focus = SubResource("StyleBoxFlat_oinqk")

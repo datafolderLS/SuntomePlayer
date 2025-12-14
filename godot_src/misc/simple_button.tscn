@@ -7,8 +7,6 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g3brw"]
 shader = ExtResource("1_w7655")
-shader_parameter/color_top = Vector4(1, 1, 1, 1)
-shader_parameter/color_bottom = Vector4(1, 1, 1, 1)
 
 [node name="SimpleButton" type="Control"]
 layout_mode = 3
@@ -20,6 +18,8 @@ script = ExtResource("1_g3brw")
 [node name="picture" type="TextureRect" parent="."]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_g3brw")
+instance_shader_parameters/color_bottom = Color(1, 1, 1, 1)
+instance_shader_parameters/color_top = Color(1, 1, 1, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

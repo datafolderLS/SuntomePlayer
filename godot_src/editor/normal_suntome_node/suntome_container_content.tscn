@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://dsavmoty1ewef"]
+
+[ext_resource type="Script" uid="uid://87sbfy0wtenj" path="res://editor/normal_suntome_node/suntome_container_content.gd" id="1_wyam2"]
+
+[node name="VBoxContainer" type="VBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_wyam2")
+
+[node name="Label" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1

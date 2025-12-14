@@ -1,0 +1,43 @@
+[gd_scene load_steps=3 format=3 uid="uid://c3jqxnxsyn73"]
+
+[ext_resource type="Script" uid="uid://um0jxnim0tdk" path="res://editor/normal_suntome_node/suntome_time_check_node_panel.gd" id="1_r6rxr"]
+[ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="2_ne0x1"]
+
+[node name="SuntomeTimeCheckNodePanel" type="VBoxContainer"]
+script = ExtResource("1_r6rxr")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "check tag"
+vertical_alignment = 1
+
+[node name="tag" type="MenuButton" parent="HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_ne0x1")
+theme_override_colors/font_color = Color(0.88, 0.88, 0.88, 1)
+text = "select tag"
+flat = false
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "passed time"
+vertical_alignment = 1
+
+[node name="count" type="SpinBox" parent="HBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme = ExtResource("2_ne0x1")
+allow_greater = true
+alignment = 1

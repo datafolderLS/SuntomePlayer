@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://lo4by6vi70kl"]
+[gd_scene load_steps=4 format=3 uid="uid://lo4by6vi70kl"]
 
-[ext_resource type="Texture2D" uid="uid://dhymfrcmoqi2m" path="res://editor/icon/play.png" id="1_d723o"]
-[ext_resource type="Texture2D" uid="uid://k40mybcqi6sy" path="res://editor/icon/pause.png" id="2_lioro"]
+[ext_resource type="Texture2D" uid="uid://dfmpofi3mdt4" path="res://editor/icon/play.png" id="1_d723o"]
+[ext_resource type="Script" uid="uid://ckrcvqtnhobhh" path="res://editor/base/sound_bar.gd" id="1_dvyri"]
+[ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="1_kcbj5"]
 
 [node name="SoundBar" type="MarginContainer"]
 anchors_preset = 15
@@ -11,6 +12,7 @@ offset_right = -130.0
 offset_bottom = -425.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_dvyri")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -29,24 +31,14 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="play_button" type="Button" parent="VBoxContainer/Panel/HBoxContainer"]
+[node name="Button" type="Button" parent="VBoxContainer/Panel/HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
-size_flags_horizontal = 6
+size_flags_horizontal = 4
 size_flags_vertical = 4
-size_flags_stretch_ratio = 0.0
+theme = ExtResource("1_kcbj5")
 icon = ExtResource("1_d723o")
-flat = true
-icon_alignment = 1
-expand_icon = true
-
-[node name="pause_button" type="Button" parent="VBoxContainer/Panel/HBoxContainer"]
-custom_minimum_size = Vector2(30, 30)
-layout_mode = 2
-size_flags_horizontal = 6
-size_flags_vertical = 4
-size_flags_stretch_ratio = 0.0
-icon = ExtResource("2_lioro")
 flat = true
 icon_alignment = 1
 expand_icon = true
@@ -56,14 +48,17 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="VBoxContainer/Panel/HBoxContainer/VBoxContainer"]
+[node name="lb_progress" type="Label" parent="VBoxContainer/Panel/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "0:11/12:03"
 
-[node name="HSlider" type="HSlider" parent="VBoxContainer/Panel/HBoxContainer/VBoxContainer"]
+[node name="slider_progress" type="HSlider" parent="VBoxContainer/Panel/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
+max_value = 1000.0
 value = 50.0
 scrollable = false
 tick_count = 5

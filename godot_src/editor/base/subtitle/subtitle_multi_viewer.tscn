@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://dlk7krendsprp"]
+
+[ext_resource type="Script" uid="uid://0tx8kylhllm5" path="res://editor/base/subtitle/subtitle_multi_viewer.gd" id="1_6w3ni"]
+[ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="1_rp1eb"]
+
+[node name="SubtitleMultiViewer" type="MarginContainer"]
+clip_contents = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_rp1eb")
+script = ExtResource("1_6w3ni")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
+
+[node name="lyrics_label_container" type="VBoxContainer" parent="Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
