@@ -373,6 +373,34 @@ msgctxt "left_sub_container"
 msgid "SoundObjList"
 msgstr "音声対象リスト"
 
+#: main_scene.gd
+msgctxt "exit_dialog"
+msgid "Yes"
+msgstr "はい"
+
+#: main_scene.gd
+msgctxt "exit_dialog"
+msgid "No"
+msgstr "いいえ"
+
+#: main_scene.gd
+msgctxt "exit_dialog"
+msgid "Cancel"
+msgstr "キャンセル"
+
+#: main_scene.gd
+msgctxt "exit_dialog"
+msgid "Are you sure to save and exit Editor?"
+msgstr "エディタを保存して終了したいのですか？"
+
+#: main_scene.tscn
+msgid "fullscreen toggle"
+msgstr "フルスクリーン変更"
+
+#: main_scene.tscn
+msgid "I'm out !"
+msgstr "もうイっちゃた！"
+
 #, fuzzy
 #~ msgid "bg color"
 #~ msgstr "ボタンの色"

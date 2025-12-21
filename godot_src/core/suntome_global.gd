@@ -84,6 +84,7 @@ func save():
 		printerr("save file write fail")
 
 	file.close()
+	print("save success")
 	pass
 
 

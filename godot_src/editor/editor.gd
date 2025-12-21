@@ -3,8 +3,6 @@ extends Container
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	TranslationServer.set_locale("ja")
-
 	var sub_container = get_node("%LeftSubContainer")
 	var panelContainer : PanelContainer = sub_container.container()
 
@@ -91,9 +89,11 @@ func _ready() -> void:
 			match id:
 				0: #English
 					TranslationServer.set_locale("en")
+					AutoSizeLabelManager.locale_chaged()
 					pass
 				1: #Japnese
 					TranslationServer.set_locale("ja")
+					AutoSizeLabelManager.locale_chaged()
 					pass
 			pass
 	)

@@ -25,6 +25,8 @@
 # res://editor/subtitle_bind_editor.tscn
 # res://editor/left_sub_container.gd
 # res://editor/left_sub_container.tscn
+# res://main_scene.gd
+# res://main_scene.tscn
 #
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -377,4 +379,32 @@ msgstr ""
 #: editor/left_sub_container.gd
 msgctxt "left_sub_container"
 msgid "SoundObjList"
+msgstr ""
+
+#: main_scene.gd
+msgctxt "exit_dialog"
+msgid "Yes"
+msgstr ""
+
+#: main_scene.gd
+msgctxt "exit_dialog"
+msgid "No"
+msgstr ""
+
+#: main_scene.gd
+msgctxt "exit_dialog"
+msgid "Cancel"
+msgstr ""
+
+#: main_scene.gd
+msgctxt "exit_dialog"
+msgid "Are you sure to save and exit Editor?"
+msgstr ""
+
+#: main_scene.tscn
+msgid "fullscreen toggle"
+msgstr ""
+
+#: main_scene.tscn
+msgid "I'm out !"
 msgstr ""

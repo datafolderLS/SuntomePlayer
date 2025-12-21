@@ -95,3 +95,10 @@ offset_top = 4.0
 offset_right = 96.0
 offset_bottom = 35.0
 text = "51515321"
+
+[node name="AcceptDialog" type="ConfirmationDialog" parent="."]
+oversampling_override = 1.0
+initial_position = 2
+size = Vector2i(297, 100)
+visible = true
+dialog_text = "dafdasfasdfasdfadsfsadfasdfadfsdfa"

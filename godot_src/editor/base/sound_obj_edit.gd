@@ -22,9 +22,10 @@ func _ready() -> void:
 
 	LocalizationCenter.LocalChanged.connect(
 		func():
-			var paramctrl = param_container.get_child(0)
-			if paramctrl:
-				paramctrl.set_text(tr("play method", "sound_obj_edit"))
+			if param_container.get_child_count() > 0:
+				var paramctrl = param_container.get_child(0)
+				if paramctrl:
+					paramctrl.set_text(tr("play method", "sound_obj_edit"))
 	)
 
 	pass # Replace with function body.
