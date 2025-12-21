@@ -54,7 +54,7 @@ func set_select_picture_content(ctt : SelectPicContent):
 
 	ctt.button_name_change_signal.connect(
 		func(_prename : String, _now_name : String):
-			# req_line_change.emit(prename, now_name)
+			ref_suntome_node.process_button_name_change(_prename, _now_name)
 			update_node_line_info.call(parent_node)
 
 	)
@@ -96,7 +96,7 @@ func _soundobj_delete_before(obj : SoundObjContent):
 	if obj != ref_suntome_node.usedSoundObject:
 		return
 
-	get_node("%sound_path").text = "no sound obj yet"
+	get_node("%sound_path").text = tr("no sound obj yet", "suntome_s_pic_content")
 	get_node("%sound_path").set("theme_override_colors/font_color", Color.RED)
 	ref_suntome_node.usedSoundObject = null
 	pass
@@ -132,11 +132,10 @@ func _select_pic_change_pic(ctt : SelectPicContent):
 
 
 func _process_line_delete(bname : String):
-	var spctt : SelectPicContent = ref_suntome_node.usedSelectPic
-	if not spctt.nextNodes_button_to_uid.has(bname):
+	if not ref_suntome_node.nextNodes_button_to_uid.has(bname):
 		return
 
-	var toNodeUid = spctt.nextNodes_button_to_uid[bname]
+	var toNodeUid = ref_suntome_node.nextNodes_button_to_uid[bname]
 	var nextNode = ref_suntome_node.nextNodes[toNodeUid]
 	delete_node_line.call(parent_node, nextNode)
 
@@ -144,15 +143,15 @@ func _process_line_delete(bname : String):
 #和PlayNodeEditor联动的函数
 #返回用户拖动节点连线时显示的线条信息
 func get_drag_line_info() -> String:
-	var names : Array = ref_suntome_node.usedSelectPic.get_unused_names()
+	var names : Array = ref_suntome_node.get_unused_names()
 	if names.is_empty():
-		return "no selection"
+		return tr("no selection", "suntome_s_pic_content")
 	return names[0]
 
 
 #当连线连接时，判断是否可以连接
 func line_connect_check() -> bool:
-	var names : Array = ref_suntome_node.usedSelectPic.get_unused_names()
+	var names : Array = ref_suntome_node.get_unused_names()
 	if names.is_empty():
 		return false
 	return true
@@ -162,20 +161,19 @@ func line_connect_check() -> bool:
 func process_node_connect(target : SuntomeNodeBase):
 	ref_suntome_node.nextNodes.set(target.uid, target)
 	var bname = get_drag_line_info()
-	ref_suntome_node.usedSelectPic.nextNodes_button_to_uid.set(bname, target.uid)
+	ref_suntome_node.nextNodes_button_to_uid.set(bname, target.uid)
 
 
 #处理和target断开连接的逻辑
 func process_node_disconnect(target : SuntomeNodeBase):
-	ref_suntome_node.nextNodes.erase(target.uid)
-	ref_suntome_node.usedSelectPic.remove_uid(target.uid)
+	ref_suntome_node.remove_target_connect(target)
 
 
 #获取该节点和其他节点的连线文本信息，该函数返回一个可调用的函数对象(other_node : SuntomeNodeBase) -> String
 func get_connect_line_lable() -> Callable:
-	var reversekey = ref_suntome_node.usedSelectPic.get_reversed_node_to_value_dict()
 	return func(other_node : SuntomeNodeBase) -> String:
 		var _uid = other_node.uid
+		var reversekey = ref_suntome_node.get_reversed_node_to_value_dict()
 		return reversekey[_uid]
 
 

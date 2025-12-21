@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cmywx43uxl7yt"]
+[gd_scene load_steps=8 format=3 uid="uid://cmywx43uxl7yt"]
 
 [ext_resource type="Script" uid="uid://b1esp3u5s4hac" path="res://editor/play_node_editor.gd" id="1_4plv0"]
 [ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="2_oqrfk"]
@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://bpu7hqnb563j8" path="res://editor/icon/pause.png" id="4_006xr"]
 [ext_resource type="PackedScene" uid="uid://cf4yknb808q7d" path="res://editor/base/state_panel.tscn" id="4_tavto"]
 [ext_resource type="Texture2D" uid="uid://dvhacktl4php6" path="res://editor/icon/add_32.png" id="5_oqrfk"]
-[ext_resource type="PackedScene" uid="uid://cbaoubcka42sf" path="res://editor/base/context_menu_pad.tscn" id="7_d1awa"]
 
 [node name="PlayNodeEditor" type="MarginContainer"]
 anchors_preset = 15
@@ -43,6 +42,7 @@ custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("3_006xr")
 theme_type_variation = &"FlatButton"
+theme_override_constants/outline_size = 4
 text = "start from begin"
 icon = ExtResource("3_d1awa")
 icon_alignment = 1
@@ -53,10 +53,12 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("3_006xr")
+theme_override_constants/outline_size = 4
 text = "step play"
 
 [node name="bt_pause" type="Button" parent="HSplitContainer2/EditMargin/PanelContainer/HBoxContainer"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("3_006xr")
@@ -119,16 +121,3 @@ popup/item_3/id = 3
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-
-[node name="ctt_root_control" type="Control" parent="."]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-
-[node name="ContextMenuPad" parent="ctt_root_control" instance=ExtResource("7_d1awa")]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 153.0
-offset_top = 181.0
-offset_right = 175.0
-offset_bottom = 188.0

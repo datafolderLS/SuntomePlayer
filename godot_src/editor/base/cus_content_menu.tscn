@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://bte84o8xupn8x"]
+
+[ext_resource type="Script" uid="uid://dq7ty8vqd4gwj" path="res://editor/base/cus_content_menu.gd" id="1_tpchm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tpchm"]
+bg_color = Color(0.08235294, 0.09411765, 0.11764706, 1)
+
+[node name="CusContentMenu" type="PopupPanel"]
+oversampling_override = 1.0
+size = Vector2i(16, 16)
+visible = true
+theme_override_styles/panel = SubResource("StyleBoxFlat_tpchm")
+script = ExtResource("1_tpchm")
+
+[node name="ItemList" type="ItemList" parent="."]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+auto_width = true
+auto_height = true

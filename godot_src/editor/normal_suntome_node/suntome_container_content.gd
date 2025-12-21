@@ -34,7 +34,16 @@ func connect_contained(obj : Control):
 
 
 func set_text(text : String):
-	%Label.text = text
+	%Label.set_text(text)
+
+#响应翻译的函数
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED:
+		if not is_node_ready():
+			await ready
+		
+		if _contained_target:
+			set_text(_contained_target.node_text())
 
 
 #拖拽相关函数（不支持拖拽

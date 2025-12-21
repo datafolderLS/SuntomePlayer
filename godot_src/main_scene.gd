@@ -18,6 +18,8 @@ func _ready() -> void:
 		editor_container.set_visible(false)
 		var editor = preload("res://editor/editor.tscn").instantiate()
 		editor_container.add_child(editor)
+	else:
+		SuntomePlayer.playoverfunc = _start_test_func
 
 	SuntomePlayer.set_player(player)
 

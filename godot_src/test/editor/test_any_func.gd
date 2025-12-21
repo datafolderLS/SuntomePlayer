@@ -74,7 +74,7 @@ func _test_SelectPicContent_serialize():
 	var sobj := SelectPicContent.new()
 	sobj.name = "1351adsf"
 	sobj.usedTexturePath = "path asdnifdn"
-	sobj.nextNodes_button_to_uid = {"asdnfi" : 15, "asdnddfi" : 15, "as1521dnfi" : 15}
+	# sobj.nextNodes_button_to_uid = {"asdnfi" : 15, "asdnddfi" : 15, "as1521dnfi" : 15}
 
 	var info = SelectPicContent.SelectButtonInfo.new()
 	info.pos = Vector2(30,30)
@@ -111,3 +111,13 @@ func _test_SelectPicContent_serialize():
 	dict = sobj.serialize()
 	print(dict)
 	pass
+
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
+			CusContentMenu.create(self, event.global_position, ["select 1", "select 2", "select3"].map(
+				func(value : String):
+					return CusContentMenu.bt(value, func(): print(value))
+			)
+			)

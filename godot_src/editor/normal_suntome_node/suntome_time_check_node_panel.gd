@@ -28,7 +28,7 @@ static func create_ctt_from_node(
 
 
 func _ready() -> void:
-	%count.value_changed.connect(func(value : float):
+	%TimeInputControl.value_changed.connect(func(value : float):
 		if _ref_node:
 			_ref_node.checked_time = value
 	)
@@ -59,7 +59,7 @@ func _ready() -> void:
 
 
 func _set_time(t : float):
-	%count.value = t
+	%TimeInputControl.value = t
 
 
 func _set_text(t : String):
@@ -70,19 +70,19 @@ func _set_text(t : String):
 
 #和SuntomeContainerContent关联的函数
 func node_text() -> String:
-	return "Suntome Time Check"
+	return tr("Suntome Time Check", "node_name")
 
 
 #和PlayNodeEditor联动的函数
 #返回用户拖动节点连线时显示的线条信息
 func get_drag_line_info() -> String:
 	if _ref_node.nextNodes.size() >= 2:
-		return "not allowed"
+		return tr("not allowed")
 
 	if _ref_node.nextNodes.has(_ref_node.success_node_uid):
-		return "reject route"
+		return tr("reject route")
 
-	return "passed route"
+	return tr("passed route")
 
 
 #当连线连接时，判断是否可以连接
@@ -110,5 +110,5 @@ func process_node_disconnect(target : SuntomeNodeBase):
 func get_connect_line_lable() -> Callable:
 	return func(_other_node : SuntomeNodeBase) -> String:
 		if _other_node.uid == _ref_node.success_node_uid:
-			return "passed route"
-		return "reject route"
+			return tr("passed route")
+		return tr("reject route")

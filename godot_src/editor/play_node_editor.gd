@@ -15,7 +15,11 @@ static var NormalNodeFuncMap = {
 	SuntomeTimeCheckNode.normal_key(): [SuntomeTimeCheckNode, SuntomeTimeCheckNodePanel],
 }
 
-# var _context_func : Callable
+
+var _cliped_data := String()
+
+#记录当前正在播放的节点
+var _preplayed_node : StateNode = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -37,7 +41,7 @@ func _ready() -> void:
 	var _content = SuntomContent.Create(start, SuntomeGlobal.begin_node, Callable(self, "_update_node_line_index_info"))
 	_change_node_to_trans(start)
 	var lab = start.get_ctt()
-	lab.text = "Start"
+	lab.text = tr("Start")
 	# start.get_container().add_child(lab)
 	start.position = SuntomeGlobal.begin_node.position
 	start_node = start
@@ -47,7 +51,7 @@ func _ready() -> void:
 	_content = SuntomContent.Create(sourou, SuntomeGlobal.sourou_node, Callable(self, "_update_node_line_index_info"))
 	_change_node_to_trans(sourou)
 	lab = sourou.get_ctt()
-	lab.text = "SouRou"
+	lab.text = tr("SouRou")
 	sourou.position = SuntomeGlobal.sourou_node.position
 	sourou_node = sourou
 
@@ -71,17 +75,6 @@ func _ready() -> void:
 				_ : Utility.CriticalFail("un implement selection")
 	)
 
-	#右键菜单
-	# %ctt_button.pressed.connect(func() : _context_func.call())
-	%ctt_root_control.hide()
-	%ctt_root_control.gui_input.connect(
-		func(event: InputEvent):
-			if event is InputEventMouseButton:
-				%ctt_root_control.hide()
-			pass
-	)
-
-
 	#读取SuntomeGlobal的内容并初始化节点信息
 	_fresh_panel_from_global()
 
@@ -95,8 +88,8 @@ func _ready() -> void:
 	state_panel.node_pos_updated.connect(_node_pos_update)
 
 	#实现复制贴贴
-	state_panel.req_copy_data_cb = Callable(self, "_copy_node")
-	state_panel.req_paste_data_cb = Callable(self, "_paste_node")
+	state_panel.req_copy_data_cb = func(list) : _cliped_data = _copy_node(list)
+	state_panel.req_paste_data_cb = func() : _paste_node(_cliped_data)
 
 	#节点播放调试控制内容
 	%bt_start_begin.pressed.connect(func():
@@ -109,6 +102,8 @@ func _ready() -> void:
 	%bt_step.pressed.connect(func():
 		SuntomePlayer.step_in_next()
 	)
+
+	SuntomePlayer.suntome_node_change.connect(_process_suntome_node_played)
 	pass # Replace with function body.
 
 
@@ -248,7 +243,7 @@ func _change_node_to_trans(node : StateNode):
 		node.get_container().remove_child(ctt)
 		node.custom_data = ctt
 		var lab = Label.new()
-		lab.text = "Port"
+		lab.text = tr("Port")
 		node.get_container().add_child(lab)
 		node.size = Vector2(60, 60)
 
@@ -408,46 +403,92 @@ func _node_select_change(selected_node : StateNode):
 	pass
 
 
-func _context_menu_show(emit_node : StateNode, _pos : Vector2):
+func _context_menu_show(emit_node : StateNode, local_pos : Vector2):
 	#构造菜单选项
 	var context_menu_items := Array()
 
-	context_menu_items.append([ "play from this node", func():
-			%ctt_root_control.hide()
+	if null == emit_node:
+		var change_position = func(nd : StateNode, pos_new : Vector2):
+			var stmnode := get_node_SuntomeNode(nd)
+			stmnode.position = pos_new
+			nd.position = pos_new
+
+		context_menu_items.append(CusContentMenu.bt(tr("Add Play Node"), func():
+			var nd = _add_state_node()
+			change_position.call(nd, state_panel.pos_map(local_pos))
+		))
+
+		context_menu_items.append(CusContentMenu.bt(tr("Add Port Node"), func():
+			var nd = _add_trans_node()
+			change_position.call(nd, state_panel.pos_map(local_pos))
+		))
+
+		for pair in [
+				[tr("Add Setting Node") , SuntomeParaNode.normal_key()],
+				[tr("Add Check Count Node") , SuntomeCountCheckNode.normal_key()],
+				[tr("Add Time Begin Node") , SuntomeTimeBeginNode.normal_key()],
+				[tr("Add Check Time Node") , SuntomeTimeCheckNode.normal_key()],
+			]:
+			var name_ = pair[0]
+			var type_key = pair[1]
+			context_menu_items.append(CusContentMenu.bt(name_, func():
+				var nd = _add_normal_node(type_key)
+				change_position.call(nd, state_panel.pos_map(local_pos))
+			))
+			pass
+
+		if not _cliped_data.is_empty():
+			context_menu_items.append(CusContentMenu.bt(tr("paste"), func():
+				_paste_node(_cliped_data)
+			))
+		pass
+	else:
+		context_menu_items.append(CusContentMenu.bt(tr("play from this node"), func():
 			var node = get_node_SuntomeNode(emit_node)
 			SuntomePlayer.start_from_node(node)
 			pass
-	])
+		))
 
-	if emit_node not in init_nodes():
-		var node = get_node_SuntomeNode(emit_node)
-		if node is SuntomeNode:
-			if node.is_transit_node:
-				context_menu_items.append([ "trans type to play node", func():
-					%ctt_root_control.hide()
-					_change_node_to_content(emit_node)
-				])
-			else:
-				context_menu_items.append([ "trans type to port node", func():
-					%ctt_root_control.hide()
-					_change_node_to_trans(emit_node)
-				])
-			pass
+		if emit_node not in init_nodes():
+			var node = get_node_SuntomeNode(emit_node)
+			if node is SuntomeNode:
+				if node.is_transit_node:
+					context_menu_items.append(CusContentMenu.bt(tr("change type to play node"), func():
+						_change_node_to_content(emit_node)
+					))
+				else:
+					context_menu_items.append(CusContentMenu.bt(tr("change type to port node"), func():
+						_change_node_to_trans(emit_node)
+					))
+				pass
+
+			context_menu_items.append(CusContentMenu.bt(tr("copy"), func():
+				var now_selected_nodes = state_panel.now_selected_nodes()
+				if emit_node in now_selected_nodes:
+					_cliped_data = _copy_node(now_selected_nodes)
+				else:
+					_cliped_data = _copy_node([emit_node])
+					state_panel.unselect_all()
+					state_panel.add_selected([emit_node])
+				pass
+			))
+
+			context_menu_items.append(CusContentMenu.bt(tr("delete node"), func():
+				var now_selected_nodes = state_panel.now_selected_nodes()
+				if emit_node in now_selected_nodes:
+					for node_ in now_selected_nodes:
+						state_panel.node_require_delete(node_)
+				else:
+					state_panel.node_require_delete(emit_node)
+					state_panel.unselect_all()
+
+				%param_container.hide()
+				pass
+			))
 
 	#显示右键菜单
-	%ContextMenuPad.set_selections(context_menu_items)
-
+	CusContentMenu.create(self, get_global_mouse_position(), context_menu_items)
 	print("context menu show")
-	%ContextMenuPad.position = get_local_mouse_position()
-
-	#优化位置
-	var rr = get_rect()
-	var rc = %ContextMenuPad.get_rect()
-	if rr.end.y < rc.end.y:
-		var diff = rc.end.y - rr.end.y
-		%ContextMenuPad.position.y -= diff
-
-	%ctt_root_control.show()
 	pass
 
 
@@ -481,6 +522,9 @@ func _copy_node(list : Array) -> String:
 
 #将基于_copy_node获取的数据进行反序列化，并拷贝到鼠标所在的地方
 func _paste_node(data : String):
+	if data.is_empty():
+		return
+
 	var json = JSON.new()
 	var error = json.parse(data)
 	if OK != error:
@@ -558,4 +602,30 @@ func _paste_node(data : String):
 	#选中复制出来的节点
 	state_panel.unselect_all()
 	state_panel.add_selected(uid_to_statenode.values())
+	pass
+
+
+func _process_suntome_node_played(stm_node : SuntomeNodeBase):
+	#找到stm_node对应的StateNode
+	var temp = []
+	state_panel.each_node(func(nd : StateNode):
+		if stm_node == get_node_SuntomeNode(nd):
+			temp.append(nd)
+			return false
+		return true
+	)
+
+	if temp.is_empty():
+		return
+
+	var stnode : StateNode = temp[0]
+
+	if _preplayed_node:
+		if stm_node != _preplayed_node:
+			_preplayed_node.fade()
+
+	if stnode:
+		_preplayed_node = stnode
+		_preplayed_node.show_back_rect()
+		pass
 	pass

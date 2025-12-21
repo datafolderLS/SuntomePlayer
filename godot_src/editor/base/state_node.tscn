@@ -1,8 +1,15 @@
-[gd_scene load_steps=6 format=3 uid="uid://ct0jqaoecw5t8"]
+[gd_scene load_steps=10 format=3 uid="uid://ct0jqaoecw5t8"]
 
 [ext_resource type="Script" uid="uid://cjvvutd1q8e8u" path="res://editor/base/state_node.gd" id="1_1t1ap"]
 [ext_resource type="StyleBox" uid="uid://dk7hib1sbscms" path="res://editor/base/state_panel_style/border_unselected.tres" id="2_5tttc"]
 [ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="2_u7let"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s3cm6"]
+bg_color = Color(0.2443996, 0.30195406, 0.5583332, 1)
+expand_margin_left = 10.0
+expand_margin_top = 10.0
+expand_margin_right = 10.0
+expand_margin_bottom = 10.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5tttc"]
 bg_color = Color(0, 0, 0, 0.490196)
@@ -20,6 +27,43 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
+[sub_resource type="Animation" id="Animation_5tttc"]
+resource_name = "fade"
+length = 0.5045
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:theme_override_styles/panel:bg_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5020456),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.2443996, 0.30195406, 0.5583332, 1), Color(0.2464, 0.30389327, 0.56, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_s3cm6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:theme_override_styles/panel:bg_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.2443996, 0.30195406, 0.5583332, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ccgja"]
+_data = {
+&"RESET": SubResource("Animation_s3cm6"),
+&"fade": SubResource("Animation_5tttc")
+}
+
 [node name="StateNode" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,32 +72,43 @@ offset_right = -1204.0
 offset_bottom = -669.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
+mouse_filter = 2
 theme = ExtResource("2_u7let")
-theme_override_styles/panel = ExtResource("2_5tttc")
+theme_override_styles/panel = SubResource("StyleBoxFlat_s3cm6")
 script = ExtResource("1_1t1ap")
 
-[node name="backContainer" type="PanelContainer" parent="."]
+[node name="SelectRect" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_5tttc")
+
+[node name="backContainer" type="PanelContainer" parent="SelectRect"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_5tttc")
 
-[node name="MarginContainer" type="MarginContainer" parent="backContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="SelectRect/backContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="PanelContainer" type="PanelContainer" parent="backContainer/MarginContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="SelectRect/backContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_u7let")
 theme_override_styles/panel = SubResource("StyleBoxFlat_1t1ap")
 
-[node name="container" type="VBoxContainer" parent="backContainer/MarginContainer/PanelContainer"]
+[node name="container" type="VBoxContainer" parent="SelectRect/backContainer/MarginContainer/PanelContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+&"": SubResource("AnimationLibrary_ccgja")
+}

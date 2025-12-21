@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://b67dfbbpkpvs"]
+[gd_scene load_steps=4 format=3 uid="uid://b67dfbbpkpvs"]
 
 [ext_resource type="Theme" uid="uid://1adxjbws8hdd" path="res://editor/editor_theme.tres" id="1_mtojm"]
 [ext_resource type="Script" uid="uid://d20l423ql8qck" path="res://editor/left_sub_container.gd" id="1_n5dga"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q57jv"]
 
 [node name="LeftSubContainer" type="MarginContainer"]
 anchors_preset = 15
@@ -37,6 +39,7 @@ theme_override_constants/side_margin = 0
 theme_override_constants/icon_separation = 0
 theme_override_constants/icon_max_width = 0
 theme_override_constants/outline_size = 0
+theme_override_styles/tab_focus = SubResource("StyleBoxEmpty_q57jv")
 clip_tabs = false
 tab_focus_mode = 1
 

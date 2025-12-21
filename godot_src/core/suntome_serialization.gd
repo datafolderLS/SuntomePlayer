@@ -2,10 +2,10 @@ class_name SuntomeSerialization
 
 #用于反序列化的函数对象集合
 class GlobalInfoMapCBs extends RefCounted:
-	var suntomenode_map_cb : Callable      #(uid : Int)->SuntomeNodeBase 基于uid获取指向的SuntomeNodeBase，其中uid会经过uid_map_cb进行映射，如果指向的SuntomeNodeBase不存在返回null
+	var suntomenode_map_cb : Callable      #(uid : Int)->SuntomeNodeBase 基于uid获取指向的SuntomeNodeBase，其中uid需先经过uid_map_cb进行映射，如果指向的SuntomeNodeBase不存在返回null
 	var sound_obj_map_cb : Callable        #(key : String)->SoundObjContent 基于key获取指向的SoundObjContent，如果不存在返回null
 	var select_pic_map_cb : Callable       #(key : String)->SelectPicContent 基于key获取指向的SelectPicContent，如果不存在返回null
-	var uid_map_cb : Callable              #(uid : Int)->int 对uid进行再映射，用于复制贴贴
+	var uid_map_cb : Callable              #(uid : Int)->int 对uid进行再映射，用于复制贴贴，如果不存在会返回null
 
 #将suntome_global对象序列化，返回一个JSON.stringify的返回值，如果出错，返回"error"
 static func serialize(gl : suntome_global) -> String:
@@ -102,7 +102,6 @@ static func unserialize(out : suntome_global, data : String) -> String:
 		var stmnode := SuntomeUnSerializeFisrt(dict, errorinfo, mapcbs)
 		if not errorinfo.is_empty():
 			push_error(errorinfo)
-			return "error in suntome_nodes unserialize step1"
 
 		out.suntome_nodes.set(uid, stmnode)
 
@@ -112,7 +111,6 @@ static func unserialize(out : suntome_global, data : String) -> String:
 		var errorlist = out.suntome_nodes[uid].unserialize_second(node_data, mapcbs)
 		if not errorlist.is_empty():
 			push_error(errorlist)
-			return "error in node connect: " + String.num_int64(uid)
 
 	#最后构造begin_node和sourou_node
 	var beginnodedata = ValueFromDictOrError(errorinfo, main_dict, "begin_node")

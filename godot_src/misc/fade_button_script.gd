@@ -2,14 +2,23 @@ class_name FadeButtonScript extends Control
 
 signal pressed()
 
-
 @export var mouse_mask : MouseButton = MOUSE_BUTTON_LEFT
 
-func _process(_delta: float) -> void:
-	if Rect2(Vector2.ZERO, size).has_point(get_local_mouse_position()):
-		visible = true
-	else :
-		visible = false
+
+func _ready():
+	mouse_entered.connect(func():
+		for cc in get_children():
+			cc.visible = true
+	)
+
+	mouse_exited.connect(func():
+		for cc in get_children():
+			cc.visible = false
+	)
+
+	for cc in get_children():
+		cc.visible = false
+	pass
 
 
 func _gui_input(event: InputEvent) -> void:

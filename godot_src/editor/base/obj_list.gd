@@ -3,7 +3,7 @@ class_name ObjList extends VBoxContainer
 
 static func construct(name_ : String, item_list : Callable) -> ObjList:
 	var list = preload("res://editor/base/obj_list.tscn").instantiate()
-	list.get_node("%label_name").text = name_
+	list.get_node("%label_name").text = ""
 	list.name = name_
 	list._get_all_item = item_list
 	# list._init_after_ready()
@@ -11,7 +11,7 @@ static func construct(name_ : String, item_list : Callable) -> ObjList:
 
 
 @onready var itemlist : ItemList = get_node("ItemList")
-@onready var nameEdit : LineEdit = get_node("ItemList/NameEdit")
+@onready var nameEdit : LineEdit = get_node("%NameEdit")
 
 @export var allow_drag : bool
 
@@ -19,7 +19,6 @@ var last_button_time : float = -1000.0
 var last_button_index : int = -1
 
 signal select_change(new_obj : String)
-
 
 var _get_all_item : Callable = Callable()
 
@@ -46,7 +45,7 @@ func _init_after_ready():
 		itemlist.set_item_text(index, obj_name)
 
 	itemlist.item_clicked.connect(
-		func (index: int, at_position: Vector2, mouse_button_index: int) :
+		func (index: int, _at_position: Vector2, mouse_button_index: int) :
 			confirm_edit_obj_name(last_button_index, nameEdit.text)
 
 			if MOUSE_BUTTON_LEFT != mouse_button_index:
@@ -57,12 +56,12 @@ func _init_after_ready():
 				last_button_time = -1
 
 				select_change.emit(itemlist.get_item_text(index))
-				return
+				# return
 
 			var now_time = Time.get_ticks_msec()
 			if now_time - last_button_time < 1000:
 				last_button_time = -1000
-				start_edit_obj_name(index, at_position)
+				start_edit_obj_name(index)
 			else:
 				last_button_time = now_time
 			pass
@@ -82,35 +81,73 @@ func _init_after_ready():
 	get_node("HBoxContainer/AddButton").pressed.connect(create_new_obj_content)
 	get_node("HBoxContainer/RemoveButton").pressed.connect(remove_button_clicked)
 
+	itemlist.gui_input.connect(_item_list_gui_input)
 	pass # Replace with function body.
 
 
-func start_edit_obj_name(index : int, at_position: Vector2):
+func _item_list_gui_input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		get_viewport().set_input_as_handled()
+		if event.is_pressed():
+			match event.keycode:
+				KEY_UP:
+					var next_index = last_button_index - 1
+					if next_index < 0:
+						return
+					last_button_index = next_index
+					itemlist.select(last_button_index)
+					select_change.emit(itemlist.get_item_text(last_button_index))
+					pass
+				KEY_DOWN:
+					var next_index = last_button_index + 1
+
+					if next_index >= itemlist.item_count:
+						return
+
+					last_button_index = next_index
+					itemlist.select(last_button_index)
+					select_change.emit(itemlist.get_item_text(last_button_index))
+					pass
+				KEY_F2:
+					if last_button_index < 0 or last_button_index >= itemlist.item_count:
+						return
+
+					start_edit_obj_name(last_button_index)
+					pass
+	pass
+
+
+func start_edit_obj_name(index : int):
 	var text := itemlist.get_item_text(index)
 	print("start edit obj in index :", index, " name: ", text)
 	var rect := itemlist.get_item_rect(index, false)
 	nameEdit.text = text
+	var y_diff = 0.0
+	for ctrl in itemlist.get_children(true):
+		if ctrl is VScrollBar:
+			y_diff = -ctrl.value
+			break
 
-	nameEdit.position.y = floorf(at_position.y / rect.size.y) * rect.size.y
-	nameEdit.position.x = rect.position.x
+	rect.size.x = itemlist.size.x
+	rect.position += Vector2(0, y_diff) + itemlist.get_global_rect().position
+	%PopupPanel.popup(Rect2i(rect))
+	# nameEdit.position = rect.position + Vector2(0, y_diff)
 
-	rect.size.x = itemlist.size.y
-	rect.size.y = rect.size.y - 2
-	nameEdit.size = rect.size
-	nameEdit.show()
 
+	# nameEdit.size = rect.size
+	# nameEdit.show()
+	nameEdit.edit()
 	pass
 
 
 #将new_text应用到index下标item的修改上，检查nameEdit是否可视，如果不可视则不应用修改，函数会隐藏nameEdit
 func confirm_edit_obj_name(index : int, new_text: String):
-	if not nameEdit.is_visible():
+	if not %PopupPanel.visible:
 		return
 
 	var preName = itemlist.get_item_text(index)
 	if new_text != preName:
 		pass
-	nameEdit.hide()
 
 	var nameList = get_all_obj_names()
 	nameList.erase(preName)
@@ -119,7 +156,9 @@ func confirm_edit_obj_name(index : int, new_text: String):
 	print("confim obj name to ", new_text)
 
 	_update_select_pic_content_name(preName, new_text)
+	%PopupPanel.hide()
 
+	itemlist.grab_focus()
 	pass
 
 
@@ -127,6 +166,7 @@ func confirm_edit_obj_name(index : int, new_text: String):
 func create_new_obj_content():
 	var i = add_new_obj()
 	_add_new_select_pic_content(itemlist.get_item_text(i))
+	itemlist.grab_focus()
 
 
 #在itemlist中添加一个新对象，并返回该对象在itemlist中的下标
@@ -147,7 +187,14 @@ func remove_button_clicked():
 
 	itemlist.remove_item(selected[0])
 
-	last_button_index = -1
+	if itemlist.item_count <= 0:
+		last_button_index = -1
+	else:
+		last_button_index = min(last_button_index, itemlist.item_count - 1)
+		itemlist.select(last_button_index)
+		select_change.emit(itemlist.get_item_text(last_button_index))
+
+	itemlist.grab_focus()
 	pass
 
 
@@ -179,6 +226,7 @@ func _update_select_pic_content_name(name_before : String, name_after : String):
 
 
 func _remove_select_pic_content(name_ : String):
+	print("delete item \"", name_, "\"")
 	delete_item_cb.call(name_)
 	# var needDelete = SuntomeGlobal.select_pic_contents[name]
 	# needDelete.before_delete()

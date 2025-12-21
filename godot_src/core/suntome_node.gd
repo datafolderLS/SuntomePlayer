@@ -144,7 +144,7 @@ func get_next_node() -> SuntomeNodeBase:
 
 		Utility.RandomHelper.Method.Random:
 			var filter_dict = Utility.dict_filter(nextNodes_chance,
-				func(node_uid : int, _chance : float):
+				func(node_uid : int, _chance):
 					return node_uid != _last_trans_node_uid
 			)
 
@@ -153,13 +153,13 @@ func get_next_node() -> SuntomeNodeBase:
 
 		Utility.RandomHelper.Method.RandomNoRepeat:
 			var filter_dict = Utility.dict_filter(nextNodes_chance,
-				func(node_uid : int, _chance : float):
+				func(node_uid : int, _chance):
 					return node_uid not in _transed_nodes_uids
 			)
 
 			if filter_dict.is_empty():
 				filter_dict = Utility.dict_filter(nextNodes_chance,
-					func(node_uid : int, _chance : float):
+					func(node_uid : int, _chance):
 						return node_uid != _last_trans_node_uid
 				)
 				_transed_nodes_uids.clear()

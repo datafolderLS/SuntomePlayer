@@ -11,7 +11,7 @@ signal node_disconnected(from : StateNode, to : StateNode)
 signal node_deleted(node : StateNode)
 #用户触发信号，当node被选中时，触发该信号，pre_selected可能为null
 signal node_selected(selected_node : StateNode)
-#用户在节点上点击请求右键菜单
+#用户在节点上点击请求右键菜单，如果没有在节点上点击，emit_node为null
 signal context_menu_req(emit_node : StateNode, pos : Vector2)
 #节点被用户拖动坐标更新的信号
 signal node_pos_updated(emit_node : StateNode, pos : Vector2)
@@ -24,8 +24,9 @@ signal node_pos_updated(emit_node : StateNode, pos : Vector2)
 var doDrag : bool = false #标记是否正在进行拖动的标志位
 var drag_diff_pos : Vector2 = Vector2(0,0) #标记是否正在进行拖动的标志位
 
-const scale_rate_list = [1.5, 1.15, 1, 0.9, 0.81, 0.729, 0.656, 0.59, 0.53, 0.43, 0.34, 0.28, 0.18, 0.1]
-var current_scale_index = 2
+# const scale_rate_list = [1.5, 1.15, 1, 0.9, 0.81, 0.729, 0.656, 0.59, 0.53, 0.43, 0.34, 0.28, 0.18, 0.1]
+var current_scale_rate = 0.0
+var scoll_senstivity = 3.0
 
 #用户拖线时创建的StateLine
 var player_line : StateLine = null
@@ -54,20 +55,19 @@ var _is_multi_select : bool = false
 var _multi_select_mouse_start_pos : Vector2 = Vector2.ZERO
 #记录多选的信息，使用Dictionary存储，键为选择的nodes，内容为{state_node, any_number}
 var _multi_selected_nodes : = Dictionary()
-#本地拷贝数据存储，该数据由外部进行设置
-var _cliped_data := String()
+# #本地拷贝数据存储，该数据由外部进行设置
+# var _cliped_data := String()
 #请求复制回调，由该面板的使用者进行设置，(Array[StateNode])->String, 返回String并赋值给_cliped_data对象
 var req_copy_data_cb := Callable()
 #请求拷贝回调，由该面板的使用者进行设置，(String)->void，其中String是_cliped_data对象
 var req_paste_data_cb := Callable()
 
+#记录当前是否有在使用custome_cursor
+var _is_using_custome_cursor := false
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	#Input.set_custom_mouse_cursor(preload("res://editor/icon/delete_16.png"), Input.CURSOR_CROSS, Vector2(8,8))
-	#get_node("StatePanelDeleteHint").set_func(
-		#func()->Vector2:
-			#return get_local_mouse_position()
-	#)
 	pass # Replace with function body.
 
 
@@ -145,20 +145,40 @@ func add_selected(list : Array):
 	_select_nodes(list)
 
 
+func now_selected_nodes() -> Array:
+	return _multi_selected_nodes.keys()
+
+
+#遍历所有的StateNode，并作为传参调用cb，cb返回false则停止遍历
+func each_node(cb : Callable):
+	for nd : StateNode in node_container.get_children():
+		if cb.call(nd):
+			continue
+		return
+	pass
+
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #bug 这里进行了按键alt按下的检测，产生的效果是全局的，如果在其他地方发现鼠标不能设置的话，就要考虑这里了
 #这里先偷懒这么写了
 func _process(_delta: float) -> void:
 	if not is_visible_in_tree():
 		return
+
 	var has_mouse_in_rect = Rect2(Vector2(0,0), size).has_point(get_local_mouse_position())
 
-	if Input.is_key_pressed(KEY_ALT) and has_mouse_in_rect:
-		Input.set_custom_mouse_cursor(preload("res://editor/icon/delete_16.png"), Input.CURSOR_ARROW, Vector2(8,8))
-		#mouse_default_cursor_shape = Control.CURSOR_CROSS
-		#Input.set_default_cursor_shape(Input.CURSOR_CROSS)
-	else:
+	if has_mouse_in_rect:
+		if Input.is_key_pressed(KEY_ALT):
+			Input.set_custom_mouse_cursor(preload("res://editor/icon/delete_16.png"), Input.CURSOR_ARROW, Vector2(8,8))
+			_is_using_custome_cursor = true
+			#mouse_default_cursor_shape = Control.CURSOR_CROSS
+			#Input.set_default_cursor_shape(Input.CURSOR_CROSS)
+		else:
+			Input.set_custom_mouse_cursor(null)
+			_is_using_custome_cursor = false
+	elif _is_using_custome_cursor:
 		Input.set_custom_mouse_cursor(null)
+		_is_using_custome_cursor = false
 
 	if false == doDrag:
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_MIDDLE) and has_mouse_in_rect:
@@ -204,12 +224,12 @@ func _gui_input(event: InputEvent) -> void:
 			# 	drag_diff_pos = root_container.position - get_local_mouse_position()
 			MOUSE_BUTTON_WHEEL_UP:
 				if not doDrag:
-					_scale_in_local_pos(get_local_mouse_position(), -1)
+					_scale_in_local_pos(get_local_mouse_position(), -0.1)
 					_clamp_cam_pos()
 				pass
 			MOUSE_BUTTON_WHEEL_DOWN:
 				if not doDrag:
-					_scale_in_local_pos(get_local_mouse_position(), 1)
+					_scale_in_local_pos(get_local_mouse_position(), 0.1)
 					_clamp_cam_pos()
 				pass
 			MOUSE_BUTTON_LEFT:
@@ -228,6 +248,10 @@ func _gui_input(event: InputEvent) -> void:
 
 				_is_multi_select = event.pressed
 				%select_panel.visible = event.pressed
+			MOUSE_BUTTON_RIGHT:
+				if event.pressed:
+					context_menu_req.emit(null, get_local_mouse_position())
+				pass
 
 	elif event is InputEventMouseMotion:
 		if _is_multi_select:
@@ -252,12 +276,12 @@ func _unhandled_input(event: InputEvent) -> void:
 				drag_diff_pos = root_container.position - get_local_mouse_position()
 			MOUSE_BUTTON_WHEEL_UP:
 				if not doDrag:
-					_scale_in_local_pos(get_local_mouse_position(), -1)
+					_scale_in_local_pos(get_local_mouse_position(), -0.1)
 					_clamp_cam_pos()
 				pass
 			MOUSE_BUTTON_WHEEL_DOWN:
 				if not doDrag:
-					_scale_in_local_pos(get_local_mouse_position(), 1)
+					_scale_in_local_pos(get_local_mouse_position(), 0.1)
 					_clamp_cam_pos()
 				pass
 	elif event is InputEventMouseMotion:
@@ -269,22 +293,25 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 #以pos为中心，对container的内容进行缩放，rate是增减的档位
-func _scale_in_local_pos(pos : Vector2, rate : int):
-	var newRate = current_scale_index + rate
-	newRate = clampi(newRate, 0, scale_rate_list.size() - 1)
-
-	if newRate == current_scale_index:
+func _scale_in_local_pos(pos : Vector2, rate : float):
+	var newRate = current_scale_rate - rate * scoll_senstivity
+	newRate = clamp(newRate, -10.0, 8.2)
+	# print(newRate)
+	if newRate == current_scale_rate:
 		return
-	var preScalar = scale_rate_list[current_scale_index]
-	var newScalar = scale_rate_list[newRate]
-	current_scale_index = newRate
-
-	var changeRate = newScalar / preScalar
+	var pre_scalar = pow(1.2, current_scale_rate)
+	current_scale_rate = newRate
+	var new_scalar = pow(1.2, newRate)
 	var dis = root_container.position - pos
+	var changeRate = new_scalar / pre_scalar
 	var newDis = dis * changeRate
 	var newPos = newDis + pos
 	root_container.position = newPos
-	root_container.scale = Vector2(newScalar, newScalar)
+	root_container.scale = Vector2(new_scalar, new_scalar)
+
+	#更新线框的大小
+	var border_seleted_style : StyleBox = preload("res://editor/base/state_panel_style/border_selected.tres")
+	border_seleted_style.set_border_width_all(max(2, round(2.0 / new_scalar)))
 	pass
 
 
@@ -383,18 +410,24 @@ func line_require_delete(line : StateLine):
 
 #槽函数，处理节点被点击的逻辑
 func _node_content_clicked(emit_node : StateNode, _clicked_pos : Vector2):
-	# if emit_node == _cur_selected_node:
-	# 	return
+	if Input.is_key_pressed(KEY_CTRL):
+		if null != emit_node:
+			if _multi_selected_nodes.has(emit_node):
+				_multi_selected_nodes.erase(emit_node)
+				emit_node.set_selected(false)
+			else:
+				emit_node.set_selected(true)
+				_multi_selected_nodes.set(emit_node, null)
+				node_selected.emit(emit_node)
+		pass
+	else:
+		_clear_multi_selected()
 
-	# if null != _cur_selected_node:
-	# 	_cur_selected_node.set_selected(false)
-	_clear_multi_selected()
+		if null != emit_node:
+			emit_node.set_selected(true)
+			_multi_selected_nodes.set(emit_node, null)
 
-	if null != emit_node:
-		emit_node.set_selected(true)
-		_multi_selected_nodes.set(emit_node, null)
-
-	node_selected.emit(emit_node)
+		node_selected.emit(emit_node)
 	pass
 
 
@@ -466,8 +499,8 @@ func _state_node_content_input(snode : StateNode, event: InputEvent) -> void:
 				#用户点击（鼠标按下弹起）事件检测
 				if event.pressed:
 					# snode.last_press_time = Time.get_ticks_msec()
-					if not _multi_selected_nodes.has(snode):
-						_node_content_clicked(snode, node_container.get_local_mouse_position())
+					# if not _multi_selected_nodes.has(snode):
+					_node_content_clicked(snode, node_container.get_local_mouse_position())
 
 					for nd in _multi_selected_nodes:
 						nd.start_drag()
@@ -476,10 +509,10 @@ func _state_node_content_input(snode : StateNode, event: InputEvent) -> void:
 					for nd in _multi_selected_nodes:
 						nd.end_drag()
 
-					if _multi_selected_nodes.size() > 1:
-						var pos_diff = node_container.get_local_mouse_position() - _node_begin_drag_mouse_pos
-						if pos_diff.length() < 10.0:
-							_node_content_clicked(snode, node_container.get_local_mouse_position())
+					# if _multi_selected_nodes.size() > 1:
+					# 	var pos_diff = node_container.get_local_mouse_position() - _node_begin_drag_mouse_pos
+					# 	if pos_diff.length() < 10.0 and not Input.is_key_pressed(KEY_CTRL):
+					# 		_node_content_clicked(snode, node_container.get_local_mouse_position())
 
 				pass
 			# MOUSE_BUTTON_RIGHT:
@@ -535,20 +568,20 @@ func _clear_multi_selected():
 
 func _copy_multi_select_in_clipdata():
 	if req_copy_data_cb.is_valid():
-		var value = req_copy_data_cb.call(_multi_selected_nodes.keys())
-		if typeof(value) != TYPE_STRING:
-			push_error("copy fail, not a valid string target")
-			return
-		_cliped_data = value
+		req_copy_data_cb.call(_multi_selected_nodes.keys())
+		# if typeof(value) != TYPE_STRING:
+		# 	push_error("copy fail, not a valid string target")
+		# 	return
+		# _cliped_data = value
 	pass
 
 
 func _paste_multi_select_in_clipdata():
-	if _cliped_data.is_empty():
-		return
+	# if _cliped_data.is_empty():
+	# 	return
 
 	if req_paste_data_cb.is_valid():
-		req_paste_data_cb.call(_cliped_data)
+		req_paste_data_cb.call()
 	pass
 
 

@@ -1,0 +1,380 @@
+# LANGUAGE translation for suntome_player for the following files:
+# res://editor/editor.tscn
+# res://editor/base/sound_obj_edit.gd
+# res://editor/base/sound_obj_edit.tscn
+# res://editor/base/subtitle/path_bind_form.gd
+# res://editor/base/subtitle/path_bind_form.tscn
+# res://editor/normal_suntome_node/suntome_count_check_node_panel.gd
+# res://editor/normal_suntome_node/suntome_count_check_node_panel.tscn
+# res://editor/normal_suntome_node/suntome_para_node_panel.gd
+# res://editor/normal_suntome_node/suntome_para_node_panel.tscn
+# res://editor/normal_suntome_node/suntome_time_begin_node_panel.gd
+# res://editor/normal_suntome_node/suntome_time_begin_node_panel.tscn
+# res://editor/normal_suntome_node/suntome_time_check_node_panel.gd
+# res://editor/normal_suntome_node/suntome_time_check_node_panel.tscn
+# res://editor/play_node_editor.gd
+# res://editor/play_node_editor.tscn
+# res://editor/select_pic_editor.gd
+# res://editor/select_pic_editor.tscn
+# res://editor/suntome_content.gd
+# res://editor/suntome_content.tscn
+# res://editor/suntome_s_pic_content.gd
+# res://editor/suntome_s_pic_content.tscn
+# res://misc/simple_button.gd
+# res://editor/suntome_content_param_panel.tscn
+# res://editor/subtitle_bind_editor.tscn
+# res://editor/left_sub_container.gd
+# res://editor/left_sub_container.tscn
+#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: suntome_player\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8-bit\n"
+
+#: editor/editor.tscn
+msgid "sound editor"
+msgstr ""
+
+#: editor/editor.tscn
+msgid "Select Pic editor"
+msgstr ""
+
+#: editor/editor.tscn
+msgid "node editor"
+msgstr ""
+
+#: editor/editor.tscn
+msgid "subtitle bind"
+msgstr ""
+
+#: editor/editor.tscn
+msgid "change language"
+msgstr ""
+
+#: editor/editor.tscn
+msgid "日本語"
+msgstr ""
+
+#: editor/editor.tscn
+msgid "English"
+msgstr ""
+
+#: editor/editor.tscn
+msgid "save"
+msgstr ""
+
+#: editor/base/sound_obj_edit.gd
+msgctxt "sound_obj_edit"
+msgid "play method"
+msgstr ""
+
+#: editor/base/sound_obj_edit.gd
+msgctxt "sound_obj_edit"
+msgid "sound"
+msgstr ""
+
+#: editor/base/sound_obj_edit.tscn
+msgid "out"
+msgstr ""
+
+#: editor/base/subtitle/path_bind_form.gd
+msgid "  "
+msgstr ""
+
+#: editor/base/subtitle/path_bind_form.tscn
+msgid "data/"
+msgstr ""
+
+#: editor/normal_suntome_node/suntome_count_check_node_panel.gd
+msgctxt "node_name"
+msgid "Suntome Count Check"
+msgstr ""
+
+#: editor/normal_suntome_node/suntome_count_check_node_panel.gd
+#: editor/normal_suntome_node/suntome_para_node_panel.gd
+#: editor/normal_suntome_node/suntome_time_begin_node_panel.gd
+#: editor/normal_suntome_node/suntome_time_check_node_panel.gd
+msgid "not allowed"
+msgstr ""
+
+#: editor/normal_suntome_node/suntome_count_check_node_panel.gd
+#: editor/normal_suntome_node/suntome_time_check_node_panel.gd
+msgid "reject route"
+msgstr ""
+
+#: editor/normal_suntome_node/suntome_count_check_node_panel.gd
+#: editor/normal_suntome_node/suntome_time_check_node_panel.gd
+msgid "passed route"
+msgstr ""
+
+#: editor/normal_suntome_node/suntome_count_check_node_panel.tscn
+msgid "allow min suntome count"
+msgstr ""
+
+#: editor/normal_suntome_node/suntome_para_node_panel.gd
+msgctxt "node_name"
+msgid "ParaSettingNode"
+msgstr ""
+
+#: editor/normal_suntome_node/suntome_para_node_panel.gd
+#: editor/normal_suntome_node/suntome_time_begin_node_panel.gd
+msgid "after setting"
+msgstr ""
+
+#: editor/normal_suntome_node/suntome_para_node_panel.tscn
+msgid "add param"
+msgstr ""
+
+#: editor/normal_suntome_node/suntome_time_begin_node_panel.gd
+msgctxt "node_name"
+msgid "Suntome Time Begin"
+msgstr ""
+
+#: editor/normal_suntome_node/suntome_time_begin_node_panel.tscn
+msgid "updata tag"
+msgstr ""
+
+#: editor/normal_suntome_node/suntome_time_check_node_panel.gd
+msgctxt "node_name"
+msgid "Suntome Time Check"
+msgstr ""
+
+#: editor/normal_suntome_node/suntome_time_check_node_panel.tscn
+msgid "check tag"
+msgstr ""
+
+#: editor/normal_suntome_node/suntome_time_check_node_panel.tscn
+msgid "select tag"
+msgstr ""
+
+#: editor/normal_suntome_node/suntome_time_check_node_panel.tscn
+msgid "passed time"
+msgstr ""
+
+#: editor/play_node_editor.gd
+msgid "Start"
+msgstr ""
+
+#: editor/play_node_editor.gd
+msgid "SouRou"
+msgstr ""
+
+#: editor/play_node_editor.gd
+msgid "Port"
+msgstr ""
+
+#: editor/play_node_editor.gd
+#: editor/play_node_editor.tscn
+msgid "Add Play Node"
+msgstr ""
+
+#: editor/play_node_editor.gd
+#: editor/play_node_editor.tscn
+msgid "Add Port Node"
+msgstr ""
+
+#: editor/play_node_editor.gd
+msgid "Add Setting Node"
+msgstr ""
+
+#: editor/play_node_editor.gd
+msgid "Add Check Count Node"
+msgstr ""
+
+#: editor/play_node_editor.gd
+msgid "Add Time Begin Node"
+msgstr ""
+
+#: editor/play_node_editor.gd
+msgid "Add Check Time Node"
+msgstr ""
+
+#: editor/play_node_editor.gd
+msgid "paste"
+msgstr ""
+
+#: editor/play_node_editor.gd
+msgid "play from this node"
+msgstr ""
+
+#: editor/play_node_editor.gd
+msgid "change type to play node"
+msgstr ""
+
+#: editor/play_node_editor.gd
+msgid "change type to port node"
+msgstr ""
+
+#: editor/play_node_editor.gd
+#: editor/select_pic_editor.gd
+msgid "copy"
+msgstr ""
+
+#: editor/play_node_editor.gd
+msgid "delete node"
+msgstr ""
+
+#: editor/play_node_editor.tscn
+msgid "start from begin"
+msgstr ""
+
+#: editor/play_node_editor.tscn
+msgid "step play"
+msgstr ""
+
+#: editor/play_node_editor.tscn
+msgid "pause"
+msgstr ""
+
+#: editor/play_node_editor.tscn
+msgid "Add Other Node"
+msgstr ""
+
+#: editor/play_node_editor.tscn
+msgid "Setting Node"
+msgstr ""
+
+#: editor/play_node_editor.tscn
+msgid "Check Count Node"
+msgstr ""
+
+#: editor/play_node_editor.tscn
+msgid "Time Begin Node"
+msgstr ""
+
+#: editor/play_node_editor.tscn
+msgid "Check Time"
+msgstr ""
+
+#: editor/select_pic_editor.gd
+msgctxt "select_pic_editor"
+msgid "drag here set"
+msgstr ""
+
+#: editor/select_pic_editor.tscn
+msgid "drag here set"
+msgstr ""
+
+#: editor/select_pic_editor.gd
+msgid "paste button"
+msgstr ""
+
+#: editor/select_pic_editor.gd
+msgid "paste button param"
+msgstr ""
+
+#: editor/select_pic_editor.tscn
+msgid "no picture yet, drag a picture here to set"
+msgstr ""
+
+#: editor/select_pic_editor.tscn
+msgid "add button"
+msgstr ""
+
+#: editor/select_pic_editor.tscn
+msgid "button name"
+msgstr ""
+
+#: editor/select_pic_editor.tscn
+msgid "button text use name"
+msgstr ""
+
+#: editor/select_pic_editor.tscn
+msgid "button text"
+msgstr ""
+
+#: editor/select_pic_editor.tscn
+msgid "position"
+msgstr ""
+
+#: editor/select_pic_editor.tscn
+msgid "size"
+msgstr ""
+
+#: editor/select_pic_editor.tscn
+msgid "font color"
+msgstr ""
+
+#: editor/select_pic_editor.tscn
+msgid "backgroung color"
+msgstr ""
+
+#: editor/select_pic_editor.tscn
+msgid "pic  button"
+msgstr ""
+
+#: editor/suntome_content.gd
+msgctxt "suntome_content"
+msgid "no sound obj yet"
+msgstr ""
+
+#: editor/suntome_s_pic_content.gd
+msgctxt "suntome_s_pic_content"
+msgid "no sound obj yet"
+msgstr ""
+
+#: editor/suntome_content.gd
+msgctxt "suntome_content"
+msgid "no texture yet"
+msgstr ""
+
+#: editor/suntome_content.gd
+msgid "no texture yet"
+msgstr ""
+
+#: editor/suntome_content.tscn
+msgid "text of object info"
+msgstr ""
+
+#: editor/suntome_content.tscn
+#: editor/suntome_s_pic_content.tscn
+msgid "texture path info"
+msgstr ""
+
+#: editor/suntome_s_pic_content.gd
+msgctxt "suntome_s_pic_content"
+msgid "no selection"
+msgstr ""
+
+#: editor/suntome_s_pic_content.tscn
+msgid "no sound object"
+msgstr ""
+
+#: misc/simple_button.gd
+msgid ""
+msgstr ""
+
+#: misc/simple_button.gd
+msgid "error"
+msgstr ""
+
+#: editor/suntome_content_param_panel.tscn
+msgid "Add Suntome Count"
+msgstr ""
+
+#: editor/suntome_content_param_panel.tscn
+msgid "node trans type"
+msgstr ""
+
+#: editor/suntome_content_param_panel.tscn
+msgid "Probability Normalize"
+msgstr ""
+
+#: editor/subtitle_bind_editor.tscn
+msgid "no audio selected yet"
+msgstr ""
+
+#: editor/left_sub_container.gd
+msgctxt "left_sub_container"
+msgid "PicObjList"
+msgstr ""
+
+#: editor/left_sub_container.gd
+msgctxt "left_sub_container"
+msgid "SoundObjList"
+msgstr ""

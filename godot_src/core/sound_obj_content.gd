@@ -12,7 +12,7 @@ class NodeInfo extends RefCounted:
 var name : String                       #该对象的名称
 #一个NodeInfo对象列表
 var sound_nodes : Array
-var out_offset_pos : Vector2 = Vector2(200,200)   #输出节点的坐标，默认为(200,200)
+var out_offset_pos : Vector2 = Vector2(400,200)   #输出节点的坐标，默认为(200,200)
 var play_method : Utility.RandomHelper.Method = Utility.RandomHelper.Method.RandomNoRepeat   #音频节点的随机方式
 var is_temp : bool = false    #标记是否是临时音频对象
 

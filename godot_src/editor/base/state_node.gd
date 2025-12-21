@@ -48,6 +48,11 @@ func _ready() -> void:
 	back.mouse_exited.connect(rect_mouse_exited)
 	back.mouse_entered.connect(rect_mouse_enter)
 
+	var style = get_theme_stylebox("panel")
+	if style is StyleBoxFlat:
+		var x = style.duplicate()
+		add_theme_stylebox_override("panel", x)
+		x.bg_color.a = 0.0
 	pass # Replace with function body.
 
 
@@ -145,9 +150,9 @@ func end_drag():
 #设置选中状态
 func set_selected(seletecd : bool):
 	if seletecd:
-		add_theme_stylebox_override("panel", border_seleted_style)
+		%SelectRect.add_theme_stylebox_override("panel", border_seleted_style)
 	else:
-		add_theme_stylebox_override("panel", border_unseleted_style)
+		%SelectRect.add_theme_stylebox_override("panel", border_unseleted_style)
 	pass
 
 
@@ -157,3 +162,14 @@ func get_ctt():
 
 func get_panel() -> StatePanel:
 	return _panel
+
+
+func fade():
+	%AnimationPlayer.play("fade")
+
+
+func show_back_rect():
+	%AnimationPlayer.stop()
+	var style = get_theme_stylebox("panel")
+	if style is StyleBoxFlat:
+		style.bg_color.a = 1.0

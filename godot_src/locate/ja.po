@@ -1,0 +1,378 @@
+# LANGUAGE translation for suntome_player for the following files:
+# res://editor/editor.tscn
+# res://editor/base/sound_obj_edit.gd
+# res://editor/base/sound_obj_edit.tscn
+# res://editor/base/subtitle/path_bind_form.gd
+# res://editor/base/subtitle/path_bind_form.tscn
+# res://editor/normal_suntome_node/suntome_count_check_node_panel.gd
+# res://editor/normal_suntome_node/suntome_count_check_node_panel.tscn
+# res://editor/normal_suntome_node/suntome_para_node_panel.gd
+# res://editor/normal_suntome_node/suntome_para_node_panel.tscn
+# res://editor/normal_suntome_node/suntome_time_begin_node_panel.gd
+# res://editor/normal_suntome_node/suntome_time_begin_node_panel.tscn
+# res://editor/normal_suntome_node/suntome_time_check_node_panel.gd
+# res://editor/normal_suntome_node/suntome_time_check_node_panel.tscn
+# res://editor/play_node_editor.gd
+# res://editor/play_node_editor.tscn
+# res://editor/select_pic_editor.gd
+# res://editor/select_pic_editor.tscn
+# res://editor/suntome_content.gd
+# res://editor/suntome_content.tscn
+# res://editor/suntome_s_pic_content.gd
+# res://editor/suntome_s_pic_content.tscn
+# res://misc/simple_button.gd
+#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: suntome_player\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.8\n"
+
+#: editor/editor.tscn
+msgid "sound editor"
+msgstr "音声対象編集"
+
+#: editor/editor.tscn
+msgid "Select Pic editor"
+msgstr "選択画像編集"
+
+#: editor/editor.tscn
+msgid "node editor"
+msgstr "音声流れ編集"
+
+#: editor/editor.tscn
+msgid "subtitle bind"
+msgstr "字幕バインド"
+
+#: editor/editor.tscn
+msgid "change language"
+msgstr "言語変更"
+
+#: editor/editor.tscn
+msgid "日本語"
+msgstr "日本語"
+
+#: editor/editor.tscn
+msgid "English"
+msgstr "English"
+
+#: editor/editor.tscn
+msgid "save"
+msgstr "保存"
+
+#: editor/base/sound_obj_edit.gd
+msgctxt "sound_obj_edit"
+msgid "play method"
+msgstr "再生方法"
+
+#: editor/base/sound_obj_edit.gd
+msgctxt "sound_obj_edit"
+msgid "sound"
+msgstr "音声"
+
+#: editor/base/sound_obj_edit.tscn
+msgid "out"
+msgstr "再生"
+
+#: editor/base/subtitle/path_bind_form.gd
+msgid "  "
+msgstr ""
+
+#: editor/base/subtitle/path_bind_form.tscn
+msgid "data/"
+msgstr "data/"
+
+#: editor/normal_suntome_node/suntome_count_check_node_panel.gd
+msgctxt "node_name"
+msgid "Suntome Count Check"
+msgstr "寸止め回数チェック"
+
+#: editor/normal_suntome_node/suntome_count_check_node_panel.gd
+#: editor/normal_suntome_node/suntome_para_node_panel.gd
+#: editor/normal_suntome_node/suntome_time_begin_node_panel.gd
+#: editor/normal_suntome_node/suntome_time_check_node_panel.gd
+msgid "not allowed"
+msgstr "接続を拒否"
+
+#: editor/normal_suntome_node/suntome_count_check_node_panel.gd
+#: editor/normal_suntome_node/suntome_time_check_node_panel.gd
+msgid "reject route"
+msgstr "通過しません"
+
+#: editor/normal_suntome_node/suntome_count_check_node_panel.gd
+#: editor/normal_suntome_node/suntome_time_check_node_panel.gd
+msgid "passed route"
+msgstr "通過した"
+
+#: editor/normal_suntome_node/suntome_count_check_node_panel.tscn
+msgid "allow min suntome count"
+msgstr "許容される寸止め最小回数"
+
+#: editor/normal_suntome_node/suntome_para_node_panel.gd
+msgctxt "node_name"
+msgid "ParaSettingNode"
+msgstr "変数設定"
+
+#: editor/normal_suntome_node/suntome_para_node_panel.gd
+#: editor/normal_suntome_node/suntome_time_begin_node_panel.gd
+msgid "after setting"
+msgstr "設定終了"
+
+#: editor/normal_suntome_node/suntome_para_node_panel.tscn
+msgid "add param"
+msgstr "変数追加"
+
+#: editor/normal_suntome_node/suntome_time_begin_node_panel.gd
+msgctxt "node_name"
+msgid "Suntome Time Begin"
+msgstr "寸止めの計時を開始"
+
+#: editor/normal_suntome_node/suntome_time_begin_node_panel.tscn
+msgid "updata tag"
+msgstr "計時タグ"
+
+#: editor/normal_suntome_node/suntome_time_check_node_panel.gd
+msgctxt "node_name"
+msgid "Suntome Time Check"
+msgstr "寸止めの計時チェック"
+
+#: editor/normal_suntome_node/suntome_time_check_node_panel.tscn
+msgid "check tag"
+msgstr "チェックした計時タグ"
+
+#: editor/normal_suntome_node/suntome_time_check_node_panel.tscn
+msgid "select tag"
+msgstr "タグ選択"
+
+#: editor/normal_suntome_node/suntome_time_check_node_panel.tscn
+msgid "passed time"
+msgstr "検査計時の長さ"
+
+#: editor/play_node_editor.gd
+msgid "Start"
+msgstr "開始ノード"
+
+#: editor/play_node_editor.gd
+msgid "SouRou"
+msgstr "早漏の場合"
+
+#: editor/play_node_editor.gd
+msgid "Port"
+msgstr "Port"
+
+#: editor/play_node_editor.gd editor/play_node_editor.tscn
+msgid "Add Play Node"
+msgstr "音声遊ぶノード追加"
+
+#: editor/play_node_editor.gd editor/play_node_editor.tscn
+msgid "Add Port Node"
+msgstr "Portノード追加"
+
+#: editor/play_node_editor.gd
+msgid "Add Setting Node"
+msgstr "変数設定ノード追加"
+
+#: editor/play_node_editor.gd
+msgid "Add Check Count Node"
+msgstr "寸止め回数チェックノード追加"
+
+#: editor/play_node_editor.gd
+msgid "Add Time Begin Node"
+msgstr "計時開始ノード追加"
+
+#: editor/play_node_editor.gd
+msgid "Add Check Time Node"
+msgstr "計時チェックノード追加"
+
+#: editor/play_node_editor.gd
+msgid "paste"
+msgstr "ペースト"
+
+#: editor/play_node_editor.gd
+msgid "play from this node"
+msgstr "このノードから始め"
+
+#: editor/play_node_editor.gd
+msgid "change type to play node"
+msgstr "音声遊ぶノードに変更"
+
+#: editor/play_node_editor.gd
+msgid "change type to port node"
+msgstr "Portノードに変更"
+
+#: editor/play_node_editor.gd editor/select_pic_editor.gd
+msgid "copy"
+msgstr "コピー"
+
+#: editor/play_node_editor.gd
+msgid "delete node"
+msgstr "ノード消去"
+
+#: editor/play_node_editor.tscn
+msgid "start from begin"
+msgstr "開始ノードから始め"
+
+#: editor/play_node_editor.tscn
+msgid "step play"
+msgstr "次のノードをプレー"
+
+#: editor/play_node_editor.tscn
+msgid "pause"
+msgstr "一時停止"
+
+#: editor/play_node_editor.tscn
+msgid "Add Other Node"
+msgstr "他のノード追加"
+
+#: editor/play_node_editor.tscn
+msgid "Setting Node"
+msgstr "変数設定ノード"
+
+#: editor/play_node_editor.tscn
+msgid "Check Count Node"
+msgstr "寸止め回数チェックノード"
+
+#: editor/play_node_editor.tscn
+msgid "Time Begin Node"
+msgstr "計時開始ノード"
+
+#: editor/play_node_editor.tscn
+msgid "Check Time"
+msgstr "計時チェックノード"
+
+#: editor/select_pic_editor.gd
+msgctxt "select_pic_editor"
+msgid "drag here set"
+msgstr "画像をここにドロップ"
+
+#: editor/select_pic_editor.tscn
+msgid "drag here set"
+msgstr "画像をここにドロップ"
+
+#: editor/select_pic_editor.gd
+msgid "paste button"
+msgstr "ボタンをペースト"
+
+#: editor/select_pic_editor.gd
+msgid "paste button param"
+msgstr "ボタンパラメータをペースト"
+
+#: editor/select_pic_editor.tscn
+msgid "no picture yet, drag a picture here to set"
+msgstr "まだ画像がありません。ここに画像をドラッグして設定してください"
+
+#: editor/select_pic_editor.tscn
+msgid "add button"
+msgstr "ボタン追加"
+
+#: editor/select_pic_editor.tscn
+msgid "button name"
+msgstr "選択マーク"
+
+#: editor/select_pic_editor.tscn
+msgid "button text use name"
+msgstr "選択マークをボタンテキストに利用"
+
+#: editor/select_pic_editor.tscn
+msgid "button text"
+msgstr "ボタンテキスト"
+
+#: editor/select_pic_editor.tscn
+msgid "position"
+msgstr "位置"
+
+#: editor/select_pic_editor.tscn
+msgid "size"
+msgstr "サイズ"
+
+#: editor/select_pic_editor.tscn
+msgid "font color"
+msgstr "テキストの色"
+
+#: editor/select_pic_editor.tscn
+msgid "backgroung color"
+msgstr "ボタンの色"
+
+#: editor/select_pic_editor.tscn
+msgid "pic  button"
+msgstr "画像ボタン"
+
+#: editor/suntome_content.gd
+msgctxt "suntome_content"
+msgid "no sound obj yet"
+msgstr "音声対象ありません"
+
+#: editor/suntome_s_pic_content.gd
+msgctxt "suntome_s_pic_content"
+msgid "no sound obj yet"
+msgstr "音声対象未設定"
+
+#: editor/suntome_content.gd
+msgctxt "suntome_content"
+msgid "no texture yet"
+msgstr "画像ありません"
+
+#: editor/suntome_content.gd
+msgid "no texture yet"
+msgstr "画像ありません"
+
+#: editor/suntome_content.tscn
+msgid "text of object info"
+msgstr "text of object info"
+
+#: editor/suntome_content.tscn editor/suntome_s_pic_content.tscn
+msgid "texture path info"
+msgstr "texture path info"
+
+#: editor/suntome_s_pic_content.gd
+msgctxt "suntome_s_pic_content"
+msgid "no selection"
+msgstr "no selection"
+
+#: editor/suntome_s_pic_content.tscn
+msgid "no sound object"
+msgstr "音声対象未設定"
+
+#: misc/simple_button.gd
+msgid "error"
+msgstr "エラー"
+
+#: editor/suntome_content_param_panel.tscn
+msgid "Add Suntome Count"
+msgstr "寸止め回数を増やす"
+
+#: editor/suntome_content_param_panel.tscn
+msgid "node trans type"
+msgstr "流れルール"
+
+#: editor/suntome_content_param_panel.tscn
+msgid "Probability Normalize"
+msgstr "確率正規化"
+
+#: editor/subtitle_bind_editor.tscn
+msgid "no audio selected yet"
+msgstr "音声が選択されていません"
+
+#: editor/left_sub_container.gd
+msgctxt "left_sub_container"
+msgid "PicObjList"
+msgstr "選択画像リスト"
+
+#: editor/left_sub_container.gd
+msgctxt "left_sub_container"
+msgid "SoundObjList"
+msgstr "音声対象リスト"
+
+#, fuzzy
+#~ msgid "bg color"
+#~ msgstr "ボタンの色"

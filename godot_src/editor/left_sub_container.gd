@@ -17,7 +17,7 @@ func _ready() -> void:
 	file_tree_container.add_child(tree)
 	#file_tree_container.move_child(tree, 0)
 
-	pic_obj_list = ObjList.construct("PicObjList",
+	pic_obj_list = ObjList.construct(tr("PicObjList", "left_sub_container"),
 		func():
 			return SuntomeGlobal.select_pic_contents.keys()
 	)
@@ -45,7 +45,7 @@ func _ready() -> void:
 		return [item_name]
 
 
-	sound_obj_list = ObjList.construct("SoundObjList", func(): return SuntomeGlobal.sound_object_contents.keys())
+	sound_obj_list = ObjList.construct(tr("SoundObjList", "left_sub_container"), func(): return SuntomeGlobal.sound_object_contents.keys())
 
 	sound_obj_list.add_new_item_cb = func(new_name : String):
 		var new_cont = SoundObjContent.new()
@@ -71,6 +71,12 @@ func _ready() -> void:
 
 	%TabContainer.add_child(sound_obj_list)
 	%TabContainer.add_child(pic_obj_list)
+
+	LocalizationCenter.LocalChanged.connect(
+		func():
+			pic_obj_list.name = tr("PicObjList", "left_sub_container")
+			sound_obj_list.name = tr("SoundObjList", "left_sub_container")
+	)
 
 	pass # Replace with function body.
 

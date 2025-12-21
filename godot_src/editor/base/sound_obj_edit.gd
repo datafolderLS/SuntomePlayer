@@ -6,6 +6,10 @@ extends Control
 
 var current_edit_node : SoundObjContent = null
 
+var _presize : Vector2 = Vector2(-1,-1)
+
+var _is_using_custome_cursor := false
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	GraphEd.show_grid = false
@@ -14,6 +18,15 @@ func _ready() -> void:
 	GraphEd.connection_request.connect(_connection_request)
 	GraphEd.end_node_move.connect(_check_all_node_position_and_update)
 	GraphEd.gui_input.connect(_graphed_gui_input)
+
+
+	LocalizationCenter.LocalChanged.connect(
+		func():
+			var paramctrl = param_container.get_child(0)
+			if paramctrl:
+				paramctrl.set_text(tr("play method", "sound_obj_edit"))
+	)
+
 	pass # Replace with function body.
 
 
@@ -22,12 +35,29 @@ func _process(_delta: float) -> void:
 	if not is_visible_in_tree():
 		return
 
-	if Input.is_key_pressed(KEY_ALT) and Rect2(Vector2(0,0), GraphEd.size).has_point(GraphEd.get_local_mouse_position()):
-		Input.set_custom_mouse_cursor(preload("res://editor/icon/delete_16.png"), Input.CURSOR_ARROW, Vector2(8,8))
-		#mouse_default_cursor_shape = Control.CURSOR_CROSS
-		#Input.set_default_cursor_shape(Input.CURSOR_CROSS)
-	else:
+	var has_mouse_in_rect = Rect2(Vector2(0,0), size).has_point(get_local_mouse_position())
+
+	if has_mouse_in_rect:
+		if Input.is_key_pressed(KEY_ALT):
+			Input.set_custom_mouse_cursor(preload("res://editor/icon/delete_16.png"), Input.CURSOR_ARROW, Vector2(8,8))
+			_is_using_custome_cursor = true
+			#mouse_default_cursor_shape = Control.CURSOR_CROSS
+			#Input.set_default_cursor_shape(Input.CURSOR_CROSS)
+		else:
+			Input.set_custom_mouse_cursor(null)
+			_is_using_custome_cursor = false
+	elif _is_using_custome_cursor:
 		Input.set_custom_mouse_cursor(null)
+		_is_using_custome_cursor = false
+
+	if is_visible_in_tree():
+		if _presize.x < 0:
+			_presize = size
+		elif _presize != size:
+			_resize_cb(_presize)
+			_presize = size
+	else:
+		_presize = Vector2(-1,-1)
 	pass
 
 
@@ -85,7 +115,7 @@ func set_sound_object(sobj : SoundObjContent):
 func _construct_param_control(value) -> Control:
 	if value is SoundObjContent:
 		var paramctrl = preload("res://editor/base/param_ctrl.tscn").instantiate()
-		paramctrl.set_text("play method")
+		paramctrl.set_text(tr("play method", "sound_obj_edit"))
 		# paramctrl.container().add_child()
 		var ctrl := Utility.make_enum_option_button(Utility.RandomHelper.Method)
 		ctrl.select(value.play_method)
@@ -97,6 +127,7 @@ func _construct_param_control(value) -> Control:
 				@warning_ignore_restore("INT_AS_ENUM_WITHOUT_CAST")
 				pass
 		)
+
 		return paramctrl
 
 	return null
@@ -121,7 +152,7 @@ func _make_node(use_name : String):
 
 func _add_sound_context(node : GraphNode) -> GraphNode:
 	var content = Label.new()
-	content.text = "sound"
+	content.text = tr("sound", "sound_obj_edit")
 	content.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	node.add_child(content)
 	node.set_slot_enabled_right(0, true)
@@ -173,18 +204,6 @@ func _drop_data(dposition, data):
 		pass
 	else:
 		_add_sound_node_in_pos(data[0], (dposition + GraphEd.scroll_offset) / GraphEd.zoom)
-		# var path = Utility.cut_file_path(data[0])
-		# var node = _add_sound_context(_make_node(path))
-		# node.position_offset = (dposition + GraphEd.scroll_offset) / GraphEd.zoom
-
-		# #修改current_edit_node的数据
-		# var newNodeInfo = SoundObjContent.NodeInfo.new()
-		# newNodeInfo.offset_pos = node.position_offset
-		# newNodeInfo.path = path
-		# newNodeInfo.has_connected = true
-		# current_edit_node.sound_nodes.append(newNodeInfo)
-
-		# GraphEd.connect_node(node.name, 0, node_out.name, 0)
 	pass
 
 
@@ -263,27 +282,62 @@ func _delete_node(node : GraphNode):
 
 
 func _graphed_gui_input(input : InputEvent):
-	if input is InputEventMouseButton and Input.is_key_pressed(KEY_ALT) and input.is_pressed():
-		var dict = GraphEd.get_closest_connection_at_point(input.position)
-		if dict.is_empty():
-			return
+	if input is InputEventMouseButton:
+		match input.button_index:
+			MOUSE_BUTTON_RIGHT:
+				if input.is_pressed():
+					var node = _get_node_in_pos(input.global_position)
+					if null == node:
+						return
 
-		# print(dict)
-		GraphEd.disconnect_node(dict["from_node"], dict["from_port"], dict["to_node"], dict["to_port"])
+					var list := Array()
+					if node.selected:
+						list.append(
+							CusContentMenu.bt("delete", func():
+							for check : GraphNode in _get_all_node():
+								if check.selected:
+									_delete_node(check)
+							)
+						)
+						pass
+					else:
+						list.append(CusContentMenu.bt("delete", func():
+							_delete_node(node)
+						)
+						)
+						pass
 
-		var node = _find_child_by_name(GraphEd, dict["from_node"])
-		if not node is GraphNode:
-			print("critical error")
-			return
+					CusContentMenu.create(self, get_global_mouse_position(), list)
+					pass
+				pass
+	pass
 
-		_delete_node(node)
 
-		# var cur = current_edit_node.get_sound_node_by_path(node.title)
-		# if null == cur:
-		# 	print("critical error")
-		# 	return
+func _get_node_in_pos(global_pos : Vector2) -> GraphNode:
+	for check_node : GraphNode in _get_all_node():
+		var rect = check_node.get_global_rect()
+		if rect.has_point(global_pos):
+			return check_node
 
-		# cur.has_connected = false
+	# var dict = GraphEd.get_closest_connection_at_point(graphed_pos)
+	# if dict.is_empty():
+	# 	return null
+	# var node = _find_child_by_name(GraphEd, dict["from_node"])
+	# if not node is GraphNode:
+	# 	Utility.CriticalFail()
+	# 	return null
 
-		pass
+	return null
+
+
+func _get_all_node() -> Array:
+	return GraphEd.get_children().filter(func(element):
+		return element is GraphNode and element != node_out
+	)
+
+
+func _resize_cb(pre_size : Vector2):
+	var change = size - pre_size
+	print(change)
+	GraphEd.scroll_offset -= change * 0.5
 	pass

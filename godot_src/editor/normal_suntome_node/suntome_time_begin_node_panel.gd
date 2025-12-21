@@ -41,15 +41,15 @@ func _set_text(t : String):
 
 #和SuntomeContainerContent关联的函数
 func node_text() -> String:
-	return "Suntome Time Begin"
+	return tr("Suntome Time Begin", "node_name")
 
 
 #和PlayNodeEditor联动的函数
 #返回用户拖动节点连线时显示的线条信息
 func get_drag_line_info() -> String:
 	if _ref_node.nextNodes.is_empty():
-		return "after setting"
-	return "not allowed"
+		return tr("after setting")
+	return tr("not allowed")
 
 
 #当连线连接时，判断是否可以连接
@@ -72,4 +72,4 @@ func process_node_disconnect(target : SuntomeNodeBase):
 #获取该节点和其他节点的连线文本信息，该函数返回一个可调用的函数对象(other_node : SuntomeNodeBase) -> String
 func get_connect_line_lable() -> Callable:
 	return func(_other_node : SuntomeNodeBase) -> String:
-		return "after setting"
+		return tr("after setting")

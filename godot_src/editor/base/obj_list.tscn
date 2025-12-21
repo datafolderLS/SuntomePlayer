@@ -14,6 +14,8 @@ bg_color = Color(0, 0, 0, 1)
 [node name="ObjList" type="VBoxContainer"]
 offset_right = 200.0
 offset_bottom = 518.0
+focus_mode = 2
+focus_behavior_recursive = 2
 script = ExtResource("1_n34jd")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -53,12 +55,17 @@ size_flags_vertical = 3
 mouse_filter = 1
 wraparound_items = false
 
-[node name="NameEdit" type="LineEdit" parent="ItemList"]
-visible = false
-layout_mode = 0
-offset_left = 10.0
-offset_top = 60.0
-offset_right = 373.0
-offset_bottom = 91.0
+[node name="PopupPanel" type="PopupPanel" parent="ItemList"]
+unique_name_in_owner = true
+disable_3d = true
+transparent_bg = false
+oversampling_override = 1.0
+
+[node name="NameEdit" type="LineEdit" parent="ItemList/PopupPanel"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 96.0
+offset_bottom = 96.0
 theme_override_styles/normal = SubResource("StyleBoxFlat_hlfcs")
 theme_override_styles/focus = SubResource("StyleBoxFlat_oinqk")

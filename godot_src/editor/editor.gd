@@ -3,6 +3,8 @@ extends Container
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	TranslationServer.set_locale("ja")
+
 	var sub_container = get_node("%LeftSubContainer")
 	var panelContainer : PanelContainer = sub_container.container()
 
@@ -78,10 +80,22 @@ func _ready() -> void:
 
 
 	#响应点击信息
-	sub_container.get_FileTreeNode().on_select_file_change.connect(
-		func(path : String, type : FileTree.AssetType):
-			if FileTree.AssetType.Sound == type:
-				subtitleBind.set_current_sound(path)
+	# sub_container.get_FileTreeNode().on_select_file_change.connect(
+	# 	func(path : String, type : FileTree.AssetType):
+	# 		if FileTree.AssetType.Sound == type:
+	# 			subtitleBind.set_current_sound(path)
+	# )
+
+	%button_language.get_popup().id_pressed.connect(
+		func(id : int):
+			match id:
+				0: #English
+					TranslationServer.set_locale("en")
+					pass
+				1: #Japnese
+					TranslationServer.set_locale("ja")
+					pass
+			pass
 	)
 
 	pass # Replace with function body.

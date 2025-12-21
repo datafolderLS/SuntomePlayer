@@ -32,13 +32,13 @@ func set_suntome_node(node : SuntomeNode):
 
 	ref_suntome_node = node
 	if null == node.usedSoundObject:
-		get_node("%sound_path").text = "no sound obj yet"
+		get_node("%sound_path").text = tr("no sound obj yet", "suntome_content")
 		get_node("%sound_path").set("theme_override_colors/font_color", Color.RED)
 	else:
 		_bind_soundobjcontent(node.usedSoundObject)
 
 	if node.usedTexturePath.is_empty():
-		get_node("%texture_path").text = "no texture yet"
+		get_node("%texture_path").text = tr("no texture yet", "suntome_content")
 		get_node("%texture_path").set("theme_override_colors/font_color", Color.RED)
 	else:
 		# get_node("%texture_path").text = node.usedTexturePath
@@ -105,7 +105,7 @@ func _soundobj_delete_before(obj : SoundObjContent):
 	if obj != ref_suntome_node.usedSoundObject:
 		return
 
-	get_node("%sound_path").text = "no sound obj yet"
+	get_node("%sound_path").text = tr("no sound obj yet", "suntome_content")
 	get_node("%sound_path").set("theme_override_colors/font_color", Color.RED)
 	ref_suntome_node.usedSoundObject = null
 	pass
@@ -206,7 +206,10 @@ func get_connect_line_lable() -> Callable:
 	return func(other_node : SuntomeNodeBase) -> String:
 		var _uid = other_node.uid
 		var index = ref_suntome_node.nextNodes_index[_uid]
-		return String.num_int64(index)
+		var chance = ref_suntome_node.nextNodes_chance[_uid]
+		if typeof(chance) != TYPE_STRING:
+			chance = String.num(chance * 100) + "%"
+		return "{0} ({1})".format([index, chance])
 
 
 #playnodeeditor会调用该函数来请求在参数栏显示节点参数
@@ -273,6 +276,7 @@ func _update_param_info(panel : Control):
 		ctrl.value_change.connect(
 			func(_ctr : NodeParamCtrl):
 				ref_suntome_node.nextNodes_chance[_uid] = _ctr.value()
+				update_node_line_info.call(parent_node)
 				pass
 		)
 		ctrllist.append(ctrl)

@@ -17,6 +17,9 @@ script = ExtResource("1_c5fey")
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
+show_grid = false
+panning_scheme = 1
+minimap_opacity = 0.25
 
 [node name="outnode" type="GraphNode" parent="GraphEdit"]
 visible = false

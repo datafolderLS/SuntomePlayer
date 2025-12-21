@@ -80,3 +80,18 @@ offset_top = 446.0
 offset_right = 440.0
 offset_bottom = 574.0
 texture = ExtResource("4_1kvcj")
+
+[node name="PopupPanel" type="PopupPanel" parent="."]
+disable_3d = true
+transparent_bg = false
+oversampling_override = 1.0
+initial_position = 1
+size = Vector2i(100, 39)
+visible = true
+
+[node name="LineEdit" type="LineEdit" parent="PopupPanel"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 96.0
+offset_bottom = 35.0
+text = "51515321"

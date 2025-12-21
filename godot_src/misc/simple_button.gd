@@ -42,6 +42,7 @@ func set_picture(pic : Texture2D):
 	%picture.set_instance_shader_parameter("color_top", Color.WHITE)
 	%picture.set_instance_shader_parameter("color_bottom", Color.WHITE)
 	%picture.texture = pic
+	text = ""
 	pass
 
 
@@ -67,18 +68,34 @@ func update_from_info(info : SelectPicContent.SelectButtonInfo):
 	anchor_top = info.pos.y
 	anchor_right = info.pos.x + info.size.x
 	anchor_bottom = info.pos.y + info.size.y
-	if info.name_as_text:
-		text = info.name
-	else:
-		text = info.text
 
-	change_color(info.bgcolor)
-	change_font_color(info.fontcolor)
+	if info.isPicture and info.picpath.length() > 0:
+		var picture = TextureCenter.get_picture(info.picpath)
+		if null == picture:
+			text = tr("error")
+			change_color(Color.WEB_GRAY)
+			change_font_color(Color.RED)
+			return
+
+		set_picture(picture)
+		var pic_size = picture.get_size()
+		# var scaled_size_y = info.size.x * pic_size.y / pic_size.x
+		_fit_static_size(pic_size.y / pic_size.x)
+		pass
+	else:
+		if info.name_as_text:
+			text = info.name
+		else:
+			text = info.text
+
+		change_color(info.bgcolor)
+		change_font_color(info.fontcolor)
 
 
 #基于info的信息在pNode下创建一个SimpleButton
 static func create_button_from_button_info(pNode : Node, info : SelectPicContent.SelectButtonInfo) -> SimpleButton:
 	var addone = SimpleButton.new_button()
+	addone.hide()
 	pNode.add_child(addone)
 
 	addone.set_anchors_preset(Control.LayoutPreset.PRESET_FULL_RECT)
@@ -86,4 +103,17 @@ static func create_button_from_button_info(pNode : Node, info : SelectPicContent
 	addone.set_end(Vector2.ZERO)
 
 	addone.update_from_info(info)
+	addone.show()
+	# addone.call_deferred("show")
 	return addone
+
+
+#基于height_to_width_rate提供的比例将button缩放到该比例
+#由于SimpleButton默认是基于anchor来进行设置的，所以这个函数还要考虑父级控件的比例
+func _fit_static_size(height_to_width_rate : float):
+	var _parent_size := get_parent_control().size
+	var _self_width = anchor_right - anchor_left
+	var _parent_wh_rate = _parent_size.x / _parent_size.y
+	var target_height = _self_width * height_to_width_rate * _parent_wh_rate
+	anchor_bottom = anchor_top + target_height
+	pass

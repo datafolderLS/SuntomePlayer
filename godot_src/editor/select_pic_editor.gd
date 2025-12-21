@@ -13,6 +13,12 @@ var _clicked_mouse_emit_pos : Vector2   #相对坐标
 
 var _need_refresh : bool = false
 
+#记录是否使用自定义指针
+var _is_using_custome_cursor := false
+
+#记录被复制的信息
+var _duplicate_info := Dictionary()
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	%PicContainer.drop_in_panel_availiable_func = func(_at_position: Vector2, data: Variant):
@@ -26,6 +32,8 @@ func _ready() -> void:
 		var pic = TextureCenter.get_picture(path)
 		current_select_picture_content.usedTexturePath = Utility.cut_file_path(path)
 		_set_picture(pic)
+
+	%picture.gui_input.connect(_pictrue_gui_input)
 
 	%Button_add_normal.pressed.connect(_add_button_normal)
 
@@ -43,6 +51,21 @@ func _ready() -> void:
 		if visible and _need_refresh:
 			_show_pic_content()
 	)
+
+	%DropLabel.drop_in_panel_availiable_func = func(_at_position: Vector2, data: Variant):
+		if null == current_select_picture_content:
+			return false
+		if null == _selected_button:
+			return false
+
+		if data[2] == FileTree.AssetType.Picture:
+			return true
+		return false
+
+	%DropLabel.drop_in_panel_cb = func(_at_position: Vector2, data: Variant):
+		var picture_path = data[0]
+		_set_cur_buton_picture(Utility.cut_file_path(picture_path))
+		pass
 	pass # Replace with function body.
 
 
@@ -68,12 +91,20 @@ func _process(_delta: float) -> void:
 	if not is_visible_in_tree():
 		return
 
-	if Input.is_key_pressed(KEY_ALT) and Rect2(Vector2(0,0), %PicContainer.size).has_point(%PicContainer.get_local_mouse_position()):
-		Input.set_custom_mouse_cursor(preload("res://editor/icon/delete_16.png"), Input.CURSOR_ARROW, Vector2(8,8))
-		#mouse_default_cursor_shape = Control.CURSOR_CROSS
-		#Input.set_default_cursor_shape(Input.CURSOR_CROSS)
-	else:
+	var has_mouse_in_rect = Rect2(Vector2(0,0), size).has_point(get_local_mouse_position())
+
+	if has_mouse_in_rect:
+		if Input.is_key_pressed(KEY_ALT):
+			Input.set_custom_mouse_cursor(preload("res://editor/icon/delete_16.png"), Input.CURSOR_ARROW, Vector2(8,8))
+			_is_using_custome_cursor = true
+			#mouse_default_cursor_shape = Control.CURSOR_CROSS
+			#Input.set_default_cursor_shape(Input.CURSOR_CROSS)
+		else:
+			Input.set_custom_mouse_cursor(null)
+			_is_using_custome_cursor = false
+	elif _is_using_custome_cursor:
 		Input.set_custom_mouse_cursor(null)
+		_is_using_custome_cursor = false
 	pass
 
 
@@ -143,7 +174,7 @@ func _add_button_normal():
 	newInfo.text = newInfo.name
 	newInfo.pos = Vector2.ONE * 0.5
 	newInfo.size = Vector2(0.1, 0.05)
-	newInfo.bgcolor = Color.BLACK
+	newInfo.bgcolor = Color.DIM_GRAY
 	newInfo.fontcolor = Color.WHITE
 	newInfo.isPicture = false
 
@@ -169,7 +200,7 @@ func _create_button_from_info(info : SelectPicContent.SelectButtonInfo) -> Simpl
 
 
 func _select_change(button : SimpleButton):
-	var info = button_to_info[button]
+	var info : SelectPicContent.SelectButtonInfo = button_to_info[button]
 	if null == info:
 		printerr("wc, 这是什么鬼")
 		Utility.CriticalFail()
@@ -184,21 +215,35 @@ func _select_change(button : SimpleButton):
 	%param_container.refresh()
 	# print("emit button")
 	button.move_to_front()
+
+	if not info.picpath.is_empty():
+		%DropLabel.text = info.picpath
+	else:
+		%DropLabel.text = tr("drag here set", "select_pic_editor")
 	pass
 
 
-#基于info更新右侧的参数选项
-#func _update_context_from_info(info : SelectPicContent.SelectButtonInfo):
-	#if null == info:
-		#%param_container.hide()
-		#return
-#
-	#%param_container.show()
-#
-	#%button_name.text = info.name
-	#%Button_bt_use_name.button_pressed = info.name_as_text
-	#%button_text.text = info.text
-	#pass
+func _pictrue_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		match event.button_index:
+			MOUSE_BUTTON_RIGHT:
+				if event.is_pressed():
+					if not _duplicate_info.is_empty():
+						var list := Array()
+						var pos = event.position
+						list.append(CusContentMenu.bt(tr("paste button"), func():
+							var info = SelectPicContent.SelectButtonInfo.new()
+							SelectPicContent.unserialize_button_info(_duplicate_info, info)
+							var names = current_select_picture_content.buton_index.keys()
+							var newName = Utility.check_no_repeat_name("empty", names)
+							info.name = newName
+							info.pos = (pos / %picture.size).clampf(0.0, 1.0)
+							_create_button_from_info(info)
+							pass
+						))
+						CusContentMenu.create(self, get_global_mouse_position(), list)
+	pass
+
 
 func _button_gui_input(button : SimpleButton, event : InputEvent):
 	# if event is InputEventMouseButton:
@@ -218,6 +263,33 @@ func _button_gui_input(button : SimpleButton, event : InputEvent):
 				_clicked_mouse_emit_pos = _picture_mouse_anchor()
 				_clicked_button_diff_pos = _button_anchor_pos(button) - _clicked_mouse_emit_pos
 				pass
+			MOUSE_BUTTON_RIGHT:
+				#用户呼叫右键菜单
+				if event.pressed:
+					var list := Array()
+					list.append(CusContentMenu.bt(tr("copy"), func():
+						var info = button_to_info[button]
+						_duplicate_info = SelectPicContent.serialize_button_info(info)
+						pass
+					))
+
+					if not _duplicate_info.is_empty():
+						list.append(CusContentMenu.bt(tr("paste button param"), func():
+							var info = SelectPicContent.SelectButtonInfo.new()
+							SelectPicContent.unserialize_button_info(_duplicate_info, info)
+							var custom_info = button_to_info[button]
+							custom_info.size = info.size
+							custom_info.bgcolor = info.bgcolor
+							custom_info.name_as_text = info.name_as_text
+							custom_info.text = info.text
+							custom_info.fontcolor = info.fontcolor
+							custom_info.isPicture = info.isPicture
+							custom_info.picpath = info.picpath
+							button.update_from_info(custom_info)
+							pass
+						))
+
+					CusContentMenu.create(self, get_global_mouse_position(), list)
 		pass
 
 	elif event is InputEventMouseMotion:
@@ -307,3 +379,12 @@ func _param_updated(param : String, value):
 
 # 	button.change_color(info.bgcolor)
 # 	button.change_font_color(info.fontcolor)
+func _set_cur_buton_picture(pic_path : String):
+	if null == _selected_button:
+		return
+
+	%DropLabel.text = pic_path
+	var cur_button_info : SelectPicContent.SelectButtonInfo = button_to_info[_selected_button]
+	cur_button_info.picpath = pic_path
+	_selected_button.update_from_info(cur_button_info)
+	pass

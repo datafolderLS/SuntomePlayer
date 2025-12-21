@@ -18,6 +18,9 @@ signal suntome_node_change(suntome_node : SuntomeNodeBase)
 #步进函数
 var _step_func := Callable()
 
+#当播放到没有下一个节点的节点时，调用该函数
+var playoverfunc := Callable()
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
@@ -87,6 +90,8 @@ func play_suntome_node(suntome_node : SuntomeNode):
 
 	if suntome_node.is_transit_node:
 		var next_node = suntome_node.get_next_node()
+		if null == next_node:
+			_play_over()
 		_play_node_in_next_frame(next_node)
 		return
 
@@ -138,12 +143,11 @@ func play_select_pic_node(suntome_node : SuntomeSelectPictNode):
 
 			addone.pressed.connect(
 				func(_button : SimpleButton):
-					if not selectpicobj.nextNodes_button_to_uid.has(bname):
+					if not suntome_node.nextNodes_button_to_uid.has(bname):
 						printerr("该按键没有绑定传递对象 ", bname)
 						return
-					var uid = selectpicobj.nextNodes_button_to_uid[bname]
+					var uid = suntome_node.nextNodes_button_to_uid[bname]
 					var nextNode = suntome_node.nextNodes[uid]
-
 					#清空所有button
 					# for b : SimpleButton in button_cache:
 					# 	picture.remove_child(b)
@@ -181,6 +185,7 @@ func play_normal_node(suntome_node : SuntomeNodeBase):
 
 	var next = suntome_node.next_node()
 	if null == next:
+		_play_over()
 		return
 	_play_node_in_next_frame(next)
 
@@ -200,7 +205,7 @@ func _sound_play_over(_obj : Player.NextPlayerObj):
 	var next = _cur_play_node.get_next_node()
 
 	if null == next:
-		print("play over")
+		_play_over()
 		return
 
 	_play_node_in_next_frame(next)
@@ -230,3 +235,9 @@ func _clear_button_cache():
 		b.queue_free()
 	button_cache.clear()
 
+
+func _play_over():
+	print("play over")
+	if playoverfunc.is_valid():
+		playoverfunc.call_deferred()
+	pass

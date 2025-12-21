@@ -106,6 +106,14 @@ anchors_preset = 0
 size_flags_vertical = 3
 mouse_filter = 2
 
+[node name="select_ColorRect_lrc" type="ColorRect" parent="VBoxContainer/HBoxContainer2/HSplitContainer/PanelContainer_lrc_path/VBoxContainer/lrc_main_ctrl/root_ctrl_lrc_path"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_right = 308.0
+offset_bottom = 17.0
+color = Color(0.7, 0.7, 0.7, 0.3764706)
+
 [node name="VBoxContainer_lrc" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2/HSplitContainer/PanelContainer_lrc_path/VBoxContainer/lrc_main_ctrl/root_ctrl_lrc_path"]
 unique_name_in_owner = true
 layout_mode = 0

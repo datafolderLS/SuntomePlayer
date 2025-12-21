@@ -1,0 +1,72 @@
+[gd_scene load_steps=2 format=3 uid="uid://cy6yjunhqykq3"]
+
+[sub_resource type="GDScript" id="GDScript_umwon"]
+script/source = "extends PanelContainer
+
+signal value_changed(v : float)
+
+var value : float :
+	set(v):
+		var sec = fmod(v, 60.0)
+		var minute = floorf(v / 60.0)
+		%SB_minute.value = minute
+		%SB_second.value = sec
+		value = %SB_minute.value * 60 + %SB_second.value
+		value_changed.emit(value)
+	get():
+		return %SB_minute.value * 60 + %SB_second.value
+
+
+func _ready() -> void:
+	%SB_second.value_changed.connect(func(v : float):
+		if v < -0.1:
+			if %SB_minute.value > 0.5:
+				%SB_second.value = 59.0
+				%SB_minute.value -= 1.0
+			else:
+				%SB_second.value = 0.0
+		elif v > 59.9:
+			%SB_second.value = 0.0
+			%SB_minute.value += 1.0
+
+		value_changed.emit(value)
+		pass
+	)
+
+	%SB_second.value_changed.connect(func(_v : float):
+		value_changed.emit(value)
+	)
+"
+
+[node name="TimeInputControl" type="PanelContainer"]
+script = SubResource("GDScript_umwon")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="SB_minute" type="SpinBox" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+rounded = true
+allow_greater = true
+alignment = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "min"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SB_second" type="SpinBox" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = -1.0
+max_value = 60.0
+rounded = true
+alignment = 2
+
+[node name="Label2" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "sec"
+horizontal_alignment = 1
+vertical_alignment = 1

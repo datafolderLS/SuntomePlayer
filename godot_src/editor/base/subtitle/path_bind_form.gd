@@ -15,6 +15,10 @@ var _left_path_dict := Dictionary()
 
 var _item_ct_to_lrc_label_dict := Dictionary()
 
+#记录当前选中的左侧控件
+var _cur_selected_item_ct : HBoxContainer = null
+
+
 func _ready() -> void:
 	%VScrollBar.value_changed.connect(_update_vertical_pos)
 	%HSplitContainer.dragged.connect(_update_HScrollBar)
@@ -95,8 +99,41 @@ func all_left_paths() -> Array:
 	return _left_path_dict.keys()
 
 
-# func remove_left_path(path : String):
-# 	pass
+func _input(event: InputEvent) -> void:
+	if not is_visible_in_tree():
+		return
+
+	var has_mouse_in_rect = Rect2(Vector2(0,0), size).has_point(get_local_mouse_position())
+	if not has_mouse_in_rect:
+		return
+
+	if event is InputEventMouseButton:
+		match event.button_index:
+			MOUSE_BUTTON_WHEEL_UP:
+				%VScrollBar.value -= 32
+				pass
+			MOUSE_BUTTON_WHEEL_DOWN:
+				%VScrollBar.value += 32
+		pass
+	elif event is InputEventKey:
+		get_viewport().set_input_as_handled()
+		if event.is_pressed():
+			match event.keycode:
+				KEY_UP:
+					if _cur_selected_item_ct:
+						var cur_index = _get_item_ct_row_index(_cur_selected_item_ct)
+						var pre_ct = _get_item_ct_in_row_index(cur_index - 1)
+						if pre_ct:
+							_select_item_ct(pre_ct)
+					pass
+				KEY_DOWN:
+					if _cur_selected_item_ct:
+						var cur_index = _get_item_ct_row_index(_cur_selected_item_ct)
+						var pre_ct = _get_item_ct_in_row_index(cur_index + 1)
+						if pre_ct:
+							_select_item_ct(pre_ct)
+					pass
+	pass
 
 
 func _make_item(text : String) -> VFloatContainer:
@@ -135,9 +172,17 @@ func _get_child_container(ct : HBoxContainer) -> VBoxContainer:
 	return ct.get_child(1)
 
 
-func _has_child_container(ct : HBoxContainer) -> bool:
-	#默认有两个子控件，一个是VFloatContainer，另一个是VBoxContainer(可能不存在)
-	return ct.get_child_count() > 1
+# func _has_child_container(ct : HBoxContainer) -> bool:
+# 	#默认有两个子控件，一个是VFloatContainer，另一个是VBoxContainer(可能不存在)
+# 	return ct.get_child_count() > 1
+
+
+func _get_item_ct_child_count(ct : HBoxContainer) -> int:
+	if ct.get_child_count() < 2:
+		return 0
+
+	return ct.get_child(1).get_child_count()
+
 
 
 #分割path，但保留"/"字符
@@ -152,8 +197,6 @@ func _split_path_with_delimiter(path : String) -> PackedStringArray:
 
 
 func _insert_parts(path_parts : PackedStringArray, path : String):
-	if path == "xxa/xxa/xxb.cc":
-		pass
 	#进入这个函数时，假定_column_count()已经通过_set_column_size进行修改且必定大于path_parts.size()
 	var cur_i : int = 0
 
@@ -230,15 +273,46 @@ func _get_item_ct_row_index(item_ct : HBoxContainer) -> int:
 	return row_index
 
 
+#获取排序在index上的叶子item_ct
+func _get_item_ct_in_row_index(index : int) -> HBoxContainer:
+	if index < 0 or index >= _left_path_dict.size():
+		return null
+
+	var cur_container : VBoxContainer = %VBoxContainer_audio
+	var cur_index : int = 0
+
+	while null != cur_container:
+		for child : HBoxContainer in cur_container.get_children():
+			if cur_index == index:
+				if _get_item_ct_child_count(child) < 1:
+					return child
+				cur_container = _get_child_container(child)
+				break
+
+			var cur_child_size = _get_item_ct_row_size(child)
+			if cur_index + cur_child_size > index:
+				if _get_item_ct_child_count(child) < 1:
+					Utility.CriticalFail()
+					return null
+				cur_container = _get_child_container(child)
+				break
+
+			cur_index += cur_child_size
+
+		if null == cur_container:
+			Utility.CriticalFail()
+			break
+
+	return null
+
+
 func _get_item_ct_row_size(item_ct : HBoxContainer) -> int:
 	var size_comclude = 0
 
-	if not _has_child_container(item_ct):
+	if _get_item_ct_child_count(item_ct) < 1:
 		return 1
 
 	var children = _get_child_container(item_ct).get_children()
-	if children.is_empty():
-		return 1
 
 	for ct : HBoxContainer in children:
 		size_comclude += _get_item_ct_row_size(ct)
@@ -360,26 +434,34 @@ func _get_item_ct_in_pos(pos : Vector2) -> HBoxContainer:
 			var point = Vector2(ct.global_position.x + 1.0, y_diff)
 			var rect = ct.get_global_rect()
 			if rect.has_point(point):
-				if _has_child_container(ct):
-					children = _get_child_container(ct).get_children()
-					if children.is_empty():
-						return ct
-				else:
+				if _get_item_ct_child_count(ct) < 1:
 					return ct
+				children = _get_child_container(ct).get_children()
+				# if _has_child_container(ct):
+				# 	children = _get_child_container(ct).get_children()
+				# 	if children.is_empty():
+				# 		return ct
+				# else:
+				# 	return ct
 				pass
 	return null
 
 
 func _select_item_ct(item_ct : HBoxContainer):
+	_cur_selected_item_ct = item_ct
 	if null == item_ct:
 		%select_ColorRect.hide()
+		%select_ColorRect_lrc.hide()
 		return
 
 	%select_ColorRect.show()
+	%select_ColorRect_lrc.show()
 	var pp = %select_ColorRect.get_parent_control()
 	var rct = item_ct.global_position
 	%select_ColorRect.position = Vector2(0, rct.y - pp.global_position.y)
 	%select_ColorRect.size = Vector2(9999, item_ct.size.y)
+	%select_ColorRect_lrc.position = Vector2(0, rct.y - pp.global_position.y)
+	%select_ColorRect_lrc.size = Vector2(9999, item_ct.size.y)
 
 	for path in _left_path_dict:
 		if _left_path_dict[path] == item_ct:

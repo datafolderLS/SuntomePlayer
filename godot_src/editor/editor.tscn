@@ -53,10 +53,21 @@ layout_mode = 2
 theme = ExtResource("1_ycap1")
 text = "subtitle bind"
 
+[node name="button_language" type="MenuButton" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 6
+text = "change language"
+flat = false
+item_count = 2
+popup/item_0/text = "日本語"
+popup/item_0/id = 1
+popup/item_1/text = "English"
+popup/item_1/id = 0
+
 [node name="ButtonSave" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 10
 theme = ExtResource("1_ycap1")
 text = "save"
 

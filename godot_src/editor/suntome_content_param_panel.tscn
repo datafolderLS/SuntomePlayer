@@ -39,7 +39,7 @@ size_flags_horizontal = 3
 [node name="ButtonNormalization" type="Button" parent="."]
 unique_name_in_owner = true
 layout_mode = 2
-text = "概率归一化"
+text = "Probability Normalize"
 
 [node name="DragSortControl" parent="." instance=ExtResource("1_yj3eg")]
 unique_name_in_owner = true
