@@ -31,7 +31,7 @@ var _transed_nodes_uids : Array = Array()
 static func new_node() -> SuntomeNode:
 	var newNode := SuntomeNode.new()
 	newNode.uid = SuntomeNodeBase.random_uid()
-	newNode.play_mode = Utility.RandomHelper.Method.RandomNoRepeat
+	newNode.play_mode = Utility.RandomHelper.Method.Random
 	newNode.position = Vector2(50,50)
 	return newNode
 

@@ -13,7 +13,8 @@ config_version=5
 config/name="suntome_player"
 run/main_scene="uid://bn0k2oedou2on"
 config/features=PackedStringArray("4.5", "Mobile")
-config/icon="res://icon.svg"
+config/icon="uid://wwa8ybk3d7br"
+config/windows_native_icon="res://icon.ico"
 
 [autoload]
 
@@ -36,7 +37,7 @@ enabled=PackedStringArray("res://addons/font_auto_size_labels/plugin.cfg")
 [internationalization]
 
 locale/translations=PackedStringArray("res://locate/ja.po")
-locale/translations_pot_files=PackedStringArray("res://editor/editor.tscn", "res://editor/base/sound_obj_edit.gd", "res://editor/base/sound_obj_edit.tscn", "res://editor/base/subtitle/path_bind_form.gd", "res://editor/base/subtitle/path_bind_form.tscn", "res://editor/normal_suntome_node/suntome_count_check_node_panel.gd", "res://editor/normal_suntome_node/suntome_count_check_node_panel.tscn", "res://editor/normal_suntome_node/suntome_para_node_panel.gd", "res://editor/normal_suntome_node/suntome_para_node_panel.tscn", "res://editor/normal_suntome_node/suntome_time_begin_node_panel.gd", "res://editor/normal_suntome_node/suntome_time_begin_node_panel.tscn", "res://editor/normal_suntome_node/suntome_time_check_node_panel.gd", "res://editor/normal_suntome_node/suntome_time_check_node_panel.tscn", "res://editor/play_node_editor.gd", "res://editor/play_node_editor.tscn", "res://editor/select_pic_editor.gd", "res://editor/select_pic_editor.tscn", "res://editor/suntome_content.gd", "res://editor/suntome_content.tscn", "res://editor/suntome_s_pic_content.gd", "res://editor/suntome_s_pic_content.tscn", "res://misc/simple_button.gd", "res://editor/suntome_content_param_panel.tscn", "res://editor/subtitle_bind_editor.tscn", "res://editor/left_sub_container.gd", "res://editor/left_sub_container.tscn", "res://main_scene.gd", "res://main_scene.tscn")
+locale/translations_pot_files=PackedStringArray("res://editor/editor.tscn", "res://editor/base/sound_obj_edit.gd", "res://editor/base/sound_obj_edit.tscn", "res://editor/base/subtitle/path_bind_form.gd", "res://editor/base/subtitle/path_bind_form.tscn", "res://editor/normal_suntome_node/suntome_count_check_node_panel.gd", "res://editor/normal_suntome_node/suntome_count_check_node_panel.tscn", "res://editor/normal_suntome_node/suntome_para_node_panel.gd", "res://editor/normal_suntome_node/suntome_para_node_panel.tscn", "res://editor/normal_suntome_node/suntome_time_begin_node_panel.gd", "res://editor/normal_suntome_node/suntome_time_begin_node_panel.tscn", "res://editor/normal_suntome_node/suntome_time_check_node_panel.gd", "res://editor/normal_suntome_node/suntome_time_check_node_panel.tscn", "res://editor/play_node_editor.gd", "res://editor/play_node_editor.tscn", "res://editor/select_pic_editor.gd", "res://editor/select_pic_editor.tscn", "res://editor/suntome_content.gd", "res://editor/suntome_content.tscn", "res://editor/suntome_s_pic_content.gd", "res://editor/suntome_s_pic_content.tscn", "res://misc/simple_button.gd", "res://editor/suntome_content_param_panel.tscn", "res://editor/subtitle_bind_editor.tscn", "res://editor/left_sub_container.gd", "res://editor/left_sub_container.tscn", "res://main_scene.gd", "res://main_scene.tscn", "res://editor/base/node_param_ctrl.tscn")
 
 [rendering]
 

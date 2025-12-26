@@ -248,6 +248,8 @@ func show_node_param(parent : Container):
 			pass
 
 		_update_param_info(param_panel)
+		update_node_line_info.call(parent_node)
+
 
 	param_panel.order_changed_cb = func(): _param_order_change()
 

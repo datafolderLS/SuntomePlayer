@@ -17,7 +17,8 @@ func _ready() -> void:
 	SuntomeGlobal.load_from_disc()
 
 	#todo 检查控制台参数
-	if OS.get_cmdline_args().has("--editor_mode") or OS.has_feature("editor"):
+	var is_in_editor = OS.get_cmdline_args().has("--editor_mode") or OS.has_feature("editor")
+	if is_in_editor:
 		editor_container.set_visible(false)
 		var editor = preload("res://editor/editor.tscn").instantiate()
 		editor_container.add_child(editor)
@@ -36,7 +37,8 @@ func _ready() -> void:
 
 	%Button_fullscreen_toggle.pressed.connect(_toggle_fullscreen)
 
-	call_deferred("_start_test_func")
+	if not is_in_editor:
+		call_deferred("_start_test_func")
 	pass # Replace with function body.
 
 

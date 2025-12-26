@@ -84,6 +84,7 @@ func connect_from_node_to_point(from : StateNode, to : Callable) -> void:
 	pass
 
 
+#通过传入两个节点的坐标和大小，计算两者间的连线应该是哪两个点，返回值是线段的起点和终点坐标
 func _calc_node_to_node_true_position(lpos : Vector2, lsize : Vector2, rpos : Vector2, rsize : Vector2) -> Array:
 	var dir = (rpos - lpos)
 
@@ -124,9 +125,25 @@ func _update_pos(from : Vector2, to : Vector2) -> void:
 	detect.size.x = lenth - 10
 	arrow.position = Vector2(lenth - 20, 0)
 	rotRoot.rotation = dir.angle()
-	%Label.position = Vector2(lenth * 0.25 - 11.0, -25)
-	%Label.rotation = -from.angle_to_point(to)
+	%Label.rotation = -rotRoot.rotation
+	var pos_diff = _calc_control_pos_diff_in_rot_angle(%Label)
+	%Label.position = Vector2(lenth * 0.25 - 11.0, -5.0) + pos_diff
+	%Label.position.x = clampf(%Label.position.x, - 11.0, lenth - 11.0)
 	pass
+
+
+#ctrl是需要计算的组件
+static func _calc_control_pos_diff_in_rot_angle(ctrl : Control, is_up : bool = true) -> Vector2:
+	var calc_func = max if is_up else min
+	var now_angle = ctrl.rotation
+	var ctrl_size = ctrl.size
+	var side_angle = atan2(ctrl_size.y , ctrl_size.x)
+	var y_diff1 = ctrl_size.length() * sin(now_angle + side_angle)
+	var y_diff2 = ctrl_size.y * sin(now_angle + PI * 0.5)
+	var y_diff3 = ctrl_size.x * sin(now_angle)
+	var y_diff = calc_func.call(y_diff1, y_diff2, y_diff3)
+	var x_diff_add = (cos(now_angle + PI)* 0.5 + 0.5) * ctrl_size.x
+	return Vector2(x_diff_add, -calc_func.call(y_diff, 0.0))
 
 
 func _mouse_enter():

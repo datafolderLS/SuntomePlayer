@@ -27,6 +27,7 @@
 # res://editor/left_sub_container.tscn
 # res://main_scene.gd
 # res://main_scene.tscn
+# res://editor/base/node_param_ctrl.tscn
 #
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -407,4 +408,24 @@ msgstr ""
 
 #: main_scene.tscn
 msgid "I'm out !"
+msgstr ""
+
+#: editor/base/node_param_ctrl.tscn
+msgid "1"
+msgstr ""
+
+#: editor/base/node_param_ctrl.tscn
+msgid "SpinBox"
+msgstr ""
+
+#: editor/base/node_param_ctrl.tscn
+msgid "para_name"
+msgstr ""
+
+#: editor/base/node_param_ctrl.tscn
+msgid "﹀"
+msgstr ""
+
+#: editor/base/node_param_ctrl.tscn
+msgid "% use percent"
 msgstr ""

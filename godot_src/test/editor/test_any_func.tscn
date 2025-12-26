@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://16ami7sse2y"]
+[gd_scene load_steps=12 format=3 uid="uid://16ami7sse2y"]
 
 [ext_resource type="Script" uid="uid://cq25kvtydcekt" path="res://test/editor/test_any_func.gd" id="1_dl84o"]
 [ext_resource type="PackedScene" uid="uid://cil6wi1mo5esx" path="res://editor/base/para_node_setting_ctrl.tscn" id="2_0t62x"]
@@ -14,6 +14,20 @@ shader = ExtResource("3_yn1d0")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_m6fgy"]
 shader = ExtResource("3_yn1d0")
+
+[sub_resource type="Gradient" id="Gradient_yn1d0"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1kvcj"]
+gradient = SubResource("Gradient_yn1d0")
+width = 512
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yn1d0"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
 
 [node name="TestAnyFunc" type="Node2D"]
 script = ExtResource("1_dl84o")
@@ -59,14 +73,14 @@ flat = false
 material = SubResource("ShaderMaterial_yn1d0")
 instance_shader_parameters/color_bottom = Color(1, 1, 1, 1)
 instance_shader_parameters/color_top = Color(1, 1, 1, 1)
-position = Vector2(1024, 328)
-scale = Vector2(271.2499, 232.25002)
+position = Vector2(65.18752, 278.4375)
+scale = Vector2(105.62496, 117.12501)
 mesh = SubResource("QuadMesh_1kvcj")
 texture = ExtResource("4_1kvcj")
 
 [node name="MeshInstance2D" type="MeshInstance2D" parent="."]
 material = SubResource("ShaderMaterial_yn1d0")
-position = Vector2(676, 446)
+position = Vector2(188, 596)
 scale = Vector2(192.5, 113.74999)
 mesh = SubResource("QuadMesh_1kvcj")
 texture = ExtResource("4_1kvcj")
@@ -75,10 +89,10 @@ texture = ExtResource("4_1kvcj")
 material = SubResource("ShaderMaterial_m6fgy")
 instance_shader_parameters/color_bottom = Color(1, 1, 1, 1)
 instance_shader_parameters/color_top = Color(1, 1, 1, 1)
-offset_left = 234.0
-offset_top = 446.0
-offset_right = 440.0
-offset_bottom = 574.0
+offset_left = 22.0
+offset_top = 351.0
+offset_right = 228.0
+offset_bottom = 479.0
 texture = ExtResource("4_1kvcj")
 
 [node name="PopupPanel" type="PopupPanel" parent="."]
@@ -87,7 +101,6 @@ transparent_bg = false
 oversampling_override = 1.0
 initial_position = 1
 size = Vector2i(100, 39)
-visible = true
 
 [node name="LineEdit" type="LineEdit" parent="PopupPanel"]
 offset_left = 4.0
@@ -100,5 +113,57 @@ text = "51515321"
 oversampling_override = 1.0
 initial_position = 2
 size = Vector2i(297, 100)
-visible = true
 dialog_text = "dafdasfasdfasdfadsfsadfasdfadfsdfa"
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 739.0
+offset_top = 283.0
+offset_right = 779.0
+offset_bottom = 323.0
+
+[node name="TextureRect2" type="TextureRect" parent="Control"]
+layout_mode = 0
+offset_left = -10.0
+offset_top = 303.0
+offset_right = 502.0
+offset_bottom = 306.0
+texture = SubResource("GradientTexture1D_1kvcj")
+
+[node name="rot_label" type="Label" parent="Control/TextureRect2"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 114.0
+offset_top = -33.0
+offset_right = 256.0
+offset_bottom = -10.0
+text = "dafdasfasdfasdfsd
+1354343"
+
+[node name="Panel" type="Panel" parent="Control/TextureRect2/rot_label"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_yn1d0")
+
+[node name="rot_slider" type="HSlider" parent="Control"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -12.0
+offset_top = 139.0
+offset_right = 495.0
+offset_bottom = 188.0
+min_value = -360.0
+max_value = 360.0
+
+[node name="now_rot" type="Label" parent="Control"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -5.0
+offset_top = 115.0
+offset_right = 35.0
+offset_bottom = 138.0

@@ -26,7 +26,7 @@ signal on_select_file_change(path : String, type : AssetType)
 # const SurportPictureTypes = ["jpg", "png"]
 # const SurportSoundTypes = ["mp3", "wav", "ogg"]
 
-var RootPath : String
+var _root_path : String
 
 
 #返回一个FileTree控件，如果filePath不是合法路径，则返回一个空对象
@@ -44,39 +44,40 @@ static func new_tree(filePath : String) -> FileTree:
 	#print(filePath)
 	var dir = DirAccess.open(filePath)
 	if null == dir:
-		tree.create_item().set_text(0, "construct error, not a valid folder path")
+		tree.create_item().set_text(0, dir.tr("construct error, path: \"{0}\" not exist").format(Utility.cut_file_path(filePath)))
 		return tree
 
-	tree.RootPath = filePath
-	var splitArray = filePath.rsplit("/", true, 1)
-	tree.create_item().set_text(0, splitArray[1])
+	tree._root_path = filePath
+	tree._refresh_path_list()
+	# var splitArray = filePath.rsplit("/", true, 1)
+	# tree.create_item().set_text(0, splitArray[1])
 
-	_folder_scan(filePath, func (path : String, type : Type) :
-		match type:
-			Type.Folder:
-				print("文件夹" + path)
-				var node = tree.add_or_find_node(path)
-				node.set_metadata(0, [path, Type.Folder, AssetType.Nothing])
-			Type.File:
-				print("文件" + path)
-				var suffixCheck = path.rsplit(".", true, 1)
-				if suffixCheck[1].to_lower() in GlobalSetting.SurportPictureTypes:
-					var node = tree.add_or_find_node(path)
-					node.set_icon(0, picture_icon)
-					node.set_metadata(0, [path, Type.File, AssetType.Picture])
-					pass
-				elif suffixCheck[1].to_lower() in GlobalSetting.SurportSoundTypes:
-					var node = tree.add_or_find_node(path)
-					node.set_icon(0, sound_icon)
-					node.set_metadata(0, [path, Type.File, AssetType.Sound])
-					pass
-				elif suffixCheck[1].to_lower() in SubtitleData.SupportSubtitleTypes.keys():
-					var node = tree.add_or_find_node(path)
-					node.set_icon(0, subtitle_icon)
-					node.set_metadata(0, [path, Type.File, AssetType.Subtitle])
-					pass
-		pass
-	)
+	# _folder_scan(filePath, func (path : String, type : Type) :
+	# 	match type:
+	# 		Type.Folder:
+	# 			print("文件夹" + path)
+	# 			var node = tree.add_or_find_node(path)
+	# 			node.set_metadata(0, [path, Type.Folder, AssetType.Nothing])
+	# 		Type.File:
+	# 			print("文件" + path)
+	# 			var suffixCheck = path.rsplit(".", true, 1)
+	# 			if suffixCheck[1].to_lower() in GlobalSetting.SurportPictureTypes:
+	# 				var node = tree.add_or_find_node(path)
+	# 				node.set_icon(0, picture_icon)
+	# 				node.set_metadata(0, [path, Type.File, AssetType.Picture])
+	# 				pass
+	# 			elif suffixCheck[1].to_lower() in GlobalSetting.SurportSoundTypes:
+	# 				var node = tree.add_or_find_node(path)
+	# 				node.set_icon(0, sound_icon)
+	# 				node.set_metadata(0, [path, Type.File, AssetType.Sound])
+	# 				pass
+	# 			elif suffixCheck[1].to_lower() in SubtitleData.SupportSubtitleTypes.keys():
+	# 				var node = tree.add_or_find_node(path)
+	# 				node.set_icon(0, subtitle_icon)
+	# 				node.set_metadata(0, [path, Type.File, AssetType.Subtitle])
+	# 				pass
+	# 	pass
+	# )
 
 	return tree
 
@@ -96,19 +97,21 @@ func _ready():
 		# print(Utility.cut_file_path(meta[0]), meta[2])
 		on_select_file_change.emit(Utility.cut_file_path(meta[0]), meta[2])
 	)
+
+	%Button_fresh.pressed.connect(_refresh_path_list)
 	pass
 
 
 #在树中添加一个路径为path的节点，如果存在就返回已有的节点
 func add_or_find_node(path : String) -> TreeItem:
-	if not path.contains(RootPath) :
-		print("path: " + path + "not contains: " + RootPath)
+	if not path.contains(_root_path) :
+		print("path: " + path + "not contains: " + _root_path)
 		return null
 
-	if path == RootPath:
+	if path == _root_path:
 		return null
 
-	path = path.trim_prefix(RootPath)
+	path = path.trim_prefix(_root_path)
 	var pathlist := path.split("/", false)
 
 	var parent = get_root()
@@ -224,3 +227,37 @@ static func scan_folder(path : String, callback : Callable, do_recursion : bool 
 				file_name = dir.get_next()
 			dir.list_dir_end()
 
+
+#刷新文件路径
+func _refresh_path_list():
+	clear()
+	var splitArray = _root_path.rsplit("/", true, 1)
+	create_item().set_text(0, splitArray[1])
+
+	_folder_scan(_root_path, func (path : String, type : Type) :
+		match type:
+			Type.Folder:
+				print("文件夹" + path)
+				var node = add_or_find_node(path)
+				node.set_metadata(0, [path, Type.Folder, AssetType.Nothing])
+			Type.File:
+				print("文件" + path)
+				var suffixCheck = path.rsplit(".", true, 1)
+				if suffixCheck[1].to_lower() in GlobalSetting.SurportPictureTypes:
+					var node = add_or_find_node(path)
+					node.set_icon(0, picture_icon)
+					node.set_metadata(0, [path, Type.File, AssetType.Picture])
+					pass
+				elif suffixCheck[1].to_lower() in GlobalSetting.SurportSoundTypes:
+					var node = add_or_find_node(path)
+					node.set_icon(0, sound_icon)
+					node.set_metadata(0, [path, Type.File, AssetType.Sound])
+					pass
+				elif suffixCheck[1].to_lower() in SubtitleData.SupportSubtitleTypes.keys():
+					var node = add_or_find_node(path)
+					node.set_icon(0, subtitle_icon)
+					node.set_metadata(0, [path, Type.File, AssetType.Subtitle])
+					pass
+		pass
+	)
+	pass

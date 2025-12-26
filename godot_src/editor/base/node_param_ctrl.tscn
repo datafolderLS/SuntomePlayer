@@ -5,12 +5,14 @@
 [node name="NodeParamCtrl" type="HBoxContainer"]
 offset_right = 200.0
 offset_bottom = 31.0
+localize_numeral_system = false
 script = ExtResource("1_rfe3u")
 
 [node name="Label" type="Label" parent="."]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
+localize_numeral_system = false
 text = "1"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -20,6 +22,7 @@ justification_flags = 160
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+localize_numeral_system = false
 tab_alignment = 1
 current_tab = 0
 tabs_visible = false
@@ -28,6 +31,7 @@ tabs_visible = false
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+localize_numeral_system = false
 allow_greater = true
 alignment = 3
 suffix = "%"
@@ -37,6 +41,7 @@ metadata/_tab_index = 0
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
+localize_numeral_system = false
 metadata/_tab_index = 1
 
 [node name="mb_selection" type="MenuButton" parent="."]

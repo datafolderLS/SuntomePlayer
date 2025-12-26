@@ -7,13 +7,19 @@ func _ready() -> void:
 	var node1 = panel.new_node()
 	node1.position = Vector2(200,200)
 	var node2 = panel.new_node()
-	panel.connect_node(node1, node2)
+	# panel.connect_node(node1, node2)
 	#panel.connect_node(node2, node1)
 	panel.node_delete_check_func =  func(node : StateNode) -> bool :
 			print("node delete check")
 			return true
 	panel.line_delete_check_func = func(line : StateLine) -> bool :
 		print("line delete check")
+		return true
+
+	panel.line_connect_check_func = func(left : StateNode, right : StateNode) -> bool :
+		print("line connect check")
+
+		call_deferred("_test")
 		return true
 
 	get_node("Button").pressed.connect(_add_node_random)
@@ -35,3 +41,12 @@ func _add_node_random():
 	var panel : StatePanel = get_node("StatePanel")
 	var node1 = panel.new_node()
 	node1.position = Vector2(randf_range(0, 500),randf_range(0, 500))
+
+
+func _test():
+	var panel : StatePanel = get_node("StatePanel")
+	panel.each_node(func(nd : StateNode):
+		var lines = panel.lines_from_node(nd)
+		for line in lines:
+			line.set_label("long enough")
+	)

@@ -401,6 +401,26 @@ msgstr "フルスクリーン変更"
 msgid "I'm out !"
 msgstr "もうイっちゃた！"
 
+#: editor/base/node_param_ctrl.tscn
+msgid "1"
+msgstr "1"
+
+#: editor/base/node_param_ctrl.tscn
+msgid "SpinBox"
+msgstr "SpinBox"
+
+#: editor/base/node_param_ctrl.tscn
+msgid "para_name"
+msgstr "para_name"
+
+#: editor/base/node_param_ctrl.tscn
+msgid "﹀"
+msgstr "﹀"
+
+#: editor/base/node_param_ctrl.tscn
+msgid "% use percent"
+msgstr "% 確率を使う"
+
 #, fuzzy
 #~ msgid "bg color"
 #~ msgstr "ボタンの色"

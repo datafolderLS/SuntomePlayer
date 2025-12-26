@@ -39,7 +39,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if not fade_func.is_null() :
+	if fade_func.is_valid() :
 		var result = fade_func.call(delta)
 		if false == result:
 			return
@@ -76,8 +76,33 @@ func _fadeNextImage(delta : float) -> bool:
 	return false
 
 
+#将now_tex过渡到next_tex
+func _fadeNextImage_both(delta : float) -> bool:
+	var nowAlpha = now_tex.modulate.a
+	next_tex.modulate.a = 0.0
+
+	if fade_time < 0.0001:
+		nowAlpha = 0.0
+		pass
+	else:
+		nowAlpha -= delta * 1.0 / fade_time
+
+	if nowAlpha <= 0.0:
+		now_tex.modulate.a = 0.0
+		next_tex.modulate.a = 1.0
+		return true
+	else:
+		now_tex.modulate.a = nowAlpha
+		next_tex.modulate.a = 1.0 - nowAlpha
+	return false
+
+
 func pause():
 	sound_player.set_stream_paused(true)
+
+
+func _no_pic_now() -> bool:
+	return now_tex.texture == null
 
 
 func play_next(waiting_next : NextPlayerObj) -> void:
@@ -87,7 +112,10 @@ func play_next(waiting_next : NextPlayerObj) -> void:
 	sound_player.set_stream(waiting_next.nextSound)
 	sound_player.set_block_signals(false)
 	cur_next = waiting_next
-	fade_func = Callable(self, "_fadeNextImage")
+	if _no_pic_now():
+		fade_func = Callable(self, "_fadeNextImage_both")
+	else:
+		fade_func = Callable(self, "_fadeNextImage")
 
 	_fade_over_func = func() : sound_player.play()
 
@@ -129,7 +157,10 @@ func play_select_pic(next : NextSelectPicObj):
 			sound_player.play()
 		next.emitAllButton.call(next_tex)
 
-	fade_func = Callable(self, "_fadeNextImage")
+	if _no_pic_now():
+		fade_func = Callable(self, "_fadeNextImage_both")
+	else:
+		fade_func = Callable(self, "_fadeNextImage")
 	pass
 
 

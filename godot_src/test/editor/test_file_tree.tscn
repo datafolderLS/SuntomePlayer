@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://doekxrqt0jkxk"]
+
+[sub_resource type="GDScript" id="GDScript_6s620"]
+script/source = "extends Control
+
+func _ready() -> void:
+	var tree = FileTree.new_tree(SuntomeGlobal.root_path().path_join(\"data\"))
+	add_child(tree)
+"
+
+[node name="TestFileTree" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_6s620")

@@ -16,6 +16,8 @@ func _ready() -> void:
 	print(Utility.file_name_without_suffix("./dafadsf/dfdfa/ddd."))
 	print(Utility.file_name_without_suffix("./dafadsf/dfdfa/ddd.dd"))
 	print(Utility.file_name_without_suffix("ddd.dd"))
+
+	%rot_slider.value_changed.connect(_rot_slider_value_change)
 	pass # Replace with function body.
 
 
@@ -121,3 +123,27 @@ func _input(event: InputEvent) -> void:
 					return CusContentMenu.bt(value, func(): print(value))
 			)
 			)
+
+
+func _rot_slider_value_change(value : float):
+	var now_angle = value / 360.0 * 2 * PI
+	%now_rot.text = "{0} degree, {1} radian".format([value, now_angle])
+
+	%rot_label.rotation = now_angle
+
+	var pos_diff = StateLine._calc_control_pos_diff_in_rot_angle(%rot_label, true)
+	%rot_label.position = pos_diff + Vector2(25, 0.0)
+	# var y_diff_add = 10
+	# var label_size = %rot_label.size
+	# var side_angle = atan2(label_size.y , label_size.x)
+	# var y_diff1 = label_size.length() * sin(now_angle + side_angle)
+	# var y_diff2 = label_size.y * sin(now_angle + PI * 0.5)
+	# var y_diff3 = label_size.x * sin(now_angle)
+	# print("{0} {1}".format([y_diff3]))
+	# var y_diff = min(y_diff1, y_diff2, y_diff3)
+	# var x_diff_add = (cos(now_angle + PI)* 0.5 + 0.5) * label_size.x
+	# if y_diff < 0.0:
+	# 	%rot_label.position = Vector2(25 + x_diff_add, -y_diff + y_diff_add)
+	# else:
+	# 	%rot_label.position = Vector2(25 + x_diff_add, y_diff_add)
+	pass
